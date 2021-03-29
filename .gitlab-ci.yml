@@ -8,7 +8,7 @@ docker-build-master:
   before_script:
     - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" $CI_REGISTRY
   script:
-    - docker build --pull -t "lethean.io/build:latest" buildbase/Dockerfile
+    - docker build --pull -t "lethean.io/build:latest" buildbase
     - docker push "$CI_REGISTRY_IMAGE"
   only:
     - master
