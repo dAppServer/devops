@@ -2,7 +2,6 @@
 
 # builder stage
 FROM ubuntu:16.04
-
 RUN set -ex \
     && apt update \
     && apt upgrade -y \
@@ -14,3 +13,4 @@ RUN set -ex \
         libhidapi-dev libusb-1.0-0-dev libprotobuf-dev protobuf-compiler libudev-dev \
         ca-certificates git
 
+WORKDIR /usr/local
