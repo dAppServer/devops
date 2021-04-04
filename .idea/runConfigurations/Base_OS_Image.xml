@@ -9,7 +9,7 @@
         <option name="containerName" value="" />
         <option name="entrypoint" value="" />
         <option name="commandLineOptions" value="" />
-        <option name="sourceFilePath" value="buildbase/Dockerfile" />
+        <option name="sourceFilePath" value="Dockerfile" />
       </settings>
     </deployment>
     <method v="2" />
