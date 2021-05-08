@@ -13,4 +13,4 @@ RUN set -ex \
         libhidapi-dev libusb-1.0-0-dev libprotobuf-dev protobuf-compiler libudev-dev \
         ca-certificates git
 
-WORKDIR /usr/local
+WORKDIR /home/lthn
