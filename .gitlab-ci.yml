@@ -1,12 +1,14 @@
-# Official docker image.
+
 image: docker:19.03.12
+
 before_script:
   - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" $CI_REGISTRY
 
+services:
+  - docker:19.03.12-dind
+
 docker build master:
-
   stage: build
-
   script:
     - docker build --pull --cache-from $CI_REGISTRY_IMAGE:latest --tag $CI_REGISTRY_IMAGE:latest .
     - docker push $CI_REGISTRY_IMAGE:latest
@@ -14,9 +16,7 @@ docker build master:
     - master
 
 docker build develop:
-
   stage: build
-
   script:
     - docker build --pull --cache-from $CI_REGISTRY_IMAGE:develop --tag $CI_REGISTRY_IMAGE:develop .
     - docker push $CI_REGISTRY_IMAGE:develop
