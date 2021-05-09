@@ -3,9 +3,8 @@
 # builder stage
 FROM ubuntu:16.04
 RUN set -ex \
-    && apt update \
-    && apt upgrade -y \
-    && apt install -y --no-install-recommends \
+    && apt-get update && apt-get upgrade -y \
+    && apt-get install -y --no-install-recommends \
         # base requirements
         dpkg-dev g++-8 libc6-dev libc-dev make cmake pkg-config libboost-all-dev libssl-dev libzmq3-dev \
         libunbound-dev libsodium-dev libunwind8-dev liblzma-dev libreadline6-dev \

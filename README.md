@@ -10,7 +10,7 @@ WORKDIR /home/lthn/build
 # the space between the dots is important (source) (destination)
 COPY . . 
 # Do some stuff here
-RUN make
+RUN set -ex && make
 # Ok, this Copy of Ubuntu is Full of nasty dev libs! 
 # let's reset the image to a fresh Ubuntu
 FROM ubuntu:16:04 as image
