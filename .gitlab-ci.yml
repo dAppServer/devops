@@ -13,7 +13,7 @@ variables:
 docker build master:
   stage: build
   script:
-    - docker build --pull --cache-from $IMAGE_TAG:latest --tag $IMAGE_TAG:latest .
+    - docker build --pull --cache-from $IMAGE_TAG --tag $IMAGE_TAG .
     - docker push $IMAGE_TAG
   only:
     - master
@@ -21,8 +21,8 @@ docker build master:
 docker build develop:
   stage: build
   script:
-    - docker build --pull --cache-from $IMAGE_TAG:develop --tag $IMAGE_TAG:develop .
-    - docker push $IMAGE_TAG:develop
+    - docker build --pull --cache-from $IMAGE_TAG --tag $IMAGE_TAG .
+    - docker push $IMAGE_TAG
   only:
     - develop
 
