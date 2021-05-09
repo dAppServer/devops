@@ -12,7 +12,7 @@ COPY . .
 # Do some stuff here
 RUN make
 # Ok, this Copy of Ubuntu is Full of nasty dev libs! 
-# make a new image from now one
+# let's reset the image to a fresh Ubuntu
 FROM ubuntu:16:04 as image
 # ok, none of the files we made are here, time to copy into this namespace
 COPY --from=builder /home/lthn/build/release/bin /usr/local/bin 
