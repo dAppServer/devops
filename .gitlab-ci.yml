@@ -2,33 +2,9 @@ include:
   - template: Auto-DevOps.gitlab-ci.yml
 
 variables:
-  IMAGE_TAG: $CI_REGISTRY_IMAGE:$CI_COMMIT_REF_SLUG
+  TEST_DISABLED: 1
+  REVIEW_DISABLED: 1
+  STAGING_ENABLED: 0
+  POSTGRES_ENABLED: 0
 
-docker build live:
-  stage: build
-  image: docker:stable
-  services:
-    - docker:stable-dind
-  before_script:
-    - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" $CI_REGISTRY
-
-  script:
-    - docker build --pull --cache-from $IMAGE_TAG --tag $IMAGE_TAG .
-    - docker push $IMAGE_TAG
-  only:
-    - live
-
-docker build develop:
-  stage: build
-  image: docker:stable
-  services:
-    - docker:stable-dind
-  before_script:
-    - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" $CI_REGISTRY
-
-  script:
-    - docker build --pull --cache-from $IMAGE_TAG --tag $IMAGE_TAG .
-    - docker push $IMAGE_TAG
-  only:
-    - develop
 
