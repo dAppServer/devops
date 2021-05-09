@@ -1,6 +1,10 @@
-# Multistage docker build, requires docker 17.05
-
-# builder stage
+#
+# Lethean Docker builder
+#
+# Maintainer: snider@lethean.io
+# Licence: MIT License, see /LICENSE
+#
+FROM scratch
 FROM ubuntu:16.04
 RUN set -ex \
     && apt-get update && apt-get upgrade -y \
