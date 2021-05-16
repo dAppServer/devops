@@ -20,4 +20,4 @@ RUN set -ex \
 
 WORKDIR /home/lthn
 
-CMD echo "\nWe Have Built: registry.gitlab.com/lethean.io/sdk/builder\nDockerfile: FROM registry.gitlab.com/lethean.io/sdk/builder as builder\n"
+CMD echo "\nWe Have Built: registry.gitlab.com/lthn.io/sdk/build\nDockerfile: FROM registry.gitlab.com/lthn.io/sdk/build as builder\n"

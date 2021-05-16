@@ -3,7 +3,7 @@
 Create a file called `Dockerfile` or edit the one you have.
 
 ```dockerfile
-FROM registry.gitlab.com/lethean.io/sdk/builder as builder
+FROM registry.gitlab.com/lthn.io/sdk/build as builder
 # Change to the mapped mount 
 WORKDIR /home/lthn/build
 # Copy in the files from the supplied build context
