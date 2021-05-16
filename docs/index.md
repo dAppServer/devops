@@ -1,14 +1,4 @@
----
-title: Developer Guides
-description: How to contribute to Lethean.io
----
-
-# Docker Commands
-
-`docker pull lthn/build`
-
-In Dockerfile add this as your base image to a multi-stage build
-
+git merge --no-ff "develop"
 ```dockerfile
 FROM lthn/build as builder
 WORKDIR /src
