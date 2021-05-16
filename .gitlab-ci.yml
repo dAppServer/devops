@@ -4,8 +4,7 @@ include:
 test:
   image: python:3.8-buster
   before_script:
-    - pip install -r requirements.txt
-    - pip install git+https://$protected_material_token@github.com/squidfunk/mkdocs-material-insiders.git
+    - pip install -r requirements.docs.txt
   stage: test
   script:
   - mkdocs build --strict --verbose --site-dir test
@@ -16,8 +15,7 @@ test:
 pages:
   image: python:3.8-buster
   before_script:
-    - pip install -r requirements.txt
-    - pip install git+https://$protected_material_token@github.com/squidfunk/mkdocs-material-insiders.git
+    - pip install -r requirements.docs.txt
 
   stage: deploy
   script:
@@ -27,3 +25,4 @@ pages:
     - public
   only:
   - master
+  - develop
