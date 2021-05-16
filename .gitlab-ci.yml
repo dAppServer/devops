@@ -12,8 +12,6 @@ test:
   artifacts:
     paths:
     - test
-  except:
-  - master
 
 pages:
   image: python:3.8-buster
