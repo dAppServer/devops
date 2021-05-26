@@ -16,7 +16,6 @@ pages:
   image: python:3.8-buster
   before_script:
     - pip install -r requirements.docs.txt
-
   stage: deploy
   script:
   - mkdocs build --strict --verbose
