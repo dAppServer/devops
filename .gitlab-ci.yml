@@ -36,8 +36,8 @@ Docker Hub:
   before_script:
     - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" $CI_REGISTRY
   script:
-    - docker build --squash -t "lthn/chain" .
-    - docker push "lthn/chain"
+    - docker build --squash -t "lthn/build" .
+    - docker push "lthn/build"
   environment:
     name: docker.io
   only:
