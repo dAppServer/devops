@@ -6,18 +6,21 @@
 #
 FROM scratch
 FROM ubuntu:16.04
+RUN set -x \
+&& buildDeps=' \
+      ca-certificates \
+      cmake \
+      g++ \
+      git \
+      libboost1.58-all-dev \
+      libssl-dev \
+      make \
+      pkg-config \
+  ' \
+  && apt-get -qq update \
+  && apt-get -qq --no-install-recommends install $buildDeps
 
-RUN set -ex \
-    && apt-get update \
-    && apt-get upgrade -y \
-    && apt-get install -y --no-install-recommends \
-        # base requirements
-        build-essential cmake pkg-config libboost-all-dev libssl-dev libzmq3-dev \
-        libunbound-dev libsodium-dev libunwind8-dev liblzma-dev libreadline6-dev \
-        libldns-dev libexpat1-dev doxygen graphviz libpgm-dev qttools5-dev-tools \
-        libhidapi-dev libusb-1.0-0-dev libprotobuf-dev protobuf-compiler libudev-dev \
-        ca-certificates git apt-utils
+#RUN git clone --single-branch https://gitlab.com/lthn.io/projects/chain/lethean.git
 
-WORKDIR /home/lthn
 
-CMD echo "\nWe Have Built: registry.gitlab.com/lthn.io/sdk/build\nDockerfile: FROM registry.gitlab.com/lthn.io/sdk/build as builder\n"
+CMD echo "\nWe Have Built: lthn/build\nDockerfile: FROM lthn/build as builder\n"
