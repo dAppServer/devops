@@ -6,21 +6,19 @@
 #
 FROM scratch
 FROM ubuntu:16.04
-RUN set -x \
-&& buildDeps=' \
-      ca-certificates \
-      cmake \
-      g++ \
-      git \
+RUN buildDeps=' \
+      ca-certificates doxygen \
+      cmake autoconf \
+      g++ automake \
+      git libtool \
       libboost1.58-all-dev \
-      libssl-dev \
-      make \
+      libssl-dev python3 \
+      make rsync \
       pkg-config \
+      docker.io \
   ' \
-  && apt-get -qq update \
-  && apt-get -qq --no-install-recommends install $buildDeps
+  && apt-get update && apt-get -y --no-install-recommends install libreadline6 libreadline6-dev \
+  && apt-get -y --no-install-recommends install $buildDeps \
+  ; apt-get clean \
+  && rm -rf /var/lib/apt/lists/*
 
-#RUN git clone --single-branch https://gitlab.com/lthn.io/projects/chain/lethean.git
-
-
-CMD echo "\nWe Have Built: lthn/build\nDockerfile: FROM lthn/build as builder\n"
