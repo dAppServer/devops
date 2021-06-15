@@ -25,11 +25,8 @@ RUN set -ex && \
         bzip2 \
         libunwind8-dev \
         libminiupnpc-dev \
-        libssl-dev
-
-RUN apt-get install -y libgtest-dev && cd /usr/src/gtest && sudo cmake . && sudo make && sudo mv libg* /usr/lib/ ; \
-    apt-get clean \
-    && rm -rf /var/lib/apt/lists/*
+        libssl-dev \
+        libgtest-dev
 
 WORKDIR /usr/local
 #Cmake

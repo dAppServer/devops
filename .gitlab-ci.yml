@@ -18,16 +18,35 @@ pages:
     - pip install -r requirements.docs.txt
   stage: deploy
   script:
-  - mkdocs build --strict --verbose
+    - mkdocs build --strict --verbose
   artifacts:
     paths:
-    - public
-  only:
-  - master
-  - develop
+      - public
+  rules:
+    - changes:
+        - docs/*
 
-Docker Hub:
-  stage: deploy
+build:
+  stage: build
+  image: lthn/build
+  variables:
+    DOCKER_HOST: tcp://docker:2375
+  services:
+    - name: docker:dind
+      command: [ "--experimental" ]
+  before_script:
+    - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" $CI_REGISTRY
+  script:
+    - docker build -t lthn/build:latest -f build-conf/build.Dockerfile src
+    - docker push lthn/build:latest
+  rules:
+    - if: $CI_COMMIT_BRANCH == 'master'
+      changes:
+        - build-conf/build.Dockerfile
+
+
+chain.linux:
+  stage: build
   image: docker
   services:
     - name: docker:dind
@@ -36,11 +55,56 @@ Docker Hub:
   before_script:
     - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" $CI_REGISTRY
   script:
-    - docker build --squash -t "lthn/build" -t lthn/build:release-3.1.0 .
-    - docker push "lthn/build"
-    - docker push "lthn/build:release-3.1.0"
-  environment:
-    name: docker.io
-  only:
-    - master
+    - docker build --squash -t lthn/build:chain -f build-conf/chain/linux.Dockerfile src
+    - docker push "lthn/build:chain"
+  rules:
+    - changes:
+        - build-conf/chain/linux.Dockerfile
 
+wallet.linux:
+  stage: build
+  image: docker
+  services:
+    - name: docker:dind
+      command: [ "--experimental" ]
+
+  before_script:
+    - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" $CI_REGISTRY
+  script:
+    - docker build --squash -t lthn/build:wallet-linux -f build-conf/wallet/linux.Dockerfile src
+    - docker push "lthn/build:wallet-linux"
+  rules:
+    - changes:
+        - build-conf/wallet/linux.Dockerfile
+
+wallet.windows:
+  stage: build
+  image: docker
+  services:
+    - name: docker:dind
+      command: [ "--experimental" ]
+
+  before_script:
+    - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" $CI_REGISTRY
+  script:
+    - docker build --squash -t lthn/build:wallet-windows -f build-conf/wallet/windows.Dockerfile src
+    - docker push "lthn/build:wallet-windows"
+  rules:
+    - changes:
+        - build-conf/wallet/windows.Dockerfile
+
+wallet.android:
+  stage: build
+  image: docker
+  services:
+    - name: docker:dind
+      command: [ "--experimental" ]
+
+  before_script:
+    - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" $CI_REGISTRY
+  script:
+    - docker build --squash -t lthn/build:wallet-android -f build-conf/wallet/android.Dockerfile src
+    - docker push "lthn/build:wallet-android"
+  rules:
+    - changes:
+        - build-conf/wallet/android.Dockerfile
