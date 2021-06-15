@@ -29,7 +29,7 @@ pages:
 
 build:
   stage: build
-  image: lthn/build
+  image: docker
   variables:
     DOCKER_HOST: tcp://docker:2375
   services:
