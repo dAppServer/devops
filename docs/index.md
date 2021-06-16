@@ -4,9 +4,9 @@ Our build system is a framework that allows any project to utilise and automate 
 
 Without additional work, all users of the project get access to platform agnostic, dev tools, one line commands that are simple and not confusing to document
 
-## Why?
+## It's easy, they said
 
-Compiling is easy, it should "just work", they said, it will be fun they said!
+Compiling is easy, it should "just work", it says so in the README, it will be fun they said!
 
 it's now 10 hours later, you're questioning if you have the IQ to classify as a human,
 the README has broken your mouse finger... then in confused tiredness you just replaced a system library with a version that breaks your world.
@@ -15,35 +15,35 @@ Lethean Builder, true to the meaning of "Lethean", to forget; is a forgetful & p
 
 compiling takes time, uses power, it's also wasteful when repeated for no real reason, but most solutions to this get complicated, Dockerfiles are the easy way.
 
-### Caching
+It's not simple, yet.
 
-Most projects get you to compile your own assets, then you have to recompile, often (in docker land or just when switching versions).
-using our builder, and some adjustments with settings we can do a full compile of our blockchain in just under 2 minutes, or about 15 minutes without pushing limits.
+## Cache all the things!
 
-The layers here enable us to deliver fast builds in an acceptable timeframe, instantiated from a terminal or script, on a framework that can be customised to compile literally anything with all options fully exposed and customisable.
+Using our builder, with some adjustments to settings (a.k.a future features) we can do a full compile of our blockchain in just under 2 minutes, or about 15 minutes without pushing limits.
 
-### Security
+The layers here enable us to deliver fast builds in an acceptable timeframe, instantiated from a terminal or script, on a framework that can be customised to compile literally anything, all options customisable.
 
+## Security
 
 When you are compiling code, you are trusting the author of the code to not do something like install a virus.
 
-Our builder is an 84 MB Alpine linux image, it starts an internal docker daemon and passes build commands to the internal daemon.
+Our builder is an 84 MB Alpine linux image, with an internal builder service that interacts with an internal daemon.
 
 Once the task is complete, we run the image and extract the build assets with a simple file copy and store the result of that in the mounted directory.
 
-This enables you to run builds with docker in an isolated context, it is not the way to use docker, don't copy my docker abuse, this is a build tool.
+This enables you to run builds with docker in an isolated context, it is not the way to use docker, don't copy my docker abuse, this is a build tool and temporary.
 
-### Compute Reuse
+## Sharing is caring
  
 It is wasteful to ask N+1 users to do the same task, using checksums we can prove if some code is safe to compile or use.
 
-If the source code is the same as the published checksum, the resulting compile checksum is the same and verified by a trusted source.
+If the source checksum and the resulting compile checksum pass validation then why redo what others have already done? 
 
-Why redo what others have already done? Thousands of hours wasted, the base functionality to provide this comes as standard with Docker. 
+Thousands of hours wasted, the project will expand shortly with some new features to address that issue, it's not published yet. 
 
-# Quick Start
+## Quick Start
 
-## Builder Service
+### Builder Service
 
 The builder requires some environment variables set, for lethean projects you can just ask for the project with its
 docker tag
@@ -52,7 +52,7 @@ docker tag
 * Vpn `docker run --privileged -v $(pwd):/home/build/dist -it lthn/build lthn/vpn`
 * Wallet `docker run --privileged -v $(pwd):/home/build/dist -it lthn/build lthn/wallet`
 
-## As a Base image
+### As a Base image
 
 These are pre-configured base images for lethean projects with everything you need preinstalled for that project
 
