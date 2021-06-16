@@ -59,6 +59,8 @@ build.deploy:
     - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" $CI_REGISTRY
   script:
     - docker pull -a $CI_REGISTRY_IMAGE
+    - docker tag $CI_REGISTRY_IMAGE:latest $DOCKER_REGISTRY_IMAGE:latest
+    - docker tag $CI_REGISTRY_IMAGE:chain-linux $DOCKER_REGISTRY_IMAGE:chain-linux
     - docker tag $CI_REGISTRY_IMAGE $DOCKER_REGISTRY_IMAGE
     - docker login -u "$DOCKER_REGISTRY_USER" -p "$DOCKER_REGISTRY_PASSWORD" $DOCKER_REGISTRY
     - docker push -a $DOCKER_REGISTRY_IMAGE

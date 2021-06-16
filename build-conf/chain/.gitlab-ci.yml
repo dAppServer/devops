@@ -8,9 +8,10 @@ chain.linux.build:
   before_script:
     - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" $CI_REGISTRY
   script:
-    - docker build --cache-from $CI_REGISTRY_IMAGE -t $CI_REGISTRY_IMAGE:chain-linux -f build-conf/chain/linux.Dockerfile src
+    - docker build --cache-from $CI_REGISTRY_IMAGE:chain-linux -t $CI_REGISTRY_IMAGE:chain-linux -f build-conf/chain/linux.Dockerfile src
     - docker push "$CI_REGISTRY_IMAGE:chain-linux"
   rules:
     - if: $CI_COMMIT_BRANCH == 'master'
     - changes:
         - build-conf/chain/linux.Dockerfile
+
