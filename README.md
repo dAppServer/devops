@@ -15,6 +15,24 @@ docker tag
 * Vpn `docker run --privileged -v $(pwd):/home/build/dist -it lthn/build lthn/vpn`
 * Wallet `docker run --privileged -v $(pwd):/home/build/dist -it lthn/build lthn/wallet`
 
+### Building Git Repos
+
+To compile a repo with `make` from its url and have the build returned to you in your working directory
+
+*Linux/Mac*
+
+`docker run --privileged -v $(pwd):/home/build/dist -it lthn/build compile https://gitlab.com/lthn.io/projects/sdk/build.git`
+
+*Windows:(i think~ will remove when tested)*
+
+`docker run --privileged -v %cd%:/home/build/dist -it lthn/build compile https://gitlab.com/lthn.io/projects/sdk/build.git`
+
+### Sandboxed Docker image Build
+
+As docker lets you build a docker image with a git url, this lets you populate internal docker from git.
+
+`docker run --privileged -v $(pwd):/home/build/dist -it lthn/build https://gitlab.com/lthn.io/projects/sdk/build.git`
+
 ## As a Base image
 
 These are pre-configured base images for lethean projects with everything you need preinstalled for that project

@@ -9,7 +9,7 @@ case $1 in
   "lthn/chain")
     shift
     rm src/.lthnkeep || echo "Could not delete .lthnkeep from build directory, not an error if this builds"
-    git clone --branch master https://gitlab.com/lthn.io/projects/chain/lethean.git src || exit
+    git clone --depth=1 --branch master https://gitlab.com/lthn.io/projects/chain/lethean.git src || exit
     export DOCKER_IMAGE='lthn/chain'
     export BUILD_RESULT_PATH='/home/lthn/bin/chain'
     make build
@@ -18,7 +18,7 @@ case $1 in
   "lthn/wallet")
     shift
     rm src/.lthnkeep || echo "Could not delete .lthnkeep from build directory, not an error if this builds"
-    git clone --branch master https://gitlab.com/lthn.io/projects/chain/wallet.git src || exit
+    git clone --depth=1 --branch master https://gitlab.com/lthn.io/projects/chain/wallet.git src || exit
     export DOCKER_IMAGE='lthn/wallet'
     export BUILD_RESULT_PATH='/home/lthn/bin/wallet'
     make build
@@ -27,17 +27,27 @@ case $1 in
   "lthn/vpn")
     shift
     rm src/.lthnkeep || echo "Could not delete .lthnkeep from build directory, not an error if this builds"
-    git clone --branch master https://gitlab.com/lthn.io/projects/vpn/node.git src || exit
+    git clone --depth=1 --branch master https://gitlab.com/lthn.io/projects/vpn/node.git src || exit
     export DOCKER_IMAGE='lthn/vpn'
     export BUILD_RESULT_PATH='/home/lthn/bin/vpn'
     make build
     make eject-build
   ;;
+  "c"|"compile")
+    shift
+    rm src/.lthnkeep || echo "Could not delete .lthnkeep from build directory, not an error if this builds"
+    export BUILD_GIT_REPO="$*"
+    export DOCKER_IMAGE='compile'
+    export BUILD_RESULT_PATH='/compile/build'
+    git clone --depth=1 --branch master --recurse-submodules "${BUILD_GIT_REPO}" src || exit
+    make build
+    make eject-build
+  ;;
 
-*)
-  export BUILD_GIT_REPO="$*"
-  make build-git
-  make eject-build
+  *)
+    export BUILD_GIT_REPO="$*"
+    make build-git
+    make eject-build
   ;;
 
 esac

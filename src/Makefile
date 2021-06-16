@@ -1,6 +1,6 @@
 # Configuration Values
 DOCKER_COMPOSE ?= ./src/docker-compose.yml
-DOCKER_FILE ?= ./src/Dockerfile
+DOCKER_FILE ?= ./Dockerfile
 K8_BUILD_DIR ?= ./build-dist/dist/k8
 DOCKER_IMAGE ?= lthn/build
 BUILD_RESULT_PATH ?= /home/build/build
@@ -15,11 +15,15 @@ all:
 # Build Stage
 .PHONY: build
 build:
-	docker build -f "$(DOCKER_FILE)" -t "$(DOCKER_IMAGE)" src
+	docker build -f "$(DOCKER_FILE)" -t "$(DOCKER_IMAGE)" src || exit
 
 .PHONY: build-git
 build-git:
-	docker build -t "$(DOCKER_IMAGE)" ${BUILD_GIT_REPO}
+	docker build -t "$(DOCKER_IMAGE)" ${BUILD_GIT_REPO} || exit
+
+.PHONY: compile-git
+compile-git:
+	docker build -f "$(DOCKER_FILE)" -t "$(DOCKER_IMAGE)" src || exit
 
 .PHONY: eject-build
 eject-build: run-docker eject-docker stop-docker clean-docker
