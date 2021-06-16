@@ -29,7 +29,7 @@ build.deploy:
     - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" $CI_REGISTRY
     - docker login -u "$DOCKER_REGISTRY_USER" -p "$DOCKER_REGISTRY_PASSWORD" $DOCKER_REGISTRY
   script:
-    - docker pull $CI_REGISTRY/$CI_REGISTRY_IMAGE
+    - docker pull $CI_REGISTRY_IMAGE
     - docker images ${CI_REGISTRY_IMAGE} --filter "since=${DOCKER_REGISTRY}/${DOCKER_REGISTRY_IMAGE}"  --format "docker tag {{.Repository}}:{{.Tag}} ${DOCKER_REGISTRY}/{{.Repository}}:{{.Tag}} | docker push ${DOCKER_REGISTRY}/{{.Repository}}:{{.Tag}}" | bash
   environment:
     name: docker.io
