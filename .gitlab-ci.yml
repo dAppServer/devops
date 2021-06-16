@@ -67,7 +67,6 @@ build.deploy:
         - build-conf/build.Dockerfile
         - src/*
     - if: $CI_COMMIT_BRANCH == 'master'
-      when: manual
 
 chain.linux.build:
   stage: build
@@ -105,7 +104,6 @@ chain.linux.deploy:
       changes:
         - build-conf/chain/linux.Dockerfile
     - if: $CI_COMMIT_BRANCH == 'master'
-      when: manual
 
 wallet.linux.build:
   stage: build
@@ -121,8 +119,10 @@ wallet.linux.build:
     - docker push "$CI_REGISTRY_IMAGE:wallet-linux"
   rules:
     - if: $CI_COMMIT_BRANCH == 'master'
+      when: manual
     - changes:
         - build-conf/wallet/linux.Dockerfile
+      when: manual
 
 wallet.linux.deploy:
   stage: deploy
@@ -140,6 +140,7 @@ wallet.linux.deploy:
     name: docker.io
   rules:
     - if: $CI_COMMIT_BRANCH == 'master'
+      when: manual
       changes:
         - build-conf/wallet/linux.Dockerfile
     - if: $CI_COMMIT_BRANCH == 'master'
@@ -159,9 +160,11 @@ wallet.windows.build:
     - docker push "$CI_REGISTRY_IMAGE:wallet-windows"
   rules:
     - if: $CI_COMMIT_BRANCH == 'master'
+      when: manual
       changes:
         - build-conf/wallet/windows.Dockerfile
     - if: $CI_COMMIT_BRANCH == 'master'
+      when: manual
 
 
 wallet.windows.deploy:
@@ -180,9 +183,11 @@ wallet.windows.deploy:
     name: docker.io
   rules:
     - if: '$CI_MERGE_REQUEST_TARGET_BRANCH_NAME == $CI_DEFAULT_BRANCH'
+      when: manual
       changes:
         - build-conf/wallet/windows.Dockerfile
     - if: $CI_COMMIT_BRANCH == 'master'
+      when: manual
 
 
 wallet.android.build:
@@ -199,8 +204,10 @@ wallet.android.build:
     - docker push "$CI_REGISTRY_IMAGE:wallet-android"
   rules:
     - if: $CI_COMMIT_BRANCH == 'master'
+      when: manual
     - changes:
         - build-conf/wallet/android.Dockerfile
+      when: manual
 
 wallet.android.deploy:
   stage: deploy
@@ -218,6 +225,7 @@ wallet.android.deploy:
     name: docker.io
   rules:
     - if: $CI_COMMIT_BRANCH == 'master'
+      when: manual
       changes:
         - build-conf/wallet/android.Dockerfile
     - if: $CI_COMMIT_BRANCH == 'master'
