@@ -161,6 +161,8 @@ wallet.windows.build:
     - if: $CI_COMMIT_BRANCH == 'master'
       changes:
         - build-conf/wallet/windows.Dockerfile
+    - if: $CI_COMMIT_BRANCH == 'master'
+      when: manual
 
 wallet.windows.deploy:
   stage: deploy
