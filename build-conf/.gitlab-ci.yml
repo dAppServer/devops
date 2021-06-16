@@ -12,8 +12,7 @@ build:
     - docker build --squash --cache-from $CI_REGISTRY_IMAGE -t $CI_REGISTRY_IMAGE -f build-conf/build.Dockerfile build-src
     - docker push $CI_REGISTRY_IMAGE
   rules:
-    - if: $CI_COMMIT_BRANCH == 'master'
-      changes:
+    - changes:
         - "build-conf/build.Dockerfile"
         - "build-src/**/*"
 

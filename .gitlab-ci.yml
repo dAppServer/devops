@@ -1,5 +1,6 @@
 include:
   - template: Auto-DevOps.gitlab-ci.yml
+  - local: 'build-conf/.gitlab.yml'
   - local: 'build-conf/**/*.yml'
 
 test:
