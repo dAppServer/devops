@@ -73,7 +73,7 @@ chain.linux.build:
   services:
     - name: docker:dind
       command: [ "--experimental" ]
-
+  allow_failure: true
   before_script:
     - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" $CI_REGISTRY
   script:
@@ -90,6 +90,7 @@ chain.linux.deploy:
   services:
     - name: docker:dind
       command: [ "--experimental" ]
+  allow_failure: true
   before_script:
     - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" $CI_REGISTRY
   script:
@@ -110,7 +111,7 @@ wallet.linux.build:
   services:
     - name: docker:dind
       command: [ "--experimental" ]
-
+  allow_failure: true
   before_script:
     - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" $CI_REGISTRY
   script:
@@ -127,6 +128,7 @@ wallet.linux.deploy:
   services:
     - name: docker:dind
       command: [ "--experimental" ]
+  allow_failure: true
   before_script:
     - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" $CI_REGISTRY
   script:
@@ -147,7 +149,7 @@ wallet.windows.build:
   services:
     - name: docker:dind
       command: [ "--experimental" ]
-
+  allow_failure: true
   before_script:
     - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" $CI_REGISTRY
   script:
@@ -164,6 +166,7 @@ wallet.windows.deploy:
   services:
     - name: docker:dind
       command: [ "--experimental" ]
+  allow_failure: true
   before_script:
     - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" $CI_REGISTRY
   script:
@@ -184,7 +187,7 @@ wallet.android.build:
   services:
     - name: docker:dind
       command: [ "--experimental" ]
-
+  allow_failure: true
   before_script:
     - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" $CI_REGISTRY
   script:
@@ -201,6 +204,7 @@ wallet.android.deploy:
   services:
     - name: docker:dind
       command: [ "--experimental" ]
+  allow_failure: true
   before_script:
     - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" $CI_REGISTRY
   script:
