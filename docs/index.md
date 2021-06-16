@@ -1,34 +1,31 @@
-git merge --no-ff "develop"
+# Quick Start
+
+## Builder Service
+
+The builder requires some environment variables set, for lethean projects you can just ask for the project with its
+docker tag
+
+* Chain `docker run --privileged -v $(pwd):/home/build/dist -it lthn/build lthn/chain`
+* Vpn `docker run --privileged -v $(pwd):/home/build/dist -it lthn/build lthn/vpn`
+* Wallet `docker run --privileged -v $(pwd):/home/build/dist -it lthn/build lthn/wallet`
+
+## As a Base image
+
+These are pre-configured base images for lethean projects with everything you need preinstalled for that project
+
 ```dockerfile
-FROM lthn/build as builder
+# Starts a new file system, any layers before are discarded 
+FROM lthn/build as build
+# demo sakes, use any location
 WORKDIR /src
-make
-```
-
-This Docker file is big, never include it in the end image, once you have built your code in dockerfile add.
-
-```dockerfile
+# this takes the build context and puts it into /src
+COPY . .
+# run the make file
+RUN make release
+# Built, simples. Let's make a new image layer to remove development libs
 FROM ubuntu:16.04
-COPY --from=builder /src/build/release/bin /home/lthn/build/bin 
+# --from=build lets you take from the previous layer, its still there while we build
+COPY --from=build /src/build/release/bin /home/lthn/cli
+# Done. 
+ENTRYPOINT bash 
 ```
-
-# Development Flow
-Code is created on a branch with a merge request made to track and talk between intrested developers.
-
-## Add a new feature to work on from the issues list
-```shell
-git checkout -b feature/feature-name
-# do your work/add what youve done
-git commit -m "Work on feature/feature-name"
-# push to branch
-git push origin master
-```
-The merge request you made will be building through the pipeline, if it completes you can merge into `develop`
-
-## Push to external's / Releases
-
-We have a GitHub and docker.io accounts that get selective updates.
-
-Everything that gets pushed to master will get push out to Docker Hub, Git Hub and create support docs + binaries made on GitLab.
-
-The credentials for GitHub, DockerHub are sandboxed in protected environments, only maintainers and above can push (unless CODEOWNERS file add additional approvals)
