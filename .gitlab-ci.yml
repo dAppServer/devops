@@ -15,7 +15,17 @@ test:
 
 pages:
   image: python:3.8-buster
+  variables:
+    PIP_CACHE_DIR: "$CI_PROJECT_DIR/.cache/pip"
+  cache:
+    paths:
+      - ".cache/pip"
+      - "venv/"
   before_script:
+    - python -V               # Print out python version for debugging
+    - pip install virtualenv
+    - virtualenv venv
+    - source venv/bin/activate
     - pip install -r requirements.txt
     - pip install git+https://$protected_material_token@github.com/squidfunk/mkdocs-material-insiders.git
   stage: deploy
