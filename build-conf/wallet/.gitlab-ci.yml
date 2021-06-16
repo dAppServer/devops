@@ -17,28 +17,6 @@ wallet.linux.build:
         - build-conf/wallet/linux.Dockerfile
       when: manual
 
-wallet.linux.deploy:
-  stage: deploy
-  image: docker
-  services:
-    - name: docker:dind
-      command: [ "--experimental" ]
-  allow_failure: true
-  before_script:
-    - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" $CI_REGISTRY
-  script:
-    - docker build --squash -t $CI_REGISTRY_IMAGE:wallet-linux -f build-conf/wallet/linux.Dockerfile src
-    - docker push "$CI_REGISTRY_IMAGE:wallet-linux"
-  environment:
-    name: docker.io
-  rules:
-    - if: $CI_COMMIT_BRANCH == 'master'
-      when: manual
-      changes:
-        - build-conf/wallet/linux.Dockerfile
-    - if: $CI_COMMIT_BRANCH == 'master'
-      when: manual
-
 wallet.windows.build:
   stage: build
   image: docker
@@ -53,28 +31,6 @@ wallet.windows.build:
     - docker push "$CI_REGISTRY_IMAGE:wallet-windows"
   rules:
     - if: $CI_COMMIT_BRANCH == 'master'
-      when: manual
-      changes:
-        - build-conf/wallet/windows.Dockerfile
-    - if: $CI_COMMIT_BRANCH == 'master'
-      when: manual
-
-wallet.windows.deploy:
-  stage: deploy
-  image: docker
-  services:
-    - name: docker:dind
-      command: [ "--experimental" ]
-  allow_failure: true
-  before_script:
-    - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" $CI_REGISTRY
-  script:
-    - docker build --squash -t $CI_REGISTRY_IMAGE:wallet-windows -f build-conf/wallet/windows.Dockerfile src
-    - docker push "$CI_REGISTRY_IMAGE:wallet-windows"
-  environment:
-    name: docker.io
-  rules:
-    - if: '$CI_MERGE_REQUEST_TARGET_BRANCH_NAME == $CI_DEFAULT_BRANCH'
       when: manual
       changes:
         - build-conf/wallet/windows.Dockerfile
@@ -98,26 +54,4 @@ wallet.android.build:
       when: manual
     - changes:
         - build-conf/wallet/android.Dockerfile
-      when: manual
-
-wallet.android.deploy:
-  stage: deploy
-  image: docker
-  services:
-    - name: docker:dind
-      command: [ "--experimental" ]
-  allow_failure: true
-  before_script:
-    - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" $CI_REGISTRY
-  script:
-    - docker build --squash -t $CI_REGISTRY_IMAGE:wallet-android -f build-conf/wallet/android.Dockerfile src
-    - docker push "$CI_REGISTRY_IMAGE:wallet-android"
-  environment:
-    name: docker.io
-  rules:
-    - if: $CI_COMMIT_BRANCH == 'master'
-      when: manual
-      changes:
-        - build-conf/wallet/android.Dockerfile
-    - if: $CI_COMMIT_BRANCH == 'master'
       when: manual
