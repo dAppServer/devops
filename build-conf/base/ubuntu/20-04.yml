@@ -36,4 +36,4 @@ base-ubuntu-20-04.deploy:
     - if: $CI_COMMIT_BRANCH == 'master'
       changes:
         - build-conf/base/ubuntu/20-04.Dockerfile
-        - build-conf/base/ubuntu/20-04.gitlab-ci.yml
+        - build-conf/base/ubuntu/20-04.yml
