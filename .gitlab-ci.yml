@@ -27,7 +27,7 @@ pages:
       changes:
         - docs/*
 
-build.build:
+build:
   stage: build
   image: docker
   variables:
