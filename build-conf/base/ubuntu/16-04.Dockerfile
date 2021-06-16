@@ -1,7 +1,5 @@
-ARG UBUNTU_VERSION=16.04
-FROM scratch as parent
-
-FROM ubuntu:${UBUNTU_VERSION} as ubuntu
+FROM scratch
+FROM ubuntu:16.04 as base-ubuntu-16-04
 
 ENV DEBIAN_FRONTEND=noninteractive
 

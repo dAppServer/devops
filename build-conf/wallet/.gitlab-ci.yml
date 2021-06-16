@@ -16,7 +16,7 @@ wallet.linux.build:
         - build-conf/wallet/linux.Dockerfile
         - build-conf/wallet/.gitlab-ci.yml
 
-wallet.windows.build:
+wallet-windows-build:
   stage: build
   image: docker
   services:
@@ -34,7 +34,7 @@ wallet.windows.build:
         - build-conf/wallet/windows.Dockerfile
         - build-conf/wallet/.gitlab-ci.yml
 
-wallet.android.build:
+wallet-android-build:
   stage: build
   image: docker
   services:

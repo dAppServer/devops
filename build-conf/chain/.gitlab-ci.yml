@@ -1,4 +1,4 @@
-chain.linux.build:
+chain-linux-build:
   stage: build
   image: docker
   services:
