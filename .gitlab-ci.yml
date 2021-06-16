@@ -46,7 +46,7 @@ build:
     - docker push $CI_REGISTRY_IMAGE
   rules:
     - if: $CI_COMMIT_BRANCH == 'master'
-    - changes:
+      changes:
         - build-conf/build.Dockerfile
         - src/*
 

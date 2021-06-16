@@ -12,7 +12,7 @@ chain.linux.build:
     - docker push "$CI_REGISTRY_IMAGE:chain-linux"
   rules:
     - if: $CI_COMMIT_BRANCH == 'master'
-    - changes:
+      changes:
         - build-conf/chain/linux.Dockerfile
         - build-conf/chain/.gitlab-ci.yml
 
