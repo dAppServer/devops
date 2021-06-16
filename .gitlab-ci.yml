@@ -156,8 +156,8 @@ wallet.windows.build:
     - docker build --cache-from $CI_REGISTRY_IMAGE:wallet-windows -t $CI_REGISTRY_IMAGE:wallet-windows -f build-conf/wallet/windows.Dockerfile src
     - docker push "$CI_REGISTRY_IMAGE:wallet-windows"
   rules:
-    - if: '$CI_MERGE_REQUEST_TARGET_BRANCH_NAME == $CI_DEFAULT_BRANCH'
-    - changes:
+    - if: $CI_COMMIT_BRANCH == 'master'
+      changes:
         - build-conf/wallet/windows.Dockerfile
 
 wallet.windows.deploy:
