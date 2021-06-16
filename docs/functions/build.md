@@ -1,72 +1,40 @@
-# Docker Build Functions
+# Main Build Examples
 
-These are contained within the `lthn/build` image, the following code samples show the internal commands that get run
 
-## build
+## Compile Projects
 
-Performs an internal docker build
+Compiles the project and copies the build assets to the mount point
 
-=== "Command"
-
-    ``` shell
-    docker run --privileged -v $(pwd):/home/build/dist -it lthn/build build
-    ```
-
-=== "Action"
-
-    ``` dockerfile
-    docker build -f "$(DOCKER_FILE)" -t "$(DOCKER_IMAGE)" src || exit
-    ```
-
-## build-git
-
-Builds a internal docker image from git url
-
-=== "Command"
+=== "Blockchain"
 
     ``` shell
-    docker run --privileged -v $(pwd):/home/build/dist -it lthn/build build-git
+    docker run --privileged -v $(pwd):/home/build/dist -it lthn/build lthn/chain
     ```
 
-=== "Action"
-
-    ``` dockerfile
-    docker build -t "$(DOCKER_IMAGE)" ${BUILD_GIT_REPO} || exit
-    ```
-
-## compile-git
-
-This never gets called direct, runs a `make` on the folder src which has been pre cloned by the builds at this point.
-
-=== "Command"
+=== "3rd Party"
 
     ``` shell
-    docker run --privileged -v $(pwd):/home/build/dist -it lthn/build compile-git
+    docker run --privileged -v $(pwd):/home/build/dist -it lthn/build compile https://github.com/monero-project/monero.git
     ```
 
-=== "Action"
+## Base Images
 
-    ``` dockerfile
-    docker build -f "$(DOCKER_FILE)" -t "$(DOCKER_IMAGE)" src || exit
+=== "Blockchain"
+
+    ```dockerfile
+    # Starts a new file system, any layers before are discarded 
+    FROM lthn/build:chain-linux as build
+    # demo sakes, use any location
+    WORKDIR /src
+    # this takes the build context and puts it into /src
+    COPY . .
+    # run the make file
+    RUN make release-static
+    # Built, simples. Let's make a new image layer to remove development libs
+    FROM ubuntu:16.04
+    # --from=build lets you take from the previous layer, its still there while we build
+    COPY --from=build /src/build/release/bin /usr/bin
+    RUN chmod +x /user/bin/lethean-*
+    # Done. 
+    ENTRYPOINT bash 
     ```
-
-## eject-build
-
-Takes the build result and extracts the files. 
-
-=== "Command"
-
-    ``` shell
-    docker run --privileged -v $(pwd):/home/build/dist -it lthn/build eject-build
-    ```
-
-=== "Action"
-
-    ``` dockerfile
-    docker run --name "$(DOCKER_NAME_NORMALISED)" -d "$(DOCKER_IMAGE)"
-    docker cp "$(DOCKER_NAME_NORMALISED)":"$(BUILD_RESULT_PATH)" ./dist
-    docker stop "$(DOCKER_NAME_NORMALISED)"
-    docker rm "$(DOCKER_NAME_NORMALISED)" && docker rmi "$(DOCKER_IMAGE)"
-    echo "Ejected Build to ${BUILD_RESULT_PATH}"
-    ```
-

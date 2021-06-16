@@ -43,6 +43,12 @@ case $1 in
     make build
     make eject-build
   ;;
+  "b"|"build")
+    shift
+    export BUILD_GIT_REPO="$*"
+    make build-git
+    make eject-build
+  ;;
   "bash")
     /usr/bin/env bash
   ;;
@@ -50,8 +56,10 @@ case $1 in
     /usr/bin/env sh
   ;;
   *)
+    rm src/.lthnkeep || echo "Could not delete .lthnkeep from build directory, not an error if this builds"
     export BUILD_GIT_REPO="$*"
-    make build-git
+    git clone --depth=1 --branch master --recurse-submodules "${BUILD_GIT_REPO}" src || exit
+    make build
     make eject-build
   ;;
 
