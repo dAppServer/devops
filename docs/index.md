@@ -1,4 +1,4 @@
-# Platform Agnostic Build Tool
+# Host Platform Agnostic Build Tool
 
 Our build system is a framework that allows any project to utilise and automate derivative docker base images via CI Pipelines
 
@@ -16,8 +16,11 @@ Lethean Builder abstracts all that geeky stuff for a few reasons: `performance`,
 compiling takes time, uses power, it's wasteful when you don't need to but maintaining base images can quickly become a nightmare. 
 
 ### Caching
+
 Most projects get you to compile your own assets, then you have to recompile, often (in docker land or just when switching versions).
-using our builder we can do a FULL compile of our blockchain in just under 2 minutes, or about 15 minutes.
+using our builder, and some adjustments with settings we can do a full compile of our blockchain in just under 2 minutes, or about 15 minutes without pushing limits.
+
+The layers here enable us to deliver fast builds in an acceptable timeframe, instantiated from a terminal or script, on a framework that can be customised to compile literally anything.
 
 ### Security
 
