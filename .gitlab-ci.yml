@@ -44,6 +44,7 @@ build:
     - if: $CI_COMMIT_BRANCH == 'master'
     - changes:
         - build-conf/build.Dockerfile
+        - src/*
 
 build.deploy:
   stage: deploy
@@ -64,6 +65,7 @@ build.deploy:
     - if: $CI_COMMIT_BRANCH == 'master'
       changes:
         - build-conf/build.Dockerfile
+        - src/*
     - if: $CI_COMMIT_BRANCH == 'master'
       when: manual
 

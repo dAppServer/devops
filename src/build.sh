@@ -43,7 +43,12 @@ case $1 in
     make build
     make eject-build
   ;;
-
+  "bash")
+    /usr/bin/env bash
+  ;;
+  "sh")
+    /usr/bin/env sh
+  ;;
   *)
     export BUILD_GIT_REPO="$*"
     make build-git
