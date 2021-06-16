@@ -26,13 +26,12 @@ build.deploy:
       command: [ "--experimental" ]
   before_script:
     - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" $CI_REGISTRY
-  script:
-    - docker pull -a $CI_REGISTRY_IMAGE
-    - docker tag $CI_REGISTRY_IMAGE:latest $DOCKER_REGISTRY_IMAGE:latest
-    - docker tag $CI_REGISTRY_IMAGE:chain-linux $DOCKER_REGISTRY_IMAGE:chain-linux
-    - docker tag $CI_REGISTRY_IMAGE $DOCKER_REGISTRY_IMAGE
     - docker login -u "$DOCKER_REGISTRY_USER" -p "$DOCKER_REGISTRY_PASSWORD" $DOCKER_REGISTRY
-    - docker push -a $DOCKER_REGISTRY_IMAGE
+  script:
+    - docker pull $CI_REGISTRY_IMAGE --all-tags
+    - docker images $CI_REGISTRY_IMAGE \
+        --format "docker tag {{.Repository}}:{{.Tag}} $DOCKER_REGISTRY/{{.Repository}}:{{.Tag}} | docker push $DOCKER_REGISTRY/{{.Repository}}:{{.Tag}}" | \
+        grep -vE "$DOCKER_REGISTRY_PUSH_BLACKLIST" | bash
   environment:
     name: docker.io
   rules:
