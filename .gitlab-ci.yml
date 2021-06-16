@@ -70,7 +70,6 @@ build.deploy:
   rules:
     - if: $CI_COMMIT_BRANCH == 'master'
       changes:
-        - build-conf/build.Dockerfile
+        - build-conf/*
         - src/*
-    - if: $CI_COMMIT_BRANCH == 'master'
 
