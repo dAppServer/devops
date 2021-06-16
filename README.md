@@ -1,56 +1,41 @@
 # Platform Agnostic Build Tool
 
-This is the source repository for: https://hub.docker.com/r/lthn/build
+The tool has a few aspects, for detailed instructions: https://build.lethean.help
 
-For instructions please see: https://build.lethean.help
+## Docker Tags
 
-# Quick Start
+### Lethean Build Images
 
-## Builder Service
+* [lthn-chain-linux](https://hub.docker.com/r/lthn/build/tags?page=1&ordering=last_updated&name=lthn-chain-linux),
+  [lthn-wallet-linux](https://hub.docker.com/r/lthn/build/tags?page=1&ordering=last_updated&name=lthn-wallet-linux),
+  [lthn-wallet-windows](https://hub.docker.com/r/lthn/build/tags?page=1&ordering=last_updated&name=lthn-wallet-linux),
+  [lthn-wallet-android](https://hub.docker.com/r/lthn/build/tags?page=1&ordering=last_updated&name=lthn-wallet-linux)
+  
+``` dockerfile
+FROM lthn/build:lthn-chain-linux as build
 
-The builder requires some environment variables set, for lethean projects you can just ask for the project with its
-docker tag
+RUN git clone --branch=master --depth=1 https://gitlab.com/lthn.io/projects/chain/lethean.git
+    
+WORKDIR /lethean
 
-* Chain `docker run --privileged -v $(pwd):/home/build/dist -it lthn/build lthn/chain`
-* Vpn `docker run --privileged -v $(pwd):/home/build/dist -it lthn/build lthn/vpn`
-* Wallet `docker run --privileged -v $(pwd):/home/build/dist -it lthn/build lthn/wallet`
+RUN make release-static
 
-### Building Git Repos
+FROM lthn/build:base-ubuntu-20.04
 
-To compile a repo with `make` from its url and have the build returned to you in your working directory
+COPY --from=build /lethean/build /tmp/build
 
-*Linux/Mac*
-
-`docker run --privileged -v $(pwd):/home/build/dist -it lthn/build compile https://gitlab.com/lthn.io/projects/chain/lethean.git`
-
-*Windows:(i think~ will remove when tested)*
-
-`docker run --privileged -v %cd%:/home/build/dist -it lthn/build compile https://gitlab.com/lthn.io/projects/chain/lethean.git`
-
-### Sandboxed Docker image Build
-
-As docker lets you build a docker image with a git url, this lets you populate internal docker from git.
-
-`docker run --privileged -v $(pwd):/home/build/dist -it lthn/build https://github.com/monero-project/monero.git`
-
-## As a Base image
-
-These are pre-configured base images for lethean projects with everything you need preinstalled for that project
-
-```dockerfile
-# Starts a new file system, any layers before are discarded 
-FROM lthn/build:chain-linux as build
-# demo sakes, use any location
-WORKDIR /src
-# this takes the build context and puts it into /src
-COPY . .
-# run the make file
-RUN make release
-# Built, simples. Let's make a new image layer to remove development libs
-FROM ubuntu:16.04
-# --from=build lets you take from the previous layer, its still there while we build
-COPY --from=build /src/build/release/bin /home/lthn/cli
-# Done. 
 ENTRYPOINT bash 
 ```
+
+### Container Base Images
+
+These are the base OS images, primed with "the basics" but not exactly tooling.
+
+#### Ubuntu
+*base-ubuntu* Will be the latest LTS
+* [base-ubuntu](https://hub.docker.com/r/lthn/build/tags?page=1&ordering=last_updated&name=base-ubuntu),
+  [base-ubuntu-16.04](https://hub.docker.com/r/lthn/build/tags?page=1&ordering=last_updated&name=base-ubuntu-16.04), 
+  [base-ubuntu-18.04](https://hub.docker.com/r/lthn/build/tags?page=1&ordering=last_updated&name=base-ubuntu-18.04), 
+  [base-ubuntu-20.04](https://hub.docker.com/r/lthn/build/tags?page=1&ordering=last_updated&name=base-ubuntu-20.04) 
+
 
