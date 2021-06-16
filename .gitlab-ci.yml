@@ -27,9 +27,9 @@ pages:
   rules:
     - if: $CI_COMMIT_BRANCH == 'master'
       changes:
-        - docs/*
-        - requirements.txt
-        - mkdocs.yml
+        - "docs/**/*"
+        - "requirements.txt"
+        - "mkdocs.yml"
 
 build:
   stage: build
@@ -47,8 +47,8 @@ build:
   rules:
     - if: $CI_COMMIT_BRANCH == 'master'
       changes:
-        - build-conf/build.Dockerfile
-        - src/*
+        - "build-conf/build.Dockerfile"
+        - "src/**/*"
 
 build.deploy:
   stage: deploy
@@ -72,6 +72,6 @@ build.deploy:
   rules:
     - if: $CI_COMMIT_BRANCH == 'master'
       changes:
-        - build-conf/*
-        - src/*
+        - "build-conf/**/*"
+        - "src/**/*"
 
