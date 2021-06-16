@@ -1,7 +1,3 @@
-[data-md-color-scheme="lethean"] {
-  /* @todo theme this up :) */
-  --md-primary-fg-color:        #0F131C;
-}
 :root {
   --md-primary-fg-color:        #40c1c5;
   --md-primary-fg-color--light: #79d4d6;
