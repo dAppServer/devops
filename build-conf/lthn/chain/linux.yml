@@ -30,7 +30,7 @@ lthn-chain-linux.deploy:
   script:
     - docker pull $CI_REGISTRY_IMAGE:lthn-chain-linux
     - docker tag $CI_REGISTRY_IMAGE:lthn-chain-linux $DOCKER_REGISTRY_IMAGE:lthn-chain-linux
-    - docker push $DOCKER_REGISTRY
+    - docker push $DOCKER_REGISTRY/$DOCKER_REGISTRY_IMAGE:lthn-chain-linux
   environment:
     name: docker.io
   rules:

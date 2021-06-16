@@ -13,7 +13,7 @@ base-ubuntu-18-04.build:
   rules:
     - changes:
         - build-conf/base/ubuntu/18-04.Dockerfile
-        - build-conf/base/ubuntu/.gitlab-ci.yml
+        - build-conf/base/ubuntu/18-04.yml
 
 
 base-ubuntu-18-04.deploy:
@@ -28,14 +28,14 @@ base-ubuntu-18-04.deploy:
     - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" $CI_REGISTRY
     - docker login -u "$DOCKER_REGISTRY_USER" -p "$DOCKER_REGISTRY_PASSWORD" $DOCKER_REGISTRY
   script:
-    - docker pull $CI_REGISTRY_IMAGE:base-ubuntu
-    - docker tag $CI_REGISTRY_IMAGE:base-ubuntu $DOCKER_REGISTRY_IMAGE:base-ubuntu-18-04
-    - docker push $DOCKER_REGISTRY
+    - docker pull $CI_REGISTRY_IMAGE:base-ubuntu-18-04
+    - docker tag $CI_REGISTRY_IMAGE:base-ubuntu-18-04 $DOCKER_REGISTRY_IMAGE:base-ubuntu-18-04
+    - docker push $DOCKER_REGISTRY/$DOCKER_REGISTRY_IMAGE:base-ubuntu-18-04
   environment:
     name: docker.io
   rules:
     - if: $CI_COMMIT_BRANCH == 'master'
       changes:
         - build-conf/base/ubuntu/18-04.Dockerfile
-        - build-conf/base/ubuntu/.gitlab-ci.yml
+        - build-conf/base/ubuntu/18-04.yml
 

@@ -30,7 +30,7 @@ base-ubuntu-16-04.deploy:
   script:
     - docker pull $CI_REGISTRY_IMAGE:base-ubuntu-16-04
     - docker tag $CI_REGISTRY_IMAGE:base-ubuntu-16-04 $DOCKER_REGISTRY_IMAGE:base-ubuntu-16-04
-    - docker push $DOCKER_REGISTRY
+    - docker push $DOCKER_REGISTRY/$DOCKER_REGISTRY_IMAGE:base-ubuntu-16-04
   environment:
     name: docker.io
   rules:
