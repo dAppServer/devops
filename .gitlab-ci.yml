@@ -28,6 +28,8 @@ pages:
     - if: $CI_COMMIT_BRANCH == 'master'
       changes:
         - docs/*
+        - requirements.txt
+        - mkdocs.yml
 
 build:
   stage: build
