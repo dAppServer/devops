@@ -11,15 +11,16 @@ Compiling is easy, it should "just work", it says so in the README, it will be f
 it's now 10 hours later, you're questioning if you have the IQ to classify as a human,
 the README has broken your mouse finger... then in confused tiredness you just replaced a system library with a version that breaks your world.
 
-Lethean Builder, true to the meaning of "Lethean", to forget; is a forgetful & private builder that abstracts all that geeky stuff for a few reasons: `performance`, `security` & `Compute Reuse(e.g being kinder to the planet)`.
+Lethean Builder, true to the meaning of "Lethean", to forget; is a forgetful & private builder that abstracts all 
+that geeky stuff for a few reasons: `Performance`, `Security` & `Compute Reuse (a.k.a being kinder to the planet)`.
 
-compiling takes time, uses power, it's also wasteful when repeated for no real reason, but most solutions to this get complicated, Dockerfiles are the easy way.
+Compiling takes time, uses power, it's also wasteful when repeated for no real reason, the solutions to this are too complicated for laypeople.
 
-It's not simple, yet.
+It's not a simple process, "ain't nobody got time for that".
 
 ## Cache all the things!
 
-Using our builder, with some adjustments to settings (a.k.a future features) we can do a full compile of our blockchain in just under 2 minutes, or about 15 minutes without pushing limits.
+Using our builder, with some adjustments to settings (*future features) we can do a full compile of our blockchain in just under 2 minutes, or about 15 minutes without pushing limits.
 
 The layers here enable us to deliver fast builds in an acceptable timeframe, instantiated from a terminal or script, on a framework that can be customised to compile literally anything, all options customisable.
 
