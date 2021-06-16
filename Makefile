@@ -1,12 +1,12 @@
 .PHONY: all
 all:
-	$(MAKE) -C src
+	$(MAKE) -C build-src
 
 
 .PHONY: builder
 builder:
-	docker build -t lthn/build -f build-conf/build.Dockerfile src
+	docker build -t lthn/build -f build-conf/build.Dockerfile build-src
 
 .PHONY: chain.linux
 chain.linux:
-	docker build -t lthn/build:chain-linux -f build-conf/chain/linux.Dockerfile src
+	docker build -t lthn/build:chain-linux -f build-conf/chain/linux.Dockerfile build-src
