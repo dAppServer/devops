@@ -1,4 +1,3 @@
-# Configuration Values
 ```makefile
 DOCKER_COMPOSE ?= ./src/docker-compose.yml
 DOCKER_FILE ?= ./Dockerfile
