@@ -1,0 +1,53 @@
+wallet.linux.build:
+  stage: build
+  image: docker
+  services:
+    - name: docker:dind
+      command: [ "--experimental" ]
+  allow_failure: true
+  before_script:
+    - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" $CI_REGISTRY
+  script:
+    - docker build --squash --cache-from $CI_REGISTRY_IMAGE:wallet-linux -t $CI_REGISTRY_IMAGE:wallet-linux -f build-conf/wallet/linux.Dockerfile build-src
+    - docker push "$CI_REGISTRY_IMAGE:wallet-linux"
+  rules:
+    - if: $CI_COMMIT_BRANCH == 'master'
+      changes:
+        - build-conf/wallet/linux.Dockerfile
+        - build-conf/wallet/.gitlab-ci.yml
+
+wallet.windows.build:
+  stage: build
+  image: docker
+  services:
+    - name: docker:dind
+      command: [ "--experimental" ]
+  allow_failure: true
+  before_script:
+    - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" $CI_REGISTRY
+  script:
+    - docker build --squash --cache-from $CI_REGISTRY_IMAGE:wallet-windows -t $CI_REGISTRY_IMAGE:wallet-windows -f build-conf/wallet/windows.Dockerfile build-src
+    - docker push "$CI_REGISTRY_IMAGE:wallet-windows"
+  rules:
+    - if: $CI_COMMIT_BRANCH == 'master'
+      changes:
+        - build-conf/wallet/windows.Dockerfile
+        - build-conf/wallet/.gitlab-ci.yml
+
+wallet.android.build:
+  stage: build
+  image: docker
+  services:
+    - name: docker:dind
+      command: [ "--experimental" ]
+  allow_failure: true
+  before_script:
+    - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" $CI_REGISTRY
+  script:
+    - docker build --squash --cache-from $CI_REGISTRY_IMAGE:wallet-android -t $CI_REGISTRY_IMAGE:wallet-android -f build-conf/wallet/android.Dockerfile build-src
+    - docker push "$CI_REGISTRY_IMAGE:wallet-android"
+  rules:
+    - if: $CI_COMMIT_BRANCH == 'master'
+      changes:
+        - build-conf/wallet/android.Dockerfile
+        - build-conf/wallet/.gitlab-ci.yml

@@ -1,43 +1,90 @@
-site_name: Lethean Develop Docs
-site_url: https://lethean.dev
+site_name: Lethean Builder Docs
+site_url: https://build.lethean.help
 site_dir: public
-copyright:
+copyright: Copyright &copy; Lethean.io Community
+repo_url: https://gitlab.com/lthn.io/projects/sdk/build
+edit_uri: edit/master/docs/
+repo_name: lthn/build
+
 theme:
   name: material
   custom_dir: docs/overrides
   favicon: images/favicon.ico
+  language: en
+  font:
+    text: montserrat
+  icon:
+    repo: fontawesome/brands/gitlab
+
   features:
+    - navigation.tracking
+    - navigation.tabs
+    - navigation.tabs.sticky
+    - navigation.sections
+    - navigation.top
     - toc.integrate
+    - search.suggest
+    - search.highlight
+    - search.share
+    - content.tabs.link
+
   palette:
-    # Light mode
+    - media: "(prefers-color-scheme: dark)"
+      scheme: slate
+      toggle:
+        icon: material/toggle-switch
+        name: Switch to light mode
     - media: "(prefers-color-scheme: light)"
-      scheme: lethean
-      primary: indigo
-      accent: indigo
+      scheme: default
       toggle:
         icon: material/toggle-switch-off-outline
         name: Switch to dark mode
 
-    # Dark mode
-    - media: "(prefers-color-scheme: dark)"
-      scheme: slate
-      primary: blue
-      accent: blue
-      toggle:
-        icon: material/toggle-switch
-        name: Switch to light mode
 extra:
   generator: false
   social:
     - icon: fontawesome/brands/twitter
       link: https://twitter.com/letheanvpn
     - icon: fontawesome/brands/github
-      link: https://github.com/LetheanMovement
+      link: https://github.com/lethean-io
     - icon: fontawesome/brands/gitlab
-      link: https://gitlab.com/lethean.io
+      link: https://gitlab.com/lthn.io
+  alternate:
+    - name: English
+      link: https://build.lethean.help/en/
+      lang: en
+    - name: Deutsch
+      link: https://build.lethean.help/de/
+      lang: de
+    - name: Russian
+      link: https://build.lethean.help/ru/
+      lang: ru
+plugins:
+  - search:
+  - i18n:
+      default_language: en
+      languages:
+        en: English
+        de: Deutsch
+        ru: Pусский
+  - git-revision-date-localized:
+      fallback_to_build_date: true
+      enable_creation_date: true
+
 extra_css:
   - stylesheets/extra.css
 markdown_extensions:
   - meta
+  - abbr
+  - attr_list
+  - footnotes
+  - admonition
+  - pymdownx.details
+  - pymdownx.highlight
+  - pymdownx.tabbed
+  - pymdownx.superfences
+  - pymdownx.inlinehilite
+  - pymdownx.snippets
   - toc:
-      permalink: true
+      slugify: !!python/name:pymdownx.slugs.uslugify
+      permalink: ⚓︎

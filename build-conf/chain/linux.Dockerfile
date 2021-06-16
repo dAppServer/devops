@@ -25,11 +25,8 @@ RUN set -ex && \
         bzip2 \
         libunwind8-dev \
         libminiupnpc-dev \
-        libssl-dev
-
-RUN apt-get install -y libgtest-dev && cd /usr/src/gtest && sudo cmake . && sudo make && sudo mv libg* /usr/lib/ ; \
-    apt-get clean \
-    && rm -rf /var/lib/apt/lists/*
+        libssl-dev \
+        libgtest-dev
 
 WORKDIR /usr/local
 #Cmake
@@ -56,7 +53,7 @@ RUN set -ex \
     && tar -xvf boost_${BOOST_VERSION}.tar.bz2 \
     && cd boost_${BOOST_VERSION} \
     && ./bootstrap.sh \
-    && ./b2 --build-type=minimal link=static runtime-link=static --with-chrono --with-date_time --with-filesystem --with-program_options --with-regex --with-serialization --with-system --with-thread --with-locale threading=multi threadapi=pthread cflags="-fPIC" cxxflags="-fPIC" install
+    && ./b2 --build-type=minimal link=static runtime-link=static --with-chrono --with-date_time --with-filesystem --with-program_options --with-regex --with-serialization --with-system --with-thread --with-locale threading=multi threadapi=pthread cflags="-fPIC" cxxflags="-fPIC" stage
 ENV BOOST_ROOT /usr/local/boost_${BOOST_VERSION}
 
 
