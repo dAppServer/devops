@@ -46,7 +46,7 @@ build:
         - build-conf/build.Dockerfile
 
 
-chain.linux:
+chain.linux.build:
   stage: build
   image: docker
   services:
@@ -56,14 +56,14 @@ chain.linux:
   before_script:
     - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" $CI_REGISTRY
   script:
-    - docker build --squash -t lthn/build:chain -f build-conf/chain/linux.Dockerfile src
-    - docker push "lthn/build:chain"
+    - docker build --squash -t lthn/build:chain-linux -f build-conf/chain/linux.Dockerfile src
+    - docker push "lthn/build:chain-linux"
   rules:
     - if: $CI_COMMIT_BRANCH == 'master'
     - changes:
         - build-conf/chain/linux.Dockerfile
 
-wallet.linux:
+wallet.linux.build:
   stage: build
   image: docker
   services:
@@ -80,7 +80,7 @@ wallet.linux:
     - changes:
         - build-conf/wallet/linux.Dockerfile
 
-wallet.windows:
+wallet.windows.build:
   stage: build
   image: docker
   services:
@@ -97,7 +97,7 @@ wallet.windows:
     - changes:
         - build-conf/wallet/windows.Dockerfile
 
-wallet.android:
+wallet.android.build:
   stage: build
   image: docker
   services:
