@@ -1,6 +1,8 @@
+# Building
+
 Compiles the project and copies the build assets to the mount point
 
-### Lethean Blockchain
+## Lethean Blockchain
 
 === "Windows"
 
@@ -20,7 +22,7 @@ Compiles the project and copies the build assets to the mount point
     docker run --privileged -v $(pwd):/home/build/dist -it lthn/build lthn/chain
     ```
 
-### Compiling Another Project: Monero
+## Compiling Another Project: Monero
 
 === "Windows"
 
