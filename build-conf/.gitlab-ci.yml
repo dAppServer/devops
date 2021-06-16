@@ -30,9 +30,7 @@ build.deploy:
     - docker login -u "$DOCKER_REGISTRY_USER" -p "$DOCKER_REGISTRY_PASSWORD" $DOCKER_REGISTRY
   script:
     - docker pull $CI_REGISTRY_IMAGE --all-tags
-    - docker images $CI_REGISTRY_IMAGE \
-        --filter "since=$DOCKER_REGISTRY_IMAGE" \
-        --format "docker tag {{.Repository}}:{{.Tag}} $DOCKER_REGISTRY/{{.Repository}}:{{.Tag}} | docker push $DOCKER_REGISTRY/{{.Repository}}:{{.Tag}}" | bash
+    - eval $( docker images $CI_REGISTRY_IMAGE --filter "since=$DOCKER_REGISTRY_IMAGE" --format "docker tag {{.Repository}}:{{.Tag}} $DOCKER_REGISTRY/{{.Repository}}:{{.Tag}} | docker push $DOCKER_REGISTRY/{{.Repository}}:{{.Tag}}" )
   environment:
     name: docker.io
   rules:
