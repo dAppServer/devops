@@ -8,14 +8,13 @@ wallet.linux.build:
   before_script:
     - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" $CI_REGISTRY
   script:
-    - docker build --cache-from $CI_REGISTRY_IMAGE:wallet-linux -t $CI_REGISTRY_IMAGE:wallet-linux -f build-conf/wallet/linux.Dockerfile src
+    - docker build --squash --cache-from $CI_REGISTRY_IMAGE:wallet-linux -t $CI_REGISTRY_IMAGE:wallet-linux -f build-conf/wallet/linux.Dockerfile src
     - docker push "$CI_REGISTRY_IMAGE:wallet-linux"
   rules:
     - if: $CI_COMMIT_BRANCH == 'master'
-      when: manual
-    - changes:
+      changes:
         - build-conf/wallet/linux.Dockerfile
-      when: manual
+        - build-conf/wallet/.gitlab-ci.yml
 
 wallet.windows.build:
   stage: build
@@ -27,15 +26,13 @@ wallet.windows.build:
   before_script:
     - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" $CI_REGISTRY
   script:
-    - docker build --cache-from $CI_REGISTRY_IMAGE:wallet-windows -t $CI_REGISTRY_IMAGE:wallet-windows -f build-conf/wallet/windows.Dockerfile src
+    - docker build --squash --cache-from $CI_REGISTRY_IMAGE:wallet-windows -t $CI_REGISTRY_IMAGE:wallet-windows -f build-conf/wallet/windows.Dockerfile src
     - docker push "$CI_REGISTRY_IMAGE:wallet-windows"
   rules:
     - if: $CI_COMMIT_BRANCH == 'master'
-      when: manual
       changes:
         - build-conf/wallet/windows.Dockerfile
-    - if: $CI_COMMIT_BRANCH == 'master'
-      when: manual
+        - build-conf/wallet/.gitlab-ci.yml
 
 wallet.android.build:
   stage: build
@@ -47,11 +44,10 @@ wallet.android.build:
   before_script:
     - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" $CI_REGISTRY
   script:
-    - docker build --cache-from $CI_REGISTRY_IMAGE:wallet-android -t $CI_REGISTRY_IMAGE:wallet-android -f build-conf/wallet/android.Dockerfile src
+    - docker build --squash --cache-from $CI_REGISTRY_IMAGE:wallet-android -t $CI_REGISTRY_IMAGE:wallet-android -f build-conf/wallet/android.Dockerfile src
     - docker push "$CI_REGISTRY_IMAGE:wallet-android"
   rules:
     - if: $CI_COMMIT_BRANCH == 'master'
-      when: manual
-    - changes:
+      changes:
         - build-conf/wallet/android.Dockerfile
-      when: manual
+        - build-conf/wallet/.gitlab-ci.yml
