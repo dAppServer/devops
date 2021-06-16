@@ -27,7 +27,7 @@ pages:
       changes:
         - docs/*
 
-build:
+build.build:
   stage: build
   image: docker
   variables:
@@ -38,13 +38,34 @@ build:
   before_script:
     - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" $CI_REGISTRY
   script:
-    - docker build -t lthn/build:latest -f build-conf/build.Dockerfile src
-    - docker push lthn/build:latest
+    - docker build --cache-from $CI_REGISTRY_IMAGE -t $CI_REGISTRY_IMAGE -f build-conf/build.Dockerfile src
+    - docker push $CI_REGISTRY_IMAGE
   rules:
     - if: $CI_COMMIT_BRANCH == 'master'
     - changes:
         - build-conf/build.Dockerfile
 
+build.deploy:
+  stage: deploy
+  image: docker
+  variables:
+    DOCKER_HOST: tcp://docker:2375
+  services:
+    - name: docker:dind
+      command: [ "--experimental" ]
+  before_script:
+    - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" $CI_REGISTRY
+  script:
+    - docker build --squash -t lthn/build -f build-conf/build.Dockerfile src
+    - docker push lthn/build
+  environment:
+    name: docker.io
+  rules:
+    - if: $CI_COMMIT_BRANCH == 'master'
+      changes:
+        - build-conf/build.Dockerfile
+    - if: $CI_COMMIT_BRANCH == 'master'
+      when: manual
 
 chain.linux.build:
   stage: build
@@ -56,12 +77,32 @@ chain.linux.build:
   before_script:
     - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" $CI_REGISTRY
   script:
-    - docker build --squash -t lthn/build:chain-linux -f build-conf/chain/linux.Dockerfile src
-    - docker push "lthn/build:chain-linux"
+    - docker build --cache-from $CI_REGISTRY_IMAGE -t $CI_REGISTRY_IMAGE:chain-linux -f build-conf/chain/linux.Dockerfile src
+    - docker push "$CI_REGISTRY_IMAGE:chain-linux"
   rules:
     - if: $CI_COMMIT_BRANCH == 'master'
     - changes:
         - build-conf/chain/linux.Dockerfile
+
+chain.linux.deploy:
+  stage: deploy
+  image: docker
+  services:
+    - name: docker:dind
+      command: [ "--experimental" ]
+  before_script:
+    - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" $CI_REGISTRY
+  script:
+    - docker build --squash -t lthn/build:chain-linux -f build-conf/chain/linux.Dockerfile src
+    - docker push "lthn/build:chain-linux"
+  environment:
+    name: docker.io
+  rules:
+    - if: $CI_COMMIT_BRANCH == 'master'
+      changes:
+        - build-conf/chain/linux.Dockerfile
+    - if: $CI_COMMIT_BRANCH == 'master'
+      when: manual
 
 wallet.linux.build:
   stage: build
@@ -73,12 +114,32 @@ wallet.linux.build:
   before_script:
     - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" $CI_REGISTRY
   script:
-    - docker build --squash -t lthn/build:wallet-linux -f build-conf/wallet/linux.Dockerfile src
-    - docker push "lthn/build:wallet-linux"
+    - docker build --cache-from $CI_REGISTRY_IMAGE:wallet-linux -t $CI_REGISTRY_IMAGE:wallet-linux -f build-conf/wallet/linux.Dockerfile src
+    - docker push "$CI_REGISTRY_IMAGE:wallet-linux"
   rules:
     - if: $CI_COMMIT_BRANCH == 'master'
     - changes:
         - build-conf/wallet/linux.Dockerfile
+
+wallet.linux.deploy:
+  stage: deploy
+  image: docker
+  services:
+    - name: docker:dind
+      command: [ "--experimental" ]
+  before_script:
+    - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" $CI_REGISTRY
+  script:
+    - docker build --squash -t $CI_REGISTRY_IMAGE:wallet-linux -f build-conf/wallet/linux.Dockerfile src
+    - docker push "$CI_REGISTRY_IMAGE:wallet-linux"
+  environment:
+    name: docker.io
+  rules:
+    - if: $CI_COMMIT_BRANCH == 'master'
+      changes:
+        - build-conf/wallet/linux.Dockerfile
+    - if: $CI_COMMIT_BRANCH == 'master'
+      when: manual
 
 wallet.windows.build:
   stage: build
@@ -90,12 +151,32 @@ wallet.windows.build:
   before_script:
     - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" $CI_REGISTRY
   script:
-    - docker build --squash -t lthn/build:wallet-windows -f build-conf/wallet/windows.Dockerfile src
-    - docker push "lthn/build:wallet-windows"
+    - docker build --cache-from $CI_REGISTRY_IMAGE:wallet-windows -t $CI_REGISTRY_IMAGE:wallet-windows -f build-conf/wallet/windows.Dockerfile src
+    - docker push "$CI_REGISTRY_IMAGE:wallet-windows"
   rules:
     - if: '$CI_MERGE_REQUEST_TARGET_BRANCH_NAME == $CI_DEFAULT_BRANCH'
     - changes:
         - build-conf/wallet/windows.Dockerfile
+
+wallet.windows.deploy:
+  stage: deploy
+  image: docker
+  services:
+    - name: docker:dind
+      command: [ "--experimental" ]
+  before_script:
+    - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" $CI_REGISTRY
+  script:
+    - docker build --squash -t $CI_REGISTRY_IMAGE:wallet-windows -f build-conf/wallet/windows.Dockerfile src
+    - docker push "$CI_REGISTRY_IMAGE:wallet-windows"
+  environment:
+    name: docker.io
+  rules:
+    - if: '$CI_MERGE_REQUEST_TARGET_BRANCH_NAME == $CI_DEFAULT_BRANCH'
+      changes:
+        - build-conf/wallet/windows.Dockerfile
+    - if: $CI_COMMIT_BRANCH == 'master'
+      when: manual
 
 wallet.android.build:
   stage: build
@@ -107,9 +188,30 @@ wallet.android.build:
   before_script:
     - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" $CI_REGISTRY
   script:
-    - docker build --squash -t lthn/build:wallet-android -f build-conf/wallet/android.Dockerfile src
-    - docker push "lthn/build:wallet-android"
+    - docker build --cache-from $CI_REGISTRY_IMAGE:wallet-android -t $CI_REGISTRY_IMAGE:wallet-android -f build-conf/wallet/android.Dockerfile src
+    - docker push "$CI_REGISTRY_IMAGE:wallet-android"
   rules:
     - if: $CI_COMMIT_BRANCH == 'master'
     - changes:
         - build-conf/wallet/android.Dockerfile
+
+wallet.android.deploy:
+  stage: deploy
+  image: docker
+  services:
+    - name: docker:dind
+      command: [ "--experimental" ]
+  before_script:
+    - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" $CI_REGISTRY
+  script:
+    - docker build --squash -t $CI_REGISTRY_IMAGE:wallet-android -f build-conf/wallet/android.Dockerfile src
+    - docker push "$CI_REGISTRY_IMAGE:wallet-android"
+  environment:
+    name: docker.io
+  rules:
+    - if: $CI_COMMIT_BRANCH == 'master'
+      changes:
+        - build-conf/wallet/android.Dockerfile
+    - if: $CI_COMMIT_BRANCH == 'master'
+      when: manual
+
