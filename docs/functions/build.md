@@ -1,6 +1,3 @@
-# Main Build Examples
-
-
 ## Compile Projects
 
 Compiles the project and copies the build assets to the mount point
