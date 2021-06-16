@@ -53,7 +53,7 @@ docker tag
 * Vpn `docker run --privileged -v $(pwd):/home/build/dist -it lthn/build lthn/vpn`
 * Wallet `docker run --privileged -v $(pwd):/home/build/dist -it lthn/build lthn/wallet`
 
-### As a Base image
+### Using our Base image
 
 These are pre-configured base images for lethean projects with everything you need preinstalled for that project
 

@@ -41,3 +41,8 @@ pages:
         - "docs/**/*"
         - "requirements.txt"
         - "mkdocs.yml"
+    - if: $CI_COMMIT_BRANCH == 'develop'
+      changes:
+        - "docs/**/*"
+        - "requirements.txt"
+        - "mkdocs.yml"
