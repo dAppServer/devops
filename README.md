@@ -1,4 +1,4 @@
-# Lethean Docker Builder
+# Platform Agnostic Build Tool
 
 This is the source repository for: https://hub.docker.com/r/lthn/build
 
