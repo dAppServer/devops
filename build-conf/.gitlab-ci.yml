@@ -25,15 +25,14 @@ build.deploy:
     - name: docker:dind
       command: [ "--experimental" ]
   before_script:
-    - apk add bash grep
+    - apk add bash
     - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" $CI_REGISTRY
     - docker login -u "$DOCKER_REGISTRY_USER" -p "$DOCKER_REGISTRY_PASSWORD" $DOCKER_REGISTRY
   script:
     - docker pull $CI_REGISTRY_IMAGE --all-tags
     - docker images $CI_REGISTRY_IMAGE \
         --filter "since=$DOCKER_REGISTRY_IMAGE" \
-        --format "docker tag {{.Repository}}:{{.Tag}} $DOCKER_REGISTRY/{{.Repository}}:{{.Tag}} | docker push $DOCKER_REGISTRY/{{.Repository}}:{{.Tag}}" |& \
-        grep -vE "$DOCKER_REGISTRY_PUSH_BLACKLIST" | bash
+        --format "docker tag {{.Repository}}:{{.Tag}} $DOCKER_REGISTRY/{{.Repository}}:{{.Tag}} | docker push $DOCKER_REGISTRY/{{.Repository}}:{{.Tag}}" | bash
   environment:
     name: docker.io
   rules:
