@@ -1,0 +1,41 @@
+base-ubuntu-18-04.build:
+  stage: build
+  image: docker
+  services:
+    - name: docker:dind
+      command: [ "--experimental" ]
+  allow_failure: true
+  before_script:
+    - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" $CI_REGISTRY
+  script:
+    - docker build --squash --cache-from $CI_REGISTRY_IMAGE:base-ubuntu-18-04 -t $CI_REGISTRY_IMAGE:base-ubuntu-18-04 -f build-conf/base/ubuntu/18-04.Dockerfile build-src
+    - docker push "$CI_REGISTRY_IMAGE:base-ubuntu-18-04"
+  rules:
+    - changes:
+        - build-conf/base/ubuntu/18-04.Dockerfile
+        - build-conf/base/ubuntu/.gitlab-ci.yml
+
+
+base-ubuntu-18-04.deploy:
+  stage: deploy
+  image: docker
+  variables:
+    DOCKER_HOST: tcp://docker:2375
+  services:
+    - name: docker:dind
+      command: [ "--experimental" ]
+  before_script:
+    - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" $CI_REGISTRY
+    - docker login -u "$DOCKER_REGISTRY_USER" -p "$DOCKER_REGISTRY_PASSWORD" $DOCKER_REGISTRY
+  script:
+    - docker pull $CI_REGISTRY_IMAGE:base-ubuntu
+    - docker tag $CI_REGISTRY_IMAGE:base-ubuntu $DOCKER_REGISTRY_IMAGE:base-ubuntu-18-04
+    - docker push $DOCKER_REGISTRY
+  environment:
+    name: docker.io
+  rules:
+    - if: $CI_COMMIT_BRANCH == 'master'
+      changes:
+        - build-conf/base/ubuntu/18-04.Dockerfile
+        - build-conf/base/ubuntu/.gitlab-ci.yml
+
