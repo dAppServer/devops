@@ -162,7 +162,7 @@ wallet.windows.build:
       changes:
         - build-conf/wallet/windows.Dockerfile
     - if: $CI_COMMIT_BRANCH == 'master'
-      when: manual
+
 
 wallet.windows.deploy:
   stage: deploy
@@ -183,7 +183,7 @@ wallet.windows.deploy:
       changes:
         - build-conf/wallet/windows.Dockerfile
     - if: $CI_COMMIT_BRANCH == 'master'
-      when: manual
+
 
 wallet.android.build:
   stage: build
