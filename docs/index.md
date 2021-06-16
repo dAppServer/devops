@@ -20,7 +20,7 @@ compiling takes time, uses power, it's also wasteful when repeated for no real r
 Most projects get you to compile your own assets, then you have to recompile, often (in docker land or just when switching versions).
 using our builder, and some adjustments with settings we can do a full compile of our blockchain in just under 2 minutes, or about 15 minutes without pushing limits.
 
-The layers here enable us to deliver fast builds in an acceptable timeframe, instantiated from a terminal or script, on a framework that can be customised to compile literally anything.
+The layers here enable us to deliver fast builds in an acceptable timeframe, instantiated from a terminal or script, on a framework that can be customised to compile literally anything with all options fully exposed and customisable.
 
 ### Security
 
