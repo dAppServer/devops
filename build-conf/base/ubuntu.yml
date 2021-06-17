@@ -19,7 +19,7 @@ base-ubuntu.build:
     - docker images "$IMAGE_TAG" | awk '{print $NF}' | sed "1 d"
     - docker run -e DOCKER_HOST=$DOCKER_HOST dslim/docker-slim build "$IMAGE_TAG"
     - echo "New size:"
-    - docker images "$IMAGE_TAG-slim" | awk '{print $NF}' | sed "1 d"
+    - docker images "$IMAGE_TAG" | awk '{print $NF}' | sed "1 d"
     - docker push "$IMAGE_TAG"
   rules:
     - changes:
