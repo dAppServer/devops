@@ -5,11 +5,15 @@ base-ubuntu-18-04.build:
     - name: docker:dind
       command: [ "--experimental" ]
   allow_failure: true
+  variables:
+    DOCKER_HOST: tcp://docker:2375
+    IMAGE_TAG: "$CI_REGISTRY_IMAGE:base-ubuntu-18-04"
   before_script:
     - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" $CI_REGISTRY
   script:
-    - docker build --squash --cache-from $CI_REGISTRY_IMAGE:base-ubuntu-18-04 -t $CI_REGISTRY_IMAGE:base-ubuntu-18-04 -f build-conf/base/ubuntu/18-04.Dockerfile build-src
-    - docker push "$CI_REGISTRY_IMAGE:base-ubuntu-18-04"
+    - docker build --cache-from $IMAGE_TAG -t $IMAGE_TAG -f build-conf/base/ubuntu/18-04.Dockerfile build-src
+    - docker run -e DOCKER_HOST=tcp://$(grep docker /etc/hosts | cut -f1):2375 dslim/docker-slim build --publish-exposed-ports --http-probe-off --pull --target "$IMAGE_TAG" --tag "$IMAGE_TAG"
+    - docker push "$IMAGE_TAG"
   rules:
     - changes:
         - build-conf/base/ubuntu/18-04.Dockerfile
