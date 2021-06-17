@@ -18,6 +18,7 @@ build:
   rules:
     - changes:
         - "build-conf/build.Dockerfile"
+        - "build-conf/build.yml"
         - "build-src/**/*"
 
 build.deploy:
@@ -42,4 +43,5 @@ build.deploy:
     - if: $CI_COMMIT_BRANCH == 'master'
       changes:
         - "build-conf/build.Dockerfile"
+        - "build-conf/build.yml"
         - "build-src/**/*"
