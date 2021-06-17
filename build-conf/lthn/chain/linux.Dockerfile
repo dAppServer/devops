@@ -1,28 +1,18 @@
-#
-# Lethean Docker builder
-#
-# Maintainer: snider@lethean.io
-# Licence: MIT License, see /LICENSE
-#
-FROM scratch
-FROM ubuntu:16.04
+FROM lthn/build:base-ubuntu-16-04
 
 RUN set -ex && \
     apt-get update && \
     apt-get --no-install-recommends --yes install \
-        ca-certificates \
         cmake \
         g++ \
         make \
         pkg-config \
         graphviz \
         doxygen \
-        git \
         curl \
         libtool-bin \
         autoconf \
         automake \
-        bzip2 \
         libunwind8-dev \
         libminiupnpc-dev \
         libssl-dev \
