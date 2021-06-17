@@ -21,6 +21,7 @@ build:
         - "build-src/**/*"
 
 build.deploy:
+  stage: deploy
   needs: ["build"]
   image: docker
   variables:
