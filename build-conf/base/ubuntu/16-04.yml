@@ -18,6 +18,7 @@ base-ubuntu-16-04.build:
 
 base-ubuntu-16-04.deploy:
   stage: deploy
+  needs: ["base-ubuntu-16-04.build"]
   image: docker
   variables:
     DOCKER_HOST: tcp://docker:2375
@@ -31,8 +32,6 @@ base-ubuntu-16-04.deploy:
     - docker pull $CI_REGISTRY_IMAGE:base-ubuntu-16-04
     - docker tag $CI_REGISTRY_IMAGE:base-ubuntu-16-04 $DOCKER_REGISTRY_IMAGE:base-ubuntu-16-04
     - docker push $DOCKER_REGISTRY/$DOCKER_REGISTRY_IMAGE:base-ubuntu-16-04
-  environment:
-    name: docker.io
   rules:
     - if: $CI_COMMIT_BRANCH == 'master'
       changes:
