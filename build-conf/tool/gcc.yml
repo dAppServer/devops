@@ -1,0 +1,45 @@
+tool-gcc.build:
+  stage: build
+  image: docker
+  services:
+    - name: docker:dind
+      command: [ "--experimental" ]
+  allow_failure: true
+  variables:
+    DOCKER_HOST: tcp://docker:2375
+    IMAGE_TAG: "$CI_REGISTRY_IMAGE:tool-gcc"
+  before_script:
+    - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" $CI_REGISTRY
+  script:
+    - docker build --cache-from $IMAGE_TAG -t $IMAGE_TAG -f build-conf/tool/gcc.Dockerfile build-src
+    - docker run -e DOCKER_HOST=tcp://$(grep docker /etc/hosts | cut -f1):2375 dslim/docker-slim build --remove-file-artifacts --publish-exposed-ports --http-probe-off --pull --target "$IMAGE_TAG" --tag "$IMAGE_TAG"
+    - docker push "$IMAGE_TAG"
+  rules:
+    - changes:
+        - build-conf/tool/gcc.Dockerfile
+        - build-conf/tool/gcc.yml
+
+tool-gcc.deploy:
+  stage: deploy
+  needs: ["tool-gcc.build"]
+  image: docker
+  variables:
+    DOCKER_HOST: tcp://docker:2375
+    IMAGE_TAG: "$CI_REGISTRY_IMAGE:tool-gcc"
+  services:
+    - name: docker:dind
+      command: [ "--experimental" ]
+  before_script:
+    - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" $CI_REGISTRY
+    - docker login -u "$DOCKER_REGISTRY_USER" -p "$DOCKER_REGISTRY_PASSWORD" $DOCKER_REGISTRY
+  script:
+    - docker pull $IMAGE_TAG
+    - docker tag $IMAGE_TAG $DOCKER_REGISTRY_IMAGE:tool-gcc
+    - docker push $DOCKER_REGISTRY/$DOCKER_REGISTRY_IMAGE:tool-gcc
+  environment:
+    name: tool-gcc
+  rules:
+    - if: $CI_COMMIT_BRANCH == 'master'
+      changes:
+        - build-conf/tool/gcc.Dockerfile
+        - build-conf/tool/gcc.yml

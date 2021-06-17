@@ -1,22 +1,4 @@
-FROM lthn/build:base-ubuntu-16-04
-
-RUN set -ex && \
-    apt-get update && \
-    apt-get --no-install-recommends --yes install \
-        cmake \
-        g++ \
-        make \
-        pkg-config \
-        graphviz \
-        doxygen \
-        curl \
-        libtool-bin \
-        autoconf \
-        automake \
-        libunwind8-dev \
-        libminiupnpc-dev \
-        libssl-dev \
-        libgtest-dev
+FROM lthn/build:tool-gcc
 
 WORKDIR /usr/local
 #Cmake

@@ -7,6 +7,12 @@ all:
 build:
 	docker build -t lthn/build -f build-conf/build.Dockerfile build-src
 
+
+.PHONY: tool-gcc
+tool-gcc:
+	docker build -t lthn/build:tool-gcc -f build-conf/tool/gcc.Dockerfile build-src
+
+
 .PHONY: lthn-chain-linux
 lthn-chain-linux:
 	docker build -t lthn/build:lthn-chain-linux -f build-conf/lthn/chain/linux.Dockerfile build-src
