@@ -12,7 +12,7 @@ base-ubuntu-18-04.build:
     - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" $CI_REGISTRY
   script:
     - docker build --cache-from $IMAGE_TAG -t $IMAGE_TAG -f build-conf/base/ubuntu/18-04.Dockerfile build-src
-    - docker run -e DOCKER_HOST=tcp://$(grep docker /etc/hosts | cut -f1):2375 dslim/docker-slim build --publish-exposed-ports --http-probe-off --pull --target "$IMAGE_TAG" --tag "$IMAGE_TAG"
+    - docker run -e DOCKER_HOST=tcp://$(grep docker /etc/hosts | cut -f1):2375 dslim/docker-slim build --remove-file-artifacts --publish-exposed-ports --http-probe-off --pull --target "$IMAGE_TAG" --tag "$IMAGE_TAG"
     - docker push "$IMAGE_TAG"
   rules:
     - changes:
