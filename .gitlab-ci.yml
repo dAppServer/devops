@@ -1,7 +1,6 @@
 include:
   - template: Auto-DevOps.gitlab-ci.yml
   - local: 'build-conf/build.yml'
-  - local: 'build-conf/**/*.yml'
 
 test:
   image: python:3.8-buster
