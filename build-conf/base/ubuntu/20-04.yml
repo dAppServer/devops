@@ -31,6 +31,8 @@ base-ubuntu-20-04.deploy:
     - docker pull $CI_REGISTRY_IMAGE:base-ubuntu-20-04
     - docker tag $CI_REGISTRY_IMAGE:base-ubuntu-20-04 $DOCKER_REGISTRY_IMAGE:base-ubuntu-20-04
     - docker push $DOCKER_REGISTRY/$DOCKER_REGISTRY_IMAGE:base-ubuntu-20-04
+  environment:
+    name: base-ubuntu-20-04
   rules:
     - if: $CI_COMMIT_BRANCH == 'master'
       changes:
