@@ -17,7 +17,7 @@ base-ubuntu.build:
     - docker build --squash --cache-from $IMAGE_TAG -t $IMAGE_TAG -f build-conf/base/ubuntu/20-04.Dockerfile build-src
     - echo "Image Size:"
     - docker images "$IMAGE_TAG" | awk '{print $NF}' | sed "1 d"
-    - docker run dslim/docker-slim build "$IMAGE_TAG"
+    - docker run -e DOCKER_HOST=$DOCKER_HOST dslim/docker-slim build "$IMAGE_TAG"
     - echo "New size:"
     - docker images "$IMAGE_TAG-slim" | awk '{print $NF}' | sed "1 d"
     - docker push "$IMAGE_TAG"
