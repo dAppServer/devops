@@ -21,7 +21,7 @@ build:
         - "build-src/**/*"
 
 build.deploy:
-  stage: deploy
+  needs: ["build"]
   image: docker
   variables:
     DOCKER_HOST: tcp://docker:2375
@@ -36,7 +36,7 @@ build.deploy:
     - docker tag $CI_REGISTRY_IMAGE:latest $DOCKER_REGISTRY_IMAGE:latest
     - docker push $DOCKER_REGISTRY/$DOCKER_REGISTRY_IMAGE:latest
   environment:
-    name: docker.io
+    name: build
   rules:
     - if: $CI_COMMIT_BRANCH == 'master'
       changes:
