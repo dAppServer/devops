@@ -26,6 +26,8 @@ base-ubuntu-16-04.scan:
   allow_failure: true
   variables:
     DOCKER_HOST: tcp://docker:2375
+    DOCKER_IMAGE: $CI_REGISTRY_IMAGE:base-ubuntu-16-04
+    DOCKERFILE_PATH: build-conf/base/ubuntu/16-04.Dockerfile
     GIT_STRATEGY: none
   artifacts:
     reports:
