@@ -23,7 +23,7 @@ base-ubuntu-16-04.scan:
   stage: test
   needs: ["base-ubuntu-16-04.build"]
   image: registry.gitlab.com/security-products/container-scanning:4
-  allow_failure: true
+  allow_failure: false
   variables:
     DOCKER_HOST: tcp://docker:2375
     DOCKER_IMAGE: $CI_REGISTRY_IMAGE:base-ubuntu-16-04
