@@ -1,7 +1,3 @@
-include:
-  - local: 'build-conf/base/ubuntu.yml'
-  - local: 'build-conf/lthn/chain/linux.yml'
-
 build:
   stage: build
   image: docker

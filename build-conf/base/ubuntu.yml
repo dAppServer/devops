@@ -1,6 +1,3 @@
-include:
-  - local: 'build-conf/base/ubuntu/*.yml'
-
 base-ubuntu.build:
   stage: build
   image: docker
