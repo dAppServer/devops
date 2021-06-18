@@ -1,2 +1,4 @@
 public
 .idea
+build-test/.docker-slim-state
+build-test/base-image
