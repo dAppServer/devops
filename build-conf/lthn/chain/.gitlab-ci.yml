@@ -33,6 +33,7 @@ lthn-chain-linux:shrink:
         - build-conf/lthn/chain/linux.Dockerfile
         - build-conf/lthn/chain/.gitlab-ci.yml
 
+
 lthn-chain-linux:test:
   image: lthn/build:lthn-wallet-linux
   needs: ["lthn-chain-linux:shrink"]
