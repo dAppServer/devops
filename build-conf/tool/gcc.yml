@@ -1,7 +1,6 @@
 tool-gcc.build:
   stage: build
   image: docker
-  needs: ["base-ubuntu-16-04.build"]
   services:
     - name: docker:dind
       command: [ "--experimental" ]
