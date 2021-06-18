@@ -23,11 +23,11 @@ lthn-chain-linux-shrink: ## Builds a optimised build image
 			--include-path "/usr/share/cmake-3.5"
 
 lthn-chain-linux-shrink-ci: ## Gitlab task
-	docker run --rm -v /var/run/docker.sock:/var/run/docker.sock dslim/docker-slim build \
+	docker run -e DOCKER_HOST=tcp://$(grep docker /etc/hosts | cut -f1):2375 dslim/docker-slim build \
 			--continue-after "exec" --http-probe-off --pull --target "lthn/build:lthn-chain-linux" \
 			--exec "git clone https://gitlab.com/lthn.io/projects/chain/lethean.git && cd lethean && make -j4 release-static && cd .. && rm -rf lethean" \
 			--show-plogs --show-clogs --show-blogs --tag "lthn/build:lthn-chain-linux" \
-			--include-path "/usr/share/cmake-3.5"
+			--include-path "/usr/share/cmake-3.5" --in-container
 
 lthn-wallet-linux: ## Builds lthn/build:lthn-wallet-linux
 	docker build --no-cache -t lthn/build:lthn-wallet-linux -f build-conf/lthn/wallet/linux.Dockerfile build-src
