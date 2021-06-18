@@ -16,8 +16,9 @@ lthn-chain-linux:build:
         - build-conf/lthn/chain/.gitlab-ci.yml
 
 lthn-chain-linux:shrink:
-  stage: build
+  stage: shrink
   image: docker
+  needs: ["lthn-chain-linux:build"]
   services:
     - name: docker:dind
       command: [ "--experimental" ]
