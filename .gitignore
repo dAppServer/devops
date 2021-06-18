@@ -1,4 +1,4 @@
 public
 .idea
-build-test/.docker-slim-state
-build-test/base-image
+build-shrink/.docker-slim-state
+build-shrink/base-image
