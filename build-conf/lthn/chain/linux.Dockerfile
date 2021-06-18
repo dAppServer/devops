@@ -1,57 +1,10 @@
 FROM lthn/build:tool-gcc
 
+RUN apt-get install -y libunbound-dev libsodium-dev libunwind8-dev liblzma-dev libreadline6-dev libssl-dev \
+    libldns-dev libexpat1-dev doxygen graphviz libpgm-dev qttools5-dev-tools libzmq3-dev \
+    libhidapi-dev libusb-1.0-0-dev libprotobuf-dev protobuf-compiler libudev-dev libboost-all-dev
+
 WORKDIR /usr/local
 
-
-## Boost
-ARG BOOST_VERSION=1_58_0
-ARG BOOST_VERSION_DOT=1.58.0
-ARG BOOST_HASH=fdfc204fc33ec79c99b9a74944c3e54bd78be4f7f15e260c0e2700a36dc7d3e5
-RUN set -ex \
-    && curl -s -L -o  boost_${BOOST_VERSION}.tar.bz2 https://downloads.sourceforge.net/project/boost/boost/${BOOST_VERSION_DOT}/boost_${BOOST_VERSION}.tar.bz2 \
-    &&  sha256sum boost_${BOOST_VERSION}.tar.bz2 \
-    && echo "${BOOST_HASH}  boost_${BOOST_VERSION}.tar.bz2" | sha256sum -c \
-    && tar -xvf boost_${BOOST_VERSION}.tar.bz2 \
-    && cd boost_${BOOST_VERSION} \
-    && ./bootstrap.sh \
-    && ./b2 --build-type=minimal link=static runtime-link=static --with-chrono --with-date_time --with-filesystem --with-program_options --with-regex --with-serialization --with-system --with-thread --with-locale threading=multi threadapi=pthread cflags="-fPIC" cxxflags="-fPIC" stage
-ENV BOOST_ROOT /usr/local/boost_${BOOST_VERSION}
-
-
-
-# ZMQ
-ARG ZMQ_VERSION=v4.2.5
-ARG ZMQ_HASH=d062edd8c142384792955796329baf1e5a3377cd
-RUN set -ex \
-    && git clone https://github.com/zeromq/libzmq.git -b ${ZMQ_VERSION} \
-    && cd libzmq \
-    && test `git rev-parse HEAD` = ${ZMQ_HASH} || exit 1 \
-    && ./autogen.sh \
-    && CFLAGS="-fPIC" CXXFLAGS="-fPIC" ./configure --enable-static --disable-shared \
-    && make \
-    && make install \
-    && ldconfig
-
-# zmq.hpp
-ARG CPPZMQ_VERSION=v4.2.3
-ARG CPPZMQ_HASH=6aa3ab686e916cb0e62df7fa7d12e0b13ae9fae6
-RUN set -ex \
-    && git clone https://github.com/zeromq/cppzmq.git -b ${CPPZMQ_VERSION} \
-    && cd cppzmq \
-    && test `git rev-parse HEAD` = ${CPPZMQ_HASH} || exit 1 \
-    && mv *.hpp /usr/local/include
-
-# Sodium
-ARG SODIUM_VERSION=1.0.16
-ARG SODIUM_HASH=675149b9b8b66ff44152553fb3ebf9858128363d
-RUN set -ex \
-    && git clone https://github.com/jedisct1/libsodium.git -b ${SODIUM_VERSION} \
-    && cd libsodium \
-    && test `git rev-parse HEAD` = ${SODIUM_HASH} || exit 1 \
-    && ./autogen.sh \
-    && CFLAGS="-fPIC" CXXFLAGS="-fPIC" ./configure \
-    && make \
-    && make check \
-    && make install
 
 #RUN git clone https://gitlab.com/lthn.io/projects/chain/lethean.git && cd lethean && make release-static
