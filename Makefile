@@ -2,7 +2,9 @@
 all:
 	$(MAKE) -C build-src
 
-
+.PHONY: cleany
+clean:
+	docker system prune --all
 .PHONY: build
 build:
 	docker build --no-cache -t lthn/build -f build-conf/build.Dockerfile build-src
