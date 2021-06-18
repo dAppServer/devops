@@ -18,7 +18,6 @@ lthn-chain-linux:build:
 lthn-chain-linux:shrink:
   stage: shrink
   image: docker
-  needs: ["lthn-chain-linux:build"]
   services:
     - name: docker:dind
       command: [ "--experimental" ]
@@ -53,7 +52,7 @@ lthn-chain-linux:test:
 
 lthn-chain-linux:deploy:
   stage: deploy
-  needs: ["lthn-chain-linux:test"]
+  needs: ["lthn-chain-linux:build"]
   image: docker
   variables:
     DOCKER_HOST: tcp://docker:2375
