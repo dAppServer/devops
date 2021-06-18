@@ -8,9 +8,30 @@ lthn-chain-linux.build:
   before_script:
     - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" $CI_REGISTRY
   script:
-    - docker build --squash --cache-from $CI_REGISTRY_IMAGE:lthn-chain-linux -t $CI_REGISTRY_IMAGE:lthn-chain-linux -f build-conf/lthn/chain/linux.Dockerfile build-src
-    - docker run -e DOCKER_HOST=tcp://$(grep docker /etc/hosts | cut -f1):2375 dslim/docker-slim build --remove-file-artifacts --publish-exposed-ports --http-probe-off --pull --target "$IMAGE_TAG" --tag "$IMAGE_TAG"
+    - docker build --squash --cache-from $CI_REGISTRY_IMAGE:lthn-chain-linux-full -t $CI_REGISTRY_IMAGE:lthn-chain-linux-full -f build-conf/lthn/chain/linux.Dockerfile build-src
+    - docker run -e DOCKER_HOST=tcp://$(grep docker /etc/hosts | cut -f1):2375 dslim/docker-slim build \
+                  --continue-after "exec" --http-probe-off --pull --target "lthn/build:lthn-chain-linux-full" \
+                  --exec "git clone https://gitlab.com/lthn.io/projects/chain/lethean.git && cd lethean && make -j2 release-static && cd .. && rm -rf lethean" \
+                  --show-plogs --show-clogs --show-blogs --tag "lthn/build:lthn-chain-linux" \
+                  --include-path "/usr/share/cmake-3.5"
     - docker push "$CI_REGISTRY_IMAGE:lthn-chain-linux"
+    - docker push "$CI_REGISTRY_IMAGE:lthn-chain-linux-full"
+  rules:
+    - if: $CI_COMMIT_BRANCH == 'master'
+      changes:
+        - build-conf/lthn/chain/linux.Dockerfile
+        - build-conf/lthn/chain/.gitlab-ci.yml
+
+lthn-chain-linux.test:
+  image: lthn/build:lthn-wallet-linux
+  needs: ["lthn-chain-linux.build"]
+  stage: test
+  script:
+    - git clone https://gitlab.com/lthn.io/projects/chain/lethean.git
+    - cd lethean
+    - make -j2 release-static
+    - cd ..
+    - rm -rf lethean
   rules:
     - if: $CI_COMMIT_BRANCH == 'master'
       changes:
@@ -20,7 +41,7 @@ lthn-chain-linux.build:
 
 lthn-chain-linux.deploy:
   stage: deploy
-  needs: ["lthn-chain-linux.build"]
+  needs: ["lthn-chain-linux.test"]
   image: docker
   variables:
     DOCKER_HOST: tcp://docker:2375
