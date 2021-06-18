@@ -1,7 +1,6 @@
 include:
   - local: 'build-conf/base/ubuntu.yml'
   - local: 'build-conf/lthn/chain/linux.yml'
-  - local: 'build-conf/lthn/wallet/.gitlab-ci.yml'
   - local: 'build-conf/tool/gcc.yml'
 
 build:
