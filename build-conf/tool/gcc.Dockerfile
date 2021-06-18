@@ -1,4 +1,5 @@
-FROM lthn/build:base-ubuntu-16-04
+ARG GCC_BASE_IMAGE=base-ubuntu-16-04
+FROM lthn/build:${GCC_BASE_IMAGE}
 
 RUN apt-get install -y --no-install-recommends software-properties-common
 RUN add-apt-repository -y ppa:ubuntu-toolchain-r/test
