@@ -1,6 +1,7 @@
 lthn-wallet-linux.build:
   stage: build
   image: docker
+  needs: ["tool-gcc.build"]
   services:
     - name: docker:dind
       command: [ "--experimental" ]

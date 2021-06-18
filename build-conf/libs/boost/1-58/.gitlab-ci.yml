@@ -1,6 +1,7 @@
 libs-boost-1-58.linux:
   stage: build
   image: docker
+  needs: ["tool-gcc.build"]
   services:
     - name: docker:dind
       command: [ "--experimental" ]
