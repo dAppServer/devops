@@ -16,6 +16,7 @@ lthn-chain-linux.build:
         - build-conf/lthn/chain/linux.Dockerfile
         - build-conf/lthn/chain/linux.yml
 
+
 lthn-chain-linux.deploy:
   stage: deploy
   needs: ["lthn-chain-linux.build"]
