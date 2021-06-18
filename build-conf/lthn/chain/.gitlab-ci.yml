@@ -7,8 +7,8 @@ lthn-chain-linux:build:
   before_script:
     - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" $CI_REGISTRY
   script:
-    - docker build --squash --cache-from $CI_REGISTRY_IMAGE:lthn-chain-linux-full -t $CI_REGISTRY_IMAGE:lthn-chain-linux-full -f build-conf/lthn/chain/linux.Dockerfile build-src
-    - docker push "$CI_REGISTRY_IMAGE:lthn-chain-linux-full"
+    - docker build --squash --cache-from $CI_REGISTRY_IMAGE:lthn-chain-linux -t $CI_REGISTRY_IMAGE:lthn-chain-linux -f build-conf/lthn/chain/linux.Dockerfile build-src
+    - docker push "$CI_REGISTRY_IMAGE:lthn-chain-linux"
   rules:
     - if: $CI_COMMIT_BRANCH == 'master'
       changes:
@@ -33,22 +33,22 @@ lthn-chain-linux:build:
 #        - build-conf/lthn/chain/.gitlab-ci.yml
 
 
-#lthn-chain-linux:test:
-#  image: lthn/build:lthn-wallet-linux
-#  needs: ["lthn-chain-linux:shrink"]
-#  stage: test
-#  script:
-#    - git clone https://gitlab.com/lthn.io/projects/chain/lethean.git
-#    - cd lethean
-#    - make -j2 release-static
-#    - cd ..
-#    - rm -rf lethean
-#  rules:
-#    - if: $CI_COMMIT_BRANCH == 'master'
-#      changes:
-#        - build-conf/lthn/chain/linux.Dockerfile
-#        - build-conf/lthn/chain/.gitlab-ci.yml
-#
+lthn-chain-linux:test:
+  image: $CI_REGISTRY_IMAGE:lthn-chain-linux
+  needs: ["lthn-chain-linux:build"]
+  stage: test
+  script:
+    - git clone https://gitlab.com/lthn.io/projects/chain/lethean.git
+    - cd lethean
+    - make release-static
+    - cd ..
+    - rm -rf lethean
+  rules:
+    - if: $CI_COMMIT_BRANCH == 'master'
+      changes:
+        - build-conf/lthn/chain/linux.Dockerfile
+        - build-conf/lthn/chain/.gitlab-ci.yml
+
 
 lthn-chain-linux:deploy:
   stage: deploy
