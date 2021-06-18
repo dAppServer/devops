@@ -16,7 +16,7 @@ lthn-chain-linux: ## Builds lthn/build:lthn-chain-linux
 	docker build --no-cache -t lthn/build:lthn-chain-linux -f build-conf/lthn/chain/linux.Dockerfile build-src
 
 lthn-chain-linux-shrink: ## Builds a optimised build image
-	docker run -it --rm -v /var/run/docker.sock:/var/run/docker.sock dslim/docker-slim build \
+	docker run --rm -v /var/run/docker.sock:/var/run/docker.sock dslim/docker-slim build \
 			--continue-after "exec" --http-probe-off --pull --target "lthn/build:lthn-chain-linux" \
 			--exec "git clone https://gitlab.com/lthn.io/projects/chain/lethean.git && cd lethean && make -j4 release-static && cd .. && rm -rf lethean" \
 			--show-plogs --show-clogs --show-blogs --tag "lthn/build:lthn-chain-linux" \
