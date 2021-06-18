@@ -5,17 +5,17 @@ all:
 
 .PHONY: build
 build:
-	docker build -t lthn/build -f build-conf/build.Dockerfile build-src
+	docker build --no-cache -t lthn/build -f build-conf/build.Dockerfile build-src
 
 
 .PHONY: tool-gcc
 tool-gcc:
-	docker build -t lthn/build:tool-gcc -f build-conf/tool/gcc.Dockerfile build-src
+	docker build --no-cache -t lthn/build:tool-gcc -f build-conf/tool/gcc.Dockerfile build-src
 
 
 .PHONY: lthn-chain-linux
 lthn-chain-linux:
-	docker build -t lthn/build:lthn-chain-linux -f build-conf/lthn/chain/linux.Dockerfile build-src
+	docker build --no-cache -t lthn/build:lthn-chain-linux -f build-conf/lthn/chain/linux.Dockerfile build-src
 
 .PHONY: base-ubuntu
 base-ubuntu: base-ubuntu-16.04 base-ubuntu-18.04 base-ubuntu-20.04
@@ -24,15 +24,15 @@ base-ubuntu: base-ubuntu-16.04 base-ubuntu-18.04 base-ubuntu-20.04
 
 .PHONY: base-ubuntu-16-04
 base-ubuntu-16-04:
-	docker build -t lthn/build:base-ubuntu-16-04 -f build-conf/base/ubuntu/16-04.Dockerfile build-src
+	docker build --no-cache -t lthn/build:base-ubuntu-16-04 -f build-conf/base/ubuntu/16-04.Dockerfile build-src
 
 .PHONY: base-ubuntu-18-04
 base-ubuntu-18-04:
-	docker build -t lthn/build:base-ubuntu-18-04 -f build-conf/base/ubuntu/18-04.Dockerfile build-src
+	docker build --no-cache -t lthn/build:base-ubuntu-18-04 -f build-conf/base/ubuntu/18-04.Dockerfile build-src
 
 .PHONY: base-ubuntu-20-04
 base-ubuntu-20-04:
-	docker build -t lthn/build:base-ubuntu-20-04 -f build-conf/base/ubuntu/20-04.Dockerfile build-src
+	docker build --no-cache -t lthn/build:base-ubuntu-20-04 -f build-conf/base/ubuntu/20-04.Dockerfile build-src
 
 .PHONY: base-ubuntu-16.04-test
 base-ubuntu-16.04-test:
