@@ -22,8 +22,8 @@ lthn-chain-linux-shrink: ## Builds a optimised build image
 			--show-plogs --show-clogs --show-blogs --tag "lthn/build:lthn-chain-linux" \
 			--include-path "/usr/share/cmake-3.5"
 
-lthn-chain-linux-shrink-ci: ## Builds a optimised build image
-	docker run -it --rm -v /var/run/docker.sock:/var/run/docker.sock dslim/docker-slim build \
+lthn-chain-linux-shrink-ci: ## Gitlab task
+	docker run --rm -v /var/run/docker.sock:/var/run/docker.sock dslim/docker-slim build \
 			--http-probe-off --pull --target "lthn/build:lthn-chain-linux" \
 			--exec "git clone https://gitlab.com/lthn.io/projects/chain/lethean.git && cd lethean && make -j4 release-static && cd .. && rm -rf lethean" \
 			--show-plogs --show-clogs --show-blogs --tag "lthn/build:lthn-chain-linux" \
@@ -52,4 +52,4 @@ base-ubuntu-16.04-test: ## Builds lthn/build:base-ubuntu-16.04-test
 
 
 help: ## Show this help
-	@egrep -h '\s##\s' $(MAKEFILE_LIST) | sort | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m make %-20s\033[0m %s\n", $$1, $$2}'
+	@egrep -h '\s##\s' $(MAKEFILE_LIST) | sort | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m make %-30s\033[0m %s\n", $$1, $$2}'
