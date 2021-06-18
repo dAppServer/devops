@@ -1,7 +1,7 @@
 include:
   - local: 'build-conf/base/ubuntu.yml'
-  - local: 'build-conf/tool/gcc.yml'
   - local: 'build-conf/lthn/chain/linux.yml'
+  - local: 'build-conf/tool/gcc.yml'
 
 build:
   stage: build
