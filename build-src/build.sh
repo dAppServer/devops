@@ -20,7 +20,7 @@ case $1 in
     rm src/.lthnkeep || echo "Could not delete .lthnkeep from build directory, not an error if this builds"
     git clone --depth=1 --branch master https://gitlab.com/lthn.io/projects/chain/wallet.git src || exit
     export DOCKER_IMAGE='lthn/wallet'
-    export BUILD_RESULT_PATH='/home/lthn/bin/wallet'
+    export BUILD_RESULT_PATH='/home/lthn/wallet/build/release/bin/'
     make build
     make eject-build
   ;;
