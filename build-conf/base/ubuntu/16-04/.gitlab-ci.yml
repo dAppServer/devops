@@ -11,13 +11,13 @@ base-ubuntu-16-04.build:
   before_script:
     - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" $CI_REGISTRY
   script:
-    - docker build --no-cache -t $IMAGE_TAG -f build-conf/base/ubuntu/16-04.Dockerfile build-src
+    - docker build --no-cache -t $IMAGE_TAG -f build-conf/base/ubuntu/16-04/build.Dockerfile build-src
 #    - docker run -e DOCKER_HOST=tcp://$(grep docker /etc/hosts | cut -f1):2375 dslim/docker-slim build --publish-exposed-ports --http-probe-off --pull --target "$IMAGE_TAG" --tag "$IMAGE_TAG"
     - docker push "$IMAGE_TAG"
   rules:
     - changes:
-        - build-conf/base/ubuntu/16-04.Dockerfile
-        - build-conf/base/ubuntu/16-04.yml
+        - build-conf/base/ubuntu/16-04/build.Dockerfile
+        - build-conf/base/ubuntu/16-04/.gitlab-ci.yml
 
 base-ubuntu-16-04.scan:
   stage: test
@@ -38,8 +38,8 @@ base-ubuntu-16-04.scan:
   rules:
     - if: $CI_COMMIT_BRANCH == 'master'
       changes:
-        - build-conf/base/ubuntu/16-04.Dockerfile
-        - build-conf/base/ubuntu/16-04.yml
+        - build-conf/base/ubuntu/16-04/build.Dockerfile
+        - build-conf/base/ubuntu/16-04/.gitlab-ci.yml
 
 base-ubuntu-16-04.deploy:
   stage: deploy
@@ -62,6 +62,6 @@ base-ubuntu-16-04.deploy:
   rules:
     - if: $CI_COMMIT_BRANCH == 'master'
       changes:
-        - build-conf/base/ubuntu/16-04.Dockerfile
-        - build-conf/base/ubuntu/16-04.yml
+        - build-conf/base/ubuntu/16-04/build.Dockerfile
+        - build-conf/base/ubuntu/16-04/.gitlab-ci.yml
 

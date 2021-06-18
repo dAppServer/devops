@@ -11,13 +11,13 @@ tool-gcc.build:
   before_script:
     - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" $CI_REGISTRY
   script:
-    - docker build --cache-from $IMAGE_TAG -t $IMAGE_TAG -f build-conf/tool/gcc.Dockerfile build-src
+    - docker build --cache-from $IMAGE_TAG -t $IMAGE_TAG -f build-conf/tool/gcc/build.Dockerfile build-src
 #    - docker run -e DOCKER_HOST=tcp://$(grep docker /etc/hosts | cut -f1):2375 dslim/docker-slim build --remove-file-artifacts --publish-exposed-ports --http-probe-off --pull --target "$IMAGE_TAG" --tag "$IMAGE_TAG"
     - docker push "$IMAGE_TAG"
   rules:
     - changes:
-        - build-conf/tool/gcc.Dockerfile
-        - build-conf/tool/gcc.yml
+        - build-conf/tool/gcc/gcc.Dockerfile
+        - build-conf/tool/gcc/.gitlab-ci.yml
 
 tool-gcc.deploy:
   stage: deploy
@@ -41,6 +41,6 @@ tool-gcc.deploy:
   rules:
     - if: $CI_COMMIT_BRANCH == 'master'
       changes:
-        - build-conf/tool/gcc.Dockerfile
-        - build-conf/tool/gcc.yml
+        - build-conf/tool/gcc/build.Dockerfile
+        - build-conf/tool/gcc/.gitlab-ci.yml
 

@@ -14,7 +14,7 @@ lthn-chain-linux.build:
     - if: $CI_COMMIT_BRANCH == 'master'
       changes:
         - build-conf/lthn/chain/linux.Dockerfile
-        - build-conf/lthn/chain/linux.yml
+        - build-conf/lthn/chain/.gitlab-ci.yml
 
 
 lthn-chain-linux.deploy:
@@ -39,4 +39,4 @@ lthn-chain-linux.deploy:
     - if: $CI_COMMIT_BRANCH == 'master'
       changes:
         - build-conf/lthn/chain/linux.Dockerfile
-        - build-conf/lthn/chain/linux.yml
+        - build-conf/lthn/chain/.gitlab-ci.yml
