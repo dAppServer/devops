@@ -1,4 +1,4 @@
-lthn-chain-linux-build:
+lthn-chain-linux:build:
   stage: build
   image: docker
   services:
@@ -15,10 +15,10 @@ lthn-chain-linux-build:
         - build-conf/lthn/chain/linux.Dockerfile
         - build-conf/lthn/chain/.gitlab-ci.yml
 
-lthn-chain-linux-shrink:
-  stage: build
+lthn-chain-linux:shrink:
+  stage: test
   image: docker
-  needs: ["lthn-chain-linux-build"]
+  needs: ["lthn-chain-linux:build"]
   services:
     - name: docker:dind
       command: [ "--experimental" ]
@@ -38,9 +38,9 @@ lthn-chain-linux-shrink:
         - build-conf/lthn/chain/linux.Dockerfile
         - build-conf/lthn/chain/.gitlab-ci.yml
 
-lthn-chain-linux-test:
+lthn-chain-linux:test:
   image: lthn/build:lthn-wallet-linux
-  needs: ["lthn-chain-linux-shrink"]
+  needs: ["lthn-chain-linux:shrink"]
   stage: test
   script:
     - git clone https://gitlab.com/lthn.io/projects/chain/lethean.git
@@ -55,9 +55,9 @@ lthn-chain-linux-test:
         - build-conf/lthn/chain/.gitlab-ci.yml
 
 
-lthn-chain-linux-deploy:
+lthn-chain-linux:deploy:
   stage: deploy
-  needs: ["lthn-chain-linux-test"]
+  needs: ["lthn-chain-linux:test"]
   image: docker
   variables:
     DOCKER_HOST: tcp://docker:2375
