@@ -1,18 +1,7 @@
 FROM lthn/build:tool-gcc
 
 WORKDIR /usr/local
-#Cmake
-ARG CMAKE_VERSION=3.11.4
-ARG CMAKE_VERSION_DOT=v3.11
-ARG CMAKE_HASH=8f864e9f78917de3e1483e256270daabc4a321741592c5b36af028e72bff87f5
-RUN set -ex \
-    && curl -s -O https://cmake.org/files/${CMAKE_VERSION_DOT}/cmake-${CMAKE_VERSION}.tar.gz \
-    && echo "${CMAKE_HASH}  cmake-${CMAKE_VERSION}.tar.gz" | sha256sum -c \
-    && tar -xzf cmake-${CMAKE_VERSION}.tar.gz \
-    && cd cmake-${CMAKE_VERSION} \
-    && ./configure \
-    && make \
-    && make install
+
 
 ## Boost
 ARG BOOST_VERSION=1_58_0
@@ -51,18 +40,6 @@ RUN set -ex \
     && cd cppzmq \
     && test `git rev-parse HEAD` = ${CPPZMQ_HASH} || exit 1 \
     && mv *.hpp /usr/local/include
-
-# Readline
-ARG READLINE_VERSION=7.0
-ARG READLINE_HASH=750d437185286f40a369e1e4f4764eda932b9459b5ec9a731628393dd3d32334
-RUN set -ex \
-    && curl -s -O https://ftp.gnu.org/gnu/readline/readline-${READLINE_VERSION}.tar.gz \
-    && echo "${READLINE_HASH}  readline-${READLINE_VERSION}.tar.gz" | sha256sum -c \
-    && tar -xzf readline-${READLINE_VERSION}.tar.gz \
-    && cd readline-${READLINE_VERSION} \
-    && CFLAGS="-fPIC" CXXFLAGS="-fPIC" ./configure \
-    && make \
-    && make install
 
 # Sodium
 ARG SODIUM_VERSION=1.0.16
