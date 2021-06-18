@@ -24,7 +24,7 @@ lthn-chain-linux-shrink: ## Builds a optimised build image
 
 lthn-chain-linux-shrink-ci: ## Gitlab task
 	docker run --rm -v /var/run/docker.sock:/var/run/docker.sock dslim/docker-slim build \
-			--http-probe-off --pull --target "lthn/build:lthn-chain-linux" \
+			--continue-after "exec" --http-probe-off --pull --target "lthn/build:lthn-chain-linux" \
 			--exec "git clone https://gitlab.com/lthn.io/projects/chain/lethean.git && cd lethean && make -j4 release-static && cd .. && rm -rf lethean" \
 			--show-plogs --show-clogs --show-blogs --tag "lthn/build:lthn-chain-linux" \
 			--include-path "/usr/share/cmake-3.5"
