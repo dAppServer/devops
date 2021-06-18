@@ -15,6 +15,7 @@ lthn-chain-linux:build:
         - build-conf/lthn/chain/linux.Dockerfile
         - build-conf/lthn/chain/.gitlab-ci.yml
 
+
 lthn-chain-linux:shrink:
   stage: shrink
   image: docker
