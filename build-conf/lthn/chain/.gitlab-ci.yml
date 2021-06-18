@@ -17,7 +17,7 @@ lthn-chain-linux.build:
         - build-conf/lthn/chain/.gitlab-ci.yml
 
 lthn-chain-linux.shrink:
-  stage: shrink
+  stage: build
   image: docker
   needs: ["lthn-chain-linux.build"]
   services:
