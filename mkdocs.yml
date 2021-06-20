@@ -1,7 +1,7 @@
 site_name: Lethean Builder Docs
 site_url: https://build.lethean.help
 site_dir: public
-copyright: Copyright &copy; <a href="https://lethean.io">Lethean VPN</a> - The Peoples Network.
+copyright: Copyright &copy; <a rel="noopener" href="https://lethean.io">Lethean VPN</a> - The Peoples Network.
 repo_url: https://gitlab.com/lthn.io/projects/sdk/build
 edit_uri: edit/master/docs/
 repo_name: lthn/build
