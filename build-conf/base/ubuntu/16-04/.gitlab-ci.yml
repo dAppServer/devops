@@ -1,0 +1,67 @@
+base-ubuntu-16-04.build:
+  stage: build
+  image: docker
+  services:
+    - name: docker:dind
+      command: [ "--experimental" ]
+  allow_failure: true
+  variables:
+    DOCKER_HOST: tcp://docker:2375
+    IMAGE_TAG: "$CI_REGISTRY_IMAGE:base-ubuntu-16-04"
+  before_script:
+    - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" $CI_REGISTRY
+  script:
+    - docker build --no-cache -t $IMAGE_TAG -f build-conf/base/ubuntu/16-04/build.Dockerfile build-src
+#    - docker run -e DOCKER_HOST=tcp://$(grep docker /etc/hosts | cut -f1):2375 dslim/docker-slim build --publish-exposed-ports --http-probe-off --pull --target "$IMAGE_TAG" --tag "$IMAGE_TAG"
+    - docker push "$IMAGE_TAG"
+  rules:
+    - changes:
+        - build-conf/base/ubuntu/16-04/build.Dockerfile
+        - build-conf/base/ubuntu/16-04/.gitlab-ci.yml
+
+base-ubuntu-16-04.scan:
+  stage: test
+  needs: ["base-ubuntu-16-04.build"]
+  image: registry.gitlab.com/security-products/container-scanning:4
+  allow_failure: false
+  variables:
+    DOCKER_HOST: tcp://docker:2375
+    DOCKER_IMAGE: $CI_REGISTRY_IMAGE:base-ubuntu-16-04
+    DOCKERFILE_PATH: build-conf/base/ubuntu/16-04.Dockerfile
+  artifacts:
+    reports:
+      container_scanning: gl-container-scanning-report.json
+    paths: [gl-container-scanning-report.json]
+  dependencies: []
+  script:
+    - gtcs scan
+  rules:
+    - if: $CI_COMMIT_BRANCH == 'master'
+      changes:
+        - build-conf/base/ubuntu/16-04/build.Dockerfile
+        - build-conf/base/ubuntu/16-04/.gitlab-ci.yml
+
+base-ubuntu-16-04.deploy:
+  stage: deploy
+  needs: ["base-ubuntu-16-04.scan"]
+  image: docker
+  variables:
+    DOCKER_HOST: tcp://docker:2375
+  services:
+    - name: docker:dind
+      command: [ "--experimental" ]
+  before_script:
+    - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" $CI_REGISTRY
+    - docker login -u "$DOCKER_REGISTRY_USER" -p "$DOCKER_REGISTRY_PASSWORD" $DOCKER_REGISTRY
+  script:
+    - docker pull $CI_REGISTRY_IMAGE:base-ubuntu-16-04
+    - docker tag $CI_REGISTRY_IMAGE:base-ubuntu-16-04 $DOCKER_REGISTRY_IMAGE:base-ubuntu-16-04
+    - docker push $DOCKER_REGISTRY/$DOCKER_REGISTRY_IMAGE:base-ubuntu-16-04
+  environment:
+    name: base-ubuntu-16-04
+  rules:
+    - if: $CI_COMMIT_BRANCH == 'master'
+      changes:
+        - build-conf/base/ubuntu/16-04/build.Dockerfile
+        - build-conf/base/ubuntu/16-04/.gitlab-ci.yml
+

@@ -1,0 +1,46 @@
+base-ubuntu-18-04.build:
+  stage: build
+  image: docker
+  services:
+    - name: docker:dind
+      command: [ "--experimental" ]
+  allow_failure: true
+  variables:
+    DOCKER_HOST: tcp://docker:2375
+    IMAGE_TAG: "$CI_REGISTRY_IMAGE:base-ubuntu-18-04"
+  before_script:
+    - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" $CI_REGISTRY
+  script:
+    - docker build --no-cache -t $IMAGE_TAG -f build-conf/base/ubuntu/18-04.Dockerfile build-src
+#    - docker run -e DOCKER_HOST=tcp://$(grep docker /etc/hosts | cut -f1):2375 dslim/docker-slim build --remove-file-artifacts --publish-exposed-ports --http-probe-off --pull --target "$IMAGE_TAG" --tag "$IMAGE_TAG"
+    - docker push "$IMAGE_TAG"
+  rules:
+    - changes:
+        - build-conf/base/ubuntu/18-04.Dockerfile
+        - build-conf/base/ubuntu/18-04.yml
+
+
+base-ubuntu-18-04.deploy:
+  stage: deploy
+  needs: ["base-ubuntu-18-04.build"]
+  image: docker
+  variables:
+    DOCKER_HOST: tcp://docker:2375
+  services:
+    - name: docker:dind
+      command: [ "--experimental" ]
+  before_script:
+    - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" $CI_REGISTRY
+    - docker login -u "$DOCKER_REGISTRY_USER" -p "$DOCKER_REGISTRY_PASSWORD" $DOCKER_REGISTRY
+  script:
+    - docker pull $CI_REGISTRY_IMAGE:base-ubuntu-18-04
+    - docker tag $CI_REGISTRY_IMAGE:base-ubuntu-18-04 $DOCKER_REGISTRY_IMAGE:base-ubuntu-18-04
+    - docker push $DOCKER_REGISTRY/$DOCKER_REGISTRY_IMAGE:base-ubuntu-18-04
+  environment:
+    name: base-ubuntu-18-04
+  rules:
+    - if: $CI_COMMIT_BRANCH == 'master'
+      changes:
+        - build-conf/base/ubuntu/18-04.Dockerfile
+        - build-conf/base/ubuntu/18-04.yml
+

@@ -1,4 +1,4 @@
-FROM lthn/build:release-3.1.0
+FROM lthn/build:tool-gcc
 
 WORKDIR /compile
 

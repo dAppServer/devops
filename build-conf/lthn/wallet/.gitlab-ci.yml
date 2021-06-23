@@ -16,6 +16,30 @@ lthn-wallet-linux.build:
         - build-conf/lthn/wallet/linux.Dockerfile
         - build-conf/lthn/wallet/.gitlab-ci.yml
 
+lthn-wallet-linux.deploy:
+  stage: deploy
+  needs: ["lthn-wallet-linux.build"]
+  image: docker
+  variables:
+    DOCKER_HOST: tcp://docker:2375
+  services:
+    - name: docker:dind
+      command: [ "--experimental" ]
+  before_script:
+    - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" $CI_REGISTRY
+    - docker login -u "$DOCKER_REGISTRY_USER" -p "$DOCKER_REGISTRY_PASSWORD" $DOCKER_REGISTRY
+  script:
+    - docker pull $CI_REGISTRY_IMAGE:lthn-wallet-linux
+    - docker tag $CI_REGISTRY_IMAGE:lthn-wallet-linux $DOCKER_REGISTRY_IMAGE:lthn-wallet-linux
+    - docker push $DOCKER_REGISTRY/$DOCKER_REGISTRY_IMAGE:lthn-wallet-linux
+  environment:
+    name: lthn-wallet-linux
+  rules:
+    - if: $CI_COMMIT_BRANCH == 'master'
+      changes:
+        - build-conf/lthn/wallet/linux.Dockerfile
+        - build-conf/lthn/wallet/.gitlab-ci.yml
+
 lthn-wallet-windows.build:
   stage: build
   image: docker
