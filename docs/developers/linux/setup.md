@@ -4,7 +4,7 @@
 
 ### Base Packages
 ```commandline
-sudo apt install build-esentials git apt-transport-https ca-certificates gnupg lsb-release \
+sudo apt install build-essential git apt-transport-https ca-certificates gnupg lsb-release \
  gcc-mingw-w64-x86-64 cmake
 ```
 ### Services
