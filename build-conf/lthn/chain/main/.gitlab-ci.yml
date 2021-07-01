@@ -7,13 +7,13 @@ lthn-chain-linux:build:
   before_script:
     - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" $CI_REGISTRY
   script:
-    - docker build --squash --cache-from $CI_REGISTRY_IMAGE:lthn-chain-linux -t $CI_REGISTRY_IMAGE:lthn-chain-linux -f build-conf/lthn/chain/linux.Dockerfile build-src
+    - docker build --squash --cache-from $CI_REGISTRY_IMAGE:lthn-chain-linux -t $CI_REGISTRY_IMAGE:lthn-chain-linux -f build-conf/lthn/chain/main/linux.Dockerfile build-src
     - docker push "$CI_REGISTRY_IMAGE:lthn-chain-linux"
   rules:
-    - if: $CI_COMMIT_BRANCH == 'master'
+    - if: $CI_COMMIT_BRANCH == 'main'
       changes:
-        - build-conf/lthn/chain/linux.Dockerfile
-        - build-conf/lthn/chain/.gitlab-ci.yml
+        - build-conf/lthn/chain/main/linux.Dockerfile
+        - build-conf/lthn/chain/main/.gitlab-ci.yml
 
 #lthn-chain-linux:shrink:
 #  stage: shrink
@@ -44,10 +44,10 @@ lthn-chain-linux:test:
     - cd ..
     - rm -rf lethean
   rules:
-    - if: $CI_COMMIT_BRANCH == 'master'
+    - if: $CI_COMMIT_BRANCH == 'main'
       changes:
-        - build-conf/lthn/chain/linux.Dockerfile
-        - build-conf/lthn/chain/.gitlab-ci.yml
+        - build-conf/lthn/chain/main/linux.Dockerfile
+        - build-conf/lthn/chain/main/.gitlab-ci.yml
 
 
 lthn-chain-linux:deploy:
@@ -69,7 +69,7 @@ lthn-chain-linux:deploy:
   environment:
     name: lthn-chain-linux
   rules:
-    - if: $CI_COMMIT_BRANCH == 'master'
+    - if: $CI_COMMIT_BRANCH == 'main'
       changes:
-        - build-conf/lthn/chain/linux.Dockerfile
-        - build-conf/lthn/chain/.gitlab-ci.yml
+        - build-conf/lthn/chain/main/linux.Dockerfile
+        - build-conf/lthn/chain/main/.gitlab-ci.yml
