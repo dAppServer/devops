@@ -10,10 +10,26 @@ lthn-chain-next:build:
     - docker build --squash --cache-from $CI_REGISTRY_IMAGE:lthn-chain-next -t $CI_REGISTRY_IMAGE:lthn-chain-next -f build-conf/lthn/chain/next/linux.Dockerfile build-src
     - docker push "$CI_REGISTRY_IMAGE:lthn-chain-next"
   rules:
-    - if: $CI_COMMIT_BRANCH == 'main'
-      changes:
+    - changes:
         - build-conf/lthn/chain/next/linux.Dockerfile
         - build-conf/lthn/chain/next/.gitlab-ci.yml
+
+lthn-chain-windows:build:
+  stage: build
+  image: docker
+  services:
+    - name: docker:dind
+      command: [ "--experimental" ]
+  before_script:
+    - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" $CI_REGISTRY
+  script:
+    - docker build --squash --cache-from $CI_REGISTRY_IMAGE:lthn-chain-windows -t $CI_REGISTRY_IMAGE:lthn-chain-windows -f build-conf/lthn/chain/next/windows.Dockerfile build-src
+    - docker push "$CI_REGISTRY_IMAGE:lthn-chain-windows"
+  rules:
+    - changes:
+        - build-conf/lthn/chain/next/windows.Dockerfile
+        - build-conf/lthn/chain/next/.gitlab-ci.yml
+
 
 #lthn-chain-linux:shrink:
 #  stage: shrink
@@ -72,4 +88,28 @@ lthn-chain-next:deploy:
     - if: $CI_COMMIT_BRANCH == 'main'
       changes:
         - build-conf/lthn/chain/next/linux.Dockerfile
+        - build-conf/lthn/chain/next/.gitlab-ci.yml
+
+lthn-chain-windows:deploy:
+  stage: deploy
+  needs: ["lthn-chain-windows:build"]
+  image: docker
+  variables:
+    DOCKER_HOST: tcp://docker:2375
+  services:
+    - name: docker:dind
+      command: [ "--experimental" ]
+  before_script:
+    - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" $CI_REGISTRY
+    - docker login -u "$DOCKER_REGISTRY_USER" -p "$DOCKER_REGISTRY_PASSWORD" $DOCKER_REGISTRY
+  script:
+    - docker pull $CI_REGISTRY_IMAGE:lthn-chain-windows
+    - docker tag $CI_REGISTRY_IMAGE:lthn-chain-windows $DOCKER_REGISTRY_IMAGE:lthn-chain-windows
+    - docker push $DOCKER_REGISTRY/$DOCKER_REGISTRY_IMAGE:lthn-chain-windows
+  environment:
+    name: lthn-chain-windows
+  rules:
+    - if: $CI_COMMIT_BRANCH == 'main'
+      changes:
+        - build-conf/lthn/chain/next/windows.Dockerfile
         - build-conf/lthn/chain/next/.gitlab-ci.yml
