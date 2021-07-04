@@ -48,10 +48,7 @@ lthn-compile-win64:test:
     DOCKER_HOST: tcp://docker:2375
     IMG_TAG: lthn-compile-win64
   script:
-    - docker run -v /lethean/chain/build:/lethean/chain/build $CI_REGISTRY_IMAGE:$IMG_TAG
-  artifacts:
-    paths:
-      - /lethean/chain/build
+    - docker run $CI_REGISTRY_IMAGE:$IMG_TAG
   rules:
     - changes:
         - build-conf/lthn/compile/base.Dockerfile
@@ -68,7 +65,7 @@ lthn-compile-base:test:
     - name: docker:dind
       command: [ "--experimental" ]
   script:
-    - docker run -v /lethean/chain/build:/lethean/chain/build $CI_REGISTRY_IMAGE:$IMG_TAG
+    - docker run $CI_REGISTRY_IMAGE:$IMG_TAG
   rules:
     - changes:
         - build-conf/lthn/compile/base.Dockerfile
