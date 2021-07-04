@@ -39,7 +39,7 @@ base-ubuntu.deploy:
   environment:
     name: base-ubuntu
   rules:
-    - if: $CI_COMMIT_BRANCH == 'master'
+    - if: $CI_COMMIT_BRANCH == 'main'
       changes:
         - build-conf/base/ubuntu/20-04/build.Dockerfile
         - build-conf/base/.gitlab-ci.yml

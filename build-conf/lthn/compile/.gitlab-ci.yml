@@ -1,0 +1,87 @@
+lthn-compile-base:build:
+  stage: build
+  image: docker
+  variables:
+    DOCKER_HOST: tcp://docker:2375
+    IMG_TAG: lthn-compile-base
+  services:
+    - name: docker:dind
+      command: [ "--experimental" ]
+  before_script:
+    - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" $CI_REGISTRY
+  script:
+    - docker build --squash --cache-from $CI_REGISTRY_IMAGE:$IMG_TAG -t $CI_REGISTRY_IMAGE:$IMG_TAG -f build-conf/lthn/compile/base.Dockerfile build-src
+    - docker push "$CI_REGISTRY_IMAGE:$IMG_TAG"
+  rules:
+    - changes:
+        - build-conf/lthn/compile/base.Dockerfile
+        - build-conf/lthn/compile/.gitlab-ci.yml
+
+lthn-compile-win64:build:
+  stage: build
+  image: docker
+  variables:
+    DOCKER_HOST: tcp://docker:2375
+    IMG_TAG: lthn-compile-win64
+  services:
+    - name: docker:dind
+      command: [ "--experimental" ]
+  before_script:
+    - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" $CI_REGISTRY
+  script:
+    - docker build --squash --cache-from $CI_REGISTRY_IMAGE:$IMG_TAG -t $CI_REGISTRY_IMAGE:$IMG_TAG -f build-conf/lthn/compile/win64.Dockerfile build-src
+    - docker push "$CI_REGISTRY_IMAGE:$IMG_TAG"
+  rules:
+    - changes:
+        - build-conf/lthn/compile/win64.Dockerfile
+        - build-conf/lthn/compile/.gitlab-ci.yml
+
+lthn-compile-win64:deploy:
+  stage: deploy
+  needs: ["lthn-compile-win64:build"]
+  image: docker
+  variables:
+    DOCKER_HOST: tcp://docker:2375
+    IMG_TAG: lthn-compile-win64
+  services:
+    - name: docker:dind
+      command: [ "--experimental" ]
+  before_script:
+    - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" $CI_REGISTRY
+    - docker login -u "$DOCKER_REGISTRY_USER" -p "$DOCKER_REGISTRY_PASSWORD" $DOCKER_REGISTRY
+  script:
+    - docker pull $CI_REGISTRY_IMAGE:$IMG_TAG
+    - docker tag $CI_REGISTRY_IMAGE:$IMG_TAG $DOCKER_REGISTRY_IMAGE:$IMG_TAG
+    - docker push $DOCKER_REGISTRY/$DOCKER_REGISTRY_IMAGE:$IMG_TAG
+  environment:
+    name: $IMG_TAG
+  rules:
+    - if: $CI_COMMIT_BRANCH == 'main'
+      changes:
+        - build-conf/lthn/compile/base.Dockerfile
+        - build-conf/lthn/compile/.gitlab-ci.yml
+
+lthn-compile-base:deploy:
+  stage: deploy
+  needs: ["lthn-compile-base:build"]
+  image: docker
+  variables:
+    DOCKER_HOST: tcp://docker:2375
+    IMG_TAG: lthn-compile-base
+  services:
+    - name: docker:dind
+      command: [ "--experimental" ]
+  before_script:
+    - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" $CI_REGISTRY
+    - docker login -u "$DOCKER_REGISTRY_USER" -p "$DOCKER_REGISTRY_PASSWORD" $DOCKER_REGISTRY
+  script:
+    - docker pull $CI_REGISTRY_IMAGE:$IMG_TAG
+    - docker tag $CI_REGISTRY_IMAGE:$IMG_TAG $DOCKER_REGISTRY_IMAGE:$IMG_TAG
+    - docker push $DOCKER_REGISTRY/$DOCKER_REGISTRY_IMAGE:$IMG_TAG
+  environment:
+    name: $IMG_TAG
+  rules:
+    - if: $CI_COMMIT_BRANCH == 'main'
+      changes:
+        - build-conf/lthn/compile/base.Dockerfile
+        - build-conf/lthn/compile/.gitlab-ci.yml

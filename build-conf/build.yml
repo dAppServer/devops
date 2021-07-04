@@ -36,7 +36,7 @@ build.deploy:
   environment:
     name: build
   rules:
-    - if: $CI_COMMIT_BRANCH == 'master'
+    - if: $CI_COMMIT_BRANCH == 'main'
       changes:
         - "build-conf/build.Dockerfile"
         - "build-conf/build.yml"

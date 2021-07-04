@@ -39,7 +39,7 @@ tool-gcc:deploy:
   environment:
     name: tool-gcc
   rules:
-    - if: $CI_COMMIT_BRANCH == 'master'
+    - if: $CI_COMMIT_BRANCH == 'main'
       changes:
         - build-conf/tool/gcc/build.Dockerfile
         - build-conf/tool/gcc/.gitlab-ci.yml
