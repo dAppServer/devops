@@ -64,6 +64,9 @@ lthn-compile-base:test:
   variables:
     DOCKER_HOST: tcp://docker:2375
     IMG_TAG: lthn-compile-base
+  services:
+    - name: docker:dind
+      command: [ "--experimental" ]
   script:
     - docker run -v /lethean/chain/build:/lethean/chain/build $CI_REGISTRY_IMAGE:$IMG_TAG
   rules:
