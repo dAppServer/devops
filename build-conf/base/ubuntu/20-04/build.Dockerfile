@@ -7,5 +7,7 @@ RUN set -ex && \
     apt-get -y upgrade && \
     apt-get --no-install-recommends --yes install \
         ca-certificates pkg-config git curl bzip2 \
-        wget tar zip unzip rsync dash make cmake
+        wget tar zip unzip rsync dash make cmake \
+        ccache doxygen graphviz automake autopoint bison gettext  gperf  python3  \
+        xutils-dev build-essential libtool
 
