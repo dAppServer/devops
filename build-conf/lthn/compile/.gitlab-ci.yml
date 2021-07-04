@@ -48,14 +48,14 @@ lthn-compile-win64:test:
     DOCKER_HOST: tcp://docker:2375
     IMG_TAG: lthn-compile-win64
   script:
-    - docker run $CI_REGISTRY_IMAGE:$IMG_TAG
+    - cd lethean/chain && make depends target=x86_64-w64-mingw32 tag=win-x64
   rules:
     - changes:
         - build-conf/lthn/compile/base.Dockerfile
         - build-conf/lthn/compile/.gitlab-ci.yml
 
 lthn-compile-base:test:
-  image: docker
+  image: $CI_REGISTRY_IMAGE:lthn-compile-base
   needs: ["lthn-compile-base:build"]
   stage: test
   variables:
@@ -65,7 +65,9 @@ lthn-compile-base:test:
     - name: docker:dind
       command: [ "--experimental" ]
   script:
-    - docker run $CI_REGISTRY_IMAGE:$IMG_TAG
+    - git clone --depth 1 --recursive --branch next https://gitlab.com/lthn.io/projects/chain/lethean.git && \
+      cd lethean && \
+      make -j$THREADS static ;
   rules:
     - changes:
         - build-conf/lthn/compile/base.Dockerfile
