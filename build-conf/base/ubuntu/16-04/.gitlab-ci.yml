@@ -36,7 +36,7 @@ base-ubuntu-16-04.scan:
   script:
     - gtcs scan
   rules:
-    - if: $CI_COMMIT_BRANCH == 'master'
+    - if: $CI_COMMIT_BRANCH == 'main'
       changes:
         - build-conf/base/ubuntu/16-04/build.Dockerfile
         - build-conf/base/ubuntu/16-04/.gitlab-ci.yml
@@ -60,7 +60,7 @@ base-ubuntu-16-04.deploy:
   environment:
     name: base-ubuntu-16-04
   rules:
-    - if: $CI_COMMIT_BRANCH == 'master'
+    - if: $CI_COMMIT_BRANCH == 'main'
       changes:
         - build-conf/base/ubuntu/16-04/build.Dockerfile
         - build-conf/base/ubuntu/16-04/.gitlab-ci.yml

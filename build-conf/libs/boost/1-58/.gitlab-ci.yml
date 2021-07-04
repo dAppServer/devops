@@ -14,7 +14,7 @@ libs-boost-1-58.linux:
     - docker build --squash --cache-from "$IMAGE_TAG" -t "$IMAGE_TAG" -f build-conf/lthn/chain/linux.Dockerfile build-src
     - docker push "$IMAGE_TAG"
   rules:
-    - if: $CI_COMMIT_BRANCH == 'master'
+    - if: $CI_COMMIT_BRANCH == 'main'
       changes:
         - build-conf/libs/boost/1-58/linux.Dockerfile
         - build-conf/libs/boost/1-58/.gitlab-ci.yml
@@ -39,7 +39,7 @@ lthn-chain-linux.deploy:
   environment:
     name: libs-boost-1-58
   rules:
-    - if: $CI_COMMIT_BRANCH == 'master'
+    - if: $CI_COMMIT_BRANCH == 'main'
       changes:
         - build-conf/libs/boost/1-58/linux.Dockerfile
         - build-conf/libs/boost/1-58/.gitlab-ci.yml

@@ -39,7 +39,7 @@ base-ubuntu-18-04.deploy:
   environment:
     name: base-ubuntu-18-04
   rules:
-    - if: $CI_COMMIT_BRANCH == 'master'
+    - if: $CI_COMMIT_BRANCH == 'main'
       changes:
         - build-conf/base/ubuntu/18-04.Dockerfile
         - build-conf/base/ubuntu/18-04.yml
