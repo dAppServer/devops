@@ -36,47 +36,9 @@ lthn-compile-win64:build:
         - build-conf/lthn/compile/win64.Dockerfile
         - build-conf/lthn/compile/.gitlab-ci.yml
 
-
-lthn-compile-win64:test:
-  image: docker
-  needs: ["lthn-compile-win64:build"]
-  stage: test
-  services:
-    - name: docker:dind
-      command: [ "--experimental" ]
-  variables:
-    DOCKER_HOST: tcp://docker:2375
-    IMG_TAG: lthn-compile-win64
-  script:
-    - cd lethean/chain && make depends target=x86_64-w64-mingw32 tag=win-x64
-  rules:
-    - changes:
-        - build-conf/lthn/compile/base.Dockerfile
-        - build-conf/lthn/compile/.gitlab-ci.yml
-
-lthn-compile-base:test:
-  image: $CI_REGISTRY_IMAGE:lthn-compile-base
-  needs: ["lthn-compile-base:build"]
-  stage: test
-  variables:
-    DOCKER_HOST: tcp://docker:2375
-    IMG_TAG: lthn-compile-base
-  services:
-    - name: docker:dind
-      command: [ "--experimental" ]
-  script:
-    - git clone --depth 1 --recursive --branch next https://gitlab.com/lthn.io/projects/chain/lethean.git && \
-      cd lethean && \
-      make -j$THREADS static ;
-  rules:
-    - changes:
-        - build-conf/lthn/compile/base.Dockerfile
-        - build-conf/lthn/compile/.gitlab-ci.yml
-
-
 lthn-compile-win64:deploy:
   stage: deploy
-  needs: ["lthn-compile-win64:test"]
+  needs: ["lthn-compile-win64:build"]
   image: docker
   variables:
     DOCKER_HOST: tcp://docker:2375
@@ -101,7 +63,7 @@ lthn-compile-win64:deploy:
 
 lthn-compile-base:deploy:
   stage: deploy
-  needs: ["lthn-compile-base:test"]
+  needs: ["lthn-compile-base:build"]
   image: docker
   variables:
     DOCKER_HOST: tcp://docker:2375
