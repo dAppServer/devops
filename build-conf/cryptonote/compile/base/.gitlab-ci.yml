@@ -15,7 +15,7 @@ cryptonote-compile-base:build:
   rules:
     - changes:
         - build-conf/cryptonote/compile/base/Dockerfile
-        - build-conf/cryptonote/compile/base/gitlab-ci.yml
+        - build-conf/cryptonote/compile/base/.gitlab-ci.yml
 
 cryptonote-compile-base:deploy:
   stage: deploy
