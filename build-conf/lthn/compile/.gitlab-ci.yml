@@ -15,7 +15,6 @@ lthn-compile-base:build:
   rules:
     - changes:
         - build-conf/lthn/compile/base.Dockerfile
-        - build-conf/lthn/compile/.gitlab-ci.yml
 
 lthn-compile-win64:build:
   stage: build
@@ -34,7 +33,6 @@ lthn-compile-win64:build:
   rules:
     - changes:
         - build-conf/lthn/compile/win64.Dockerfile
-        - build-conf/lthn/compile/.gitlab-ci.yml
 
 lthn-compile-win64:deploy:
   stage: deploy
@@ -58,8 +56,7 @@ lthn-compile-win64:deploy:
   rules:
     - if: $CI_COMMIT_BRANCH == 'main'
       changes:
-        - build-conf/lthn/compile/base.Dockerfile
-        - build-conf/lthn/compile/.gitlab-ci.yml
+        - build-conf/lthn/compile/win64.Dockerfile
 
 lthn-compile-base:deploy:
   stage: deploy
@@ -84,4 +81,132 @@ lthn-compile-base:deploy:
     - if: $CI_COMMIT_BRANCH == 'main'
       changes:
         - build-conf/lthn/compile/base.Dockerfile
-        - build-conf/lthn/compile/.gitlab-ci.yml
+
+
+lthn-compile-armv7:build:
+  stage: build
+  image: docker
+  variables:
+    DOCKER_HOST: tcp://docker:2375
+    IMG_TAG: lthn-compile-armv7
+  services:
+    - name: docker:dind
+      command: [ "--experimental" ]
+  before_script:
+    - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" $CI_REGISTRY
+  script:
+    - docker build --squash --cache-from $CI_REGISTRY_IMAGE:$IMG_TAG -t $CI_REGISTRY_IMAGE:$IMG_TAG -f build-conf/lthn/compile/armv7.Dockerfile build-src
+    - docker push "$CI_REGISTRY_IMAGE:$IMG_TAG"
+  rules:
+    - changes:
+        - build-conf/lthn/compile/armv7.Dockerfile
+
+lthn-compile-armv7:deploy:
+  stage: deploy
+  needs: ["lthn-compile-armv7:build"]
+  image: docker
+  variables:
+    DOCKER_HOST: tcp://docker:2375
+    IMG_TAG: lthn-compile-armv7
+  services:
+    - name: docker:dind
+      command: [ "--experimental" ]
+  before_script:
+    - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" $CI_REGISTRY
+    - docker login -u "$DOCKER_REGISTRY_USER" -p "$DOCKER_REGISTRY_PASSWORD" $DOCKER_REGISTRY
+  script:
+    - docker pull $CI_REGISTRY_IMAGE:$IMG_TAG
+    - docker tag $CI_REGISTRY_IMAGE:$IMG_TAG $DOCKER_REGISTRY_IMAGE:$IMG_TAG
+    - docker push $DOCKER_REGISTRY/$DOCKER_REGISTRY_IMAGE:$IMG_TAG
+  environment:
+    name: $IMG_TAG
+  rules:
+    - if: $CI_COMMIT_BRANCH == 'main'
+      changes:
+        - build-conf/lthn/compile/armv7.Dockerfile
+
+
+lthn-compile-armv8:build:
+  stage: build
+  image: docker
+  variables:
+    DOCKER_HOST: tcp://docker:2375
+    IMG_TAG: lthn-compile-armv8
+  services:
+    - name: docker:dind
+      command: [ "--experimental" ]
+  before_script:
+    - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" $CI_REGISTRY
+  script:
+    - docker build --squash --cache-from $CI_REGISTRY_IMAGE:$IMG_TAG -t $CI_REGISTRY_IMAGE:$IMG_TAG -f build-conf/lthn/compile/armv8.Dockerfile build-src
+    - docker push "$CI_REGISTRY_IMAGE:$IMG_TAG"
+  rules:
+    - changes:
+        - build-conf/lthn/compile/armv8.Dockerfile
+
+lthn-compile-armv8:deploy:
+  stage: deploy
+  needs: ["lthn-compile-armv8:build"]
+  image: docker
+  variables:
+    DOCKER_HOST: tcp://docker:2375
+    IMG_TAG: lthn-compile-armv8
+  services:
+    - name: docker:dind
+      command: [ "--experimental" ]
+  before_script:
+    - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" $CI_REGISTRY
+    - docker login -u "$DOCKER_REGISTRY_USER" -p "$DOCKER_REGISTRY_PASSWORD" $DOCKER_REGISTRY
+  script:
+    - docker pull $CI_REGISTRY_IMAGE:$IMG_TAG
+    - docker tag $CI_REGISTRY_IMAGE:$IMG_TAG $DOCKER_REGISTRY_IMAGE:$IMG_TAG
+    - docker push $DOCKER_REGISTRY/$DOCKER_REGISTRY_IMAGE:$IMG_TAG
+  environment:
+    name: $IMG_TAG
+  rules:
+    - if: $CI_COMMIT_BRANCH == 'main'
+      changes:
+        - build-conf/lthn/compile/armv8.Dockerfile
+
+
+lthn-compile-riscv64:build:
+  stage: build
+  image: docker
+  variables:
+    DOCKER_HOST: tcp://docker:2375
+    IMG_TAG: lthn-compile-riscv64
+  services:
+    - name: docker:dind
+      command: [ "--experimental" ]
+  before_script:
+    - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" $CI_REGISTRY
+  script:
+    - docker build --squash --cache-from $CI_REGISTRY_IMAGE:$IMG_TAG -t $CI_REGISTRY_IMAGE:$IMG_TAG -f build-conf/lthn/compile/riscv64.Dockerfile build-src
+    - docker push "$CI_REGISTRY_IMAGE:$IMG_TAG"
+  rules:
+    - changes:
+        - build-conf/lthn/compile/riscv64.Dockerfile
+
+lthn-compile-riscv64:deploy:
+  stage: deploy
+  needs: ["lthn-compile-riscv64:build"]
+  image: docker
+  variables:
+    DOCKER_HOST: tcp://docker:2375
+    IMG_TAG: lthn-compile-riscv64
+  services:
+    - name: docker:dind
+      command: [ "--experimental" ]
+  before_script:
+    - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" $CI_REGISTRY
+    - docker login -u "$DOCKER_REGISTRY_USER" -p "$DOCKER_REGISTRY_PASSWORD" $DOCKER_REGISTRY
+  script:
+    - docker pull $CI_REGISTRY_IMAGE:$IMG_TAG
+    - docker tag $CI_REGISTRY_IMAGE:$IMG_TAG $DOCKER_REGISTRY_IMAGE:$IMG_TAG
+    - docker push $DOCKER_REGISTRY/$DOCKER_REGISTRY_IMAGE:$IMG_TAG
+  environment:
+    name: $IMG_TAG
+  rules:
+    - if: $CI_COMMIT_BRANCH == 'main'
+      changes:
+        - build-conf/lthn/compile/riscv64.Dockerfile

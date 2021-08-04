@@ -1,5 +1,5 @@
 <component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="base-ubuntu-20-04" type="docker-deploy" factoryName="dockerfile" server-name="Docker">
+  <configuration default="false" name="lthn/build:base-ubuntu-20-04" type="docker-deploy" factoryName="dockerfile" server-name="Docker">
     <deployment type="dockerfile">
       <settings>
         <option name="imageTag" value="lthn/build:base-ubuntu-20-04" />
