@@ -1,7 +1,5 @@
 FROM debian:10
 
-ENV DEBIAN_FRONTEND=noninteractive
-
 RUN apt-get update && \
     apt-get install -y --no-install-recommends ca-certificates pkg-config git curl bzip2 wget tar zip unzip rsync make \
                     cmake dash ccache doxygen graphviz automake autopoint bison gettext  gperf  python3  \
