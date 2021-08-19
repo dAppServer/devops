@@ -1,23 +1,23 @@
 FROM ubuntu:20.04
 
-ARG THREADS=1
+ARG THREADS=20
 ARG QT_VERSION=5.15.2
 ENV SOURCE_DATE_EPOCH=1397818193
 
-RUN apt update && \
-    DEBIAN_FRONTEND=noninteractive apt install -y build-essential cmake g++-mingw-w64 gettext git libtool pkg-config \
-    python && \
+RUN apt-get update && \
+    DEBIAN_FRONTEND=noninteractive apt-get install -y build-essential cmake g++-mingw-w64 gettext git libtool pkg-config \
+    python libssl-dev && \
     rm -rf /var/lib/apt/lists/*
 
 RUN update-alternatives --set x86_64-w64-mingw32-g++ $(which x86_64-w64-mingw32-g++-posix) && \
     update-alternatives --set x86_64-w64-mingw32-gcc $(which x86_64-w64-mingw32-gcc-posix)
 
-RUN git clone -b v0.17.0.0 --depth 1 https://github.com/monero-project/monero && \
-    cd monero && \
-    git reset --hard d27d4526fe89b7cdeb4b296280c4a6cf7efe21f8 && \
+
+RUN git clone --depth 1 --branch next https://gitlab.com/lthn.io/projects/chain/lethean.git && \
+    cd lethean/chain && \
     cp -a contrib/depends / && \
-    cd .. && \
-    rm -rf monero
+    cd ../.. && \
+    rm -rf lethean
 
 RUN make -j$THREADS -C /depends HOST=x86_64-w64-mingw32 NO_QT=1
 
@@ -80,3 +80,13 @@ RUN git clone -b libgcrypt-1.8.5 --depth 1 git://git.gnupg.org/libgcrypt.git && 
     make -j$THREADS install && \
     cd .. && \
     rm -rf libgcrypt
+
+
+
+RUN git clone -b v3.19.7 --depth 1 https://github.com/Kitware/CMake \
+    && cd CMake \
+    && git reset --hard 22612dd53a46c7f9b4c3f4b7dbe5c78f9afd9581 \
+    && ./bootstrap \
+    && make -j${THREADS} \
+    && make -j${THREADS} install \
+    && rm -rf $(pwd)
