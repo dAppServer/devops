@@ -199,7 +199,7 @@ CMD set -ex \
     -DANDROID_TOOLCHAIN=clang \
     -DBoost_USE_STATIC_RUNTIME=ON \
     -DLRELEASE_PATH="${PREFIX}/bin" \
-    -DQT_ANDROID_APPLICATION_BINARY="monero-wallet-gui" \
+    -DQT_ANDROID_APPLICATION_BINARY="lethean-wallet-gui" \
     -DWITH_SCANNER=ON \
     ../../.. \
     && PATH=${HOST_PATH} make generate_translations_header \
