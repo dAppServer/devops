@@ -26,8 +26,6 @@ depends:
     matrix:
       - TARGET: x86_64-unknown-linux-gnu
         PACKAGE: libdbus-1-dev libharfbuzz-dev
-      - TARGET: i686-pc-linux-gnu
-        PACKAGE: g++-multilib-i686-linux-gnu
       - TARGET: x86_64-w64-mingw32
         PACKAGE: g++-mingw-w64-x86-64
       - TARGET: i686-w64-mingw32
