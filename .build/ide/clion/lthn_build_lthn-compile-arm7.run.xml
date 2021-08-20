@@ -1,5 +1,5 @@
 <component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="lthn/build:lthn-compile-armv7" type="docker-deploy" factoryName="dockerfile" server-name="Docker">
+  <configuration default="false" name="compile/armv7.Dockerfile: Compose Deployment" type="docker-deploy" factoryName="dockerfile" server-name="Docker">
     <deployment type="dockerfile">
       <settings>
         <option name="imageTag" value="lthn/build:lthn-compile-armv7" />
@@ -21,7 +21,7 @@
             </DockerEnvVarImpl>
           </list>
         </option>
-        <option name="sourceFilePath" value="build-conf/lthn/compile/armv7.Dockerfile" />
+        <option name="sourceFilePath" value="build-conf/compile/armv7.Dockerfile" />
       </settings>
     </deployment>
     <method v="2" />

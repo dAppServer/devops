@@ -1,54 +1,43 @@
-.PHONY: all help clean build tool-gcc lthn-chain-linux lthn-wallet-linux shrink-chain-build
-.PHONY: base-ubuntu base-ubuntu-16.04 base-ubuntu-18.04 base-ubuntu-20.04
-.ONESHELL: shrink-chain-build base-ubuntu
+
 all: help
 
 clean: ## Docker System Prune
 	docker system prune --all
 
 build: ## Builds lthn/build
-	docker build --no-cache -t lthn/build -f build-conf/build.Dockerfile build-src
+	docker build -t lthn/build -f build-conf/build.Dockerfile build-src
 
-tool-gcc: ## Builds lthn/build:tool-gcc
-	docker build --no-cache -t lthn/build:tool-gcc -f build-conf/tool/gcc/build.Dockerfile build-src
-
-lthn-chain-linux: ## Builds lthn/build:lthn-chain-linux
-	docker build --no-cache -t lthn/build:lthn-chain-linux -f build-conf/lthn/chain/linux.Dockerfile build-src
-
-lthn-chain-linux-shrink: ## Builds a optimised build image
-	docker run --rm -v /var/run/docker.sock:/var/run/docker.sock dslim/docker-slim build \
-			--continue-after "exec" --http-probe-off --pull --target "lthn/build:lthn-chain-linux" \
-			--exec "git clone https://gitlab.com/lthn.io/projects/chain/lethean.git && cd lethean && make -j4 release-static && cd .. && rm -rf lethean" \
-			--show-plogs --show-clogs --show-blogs --tag "lthn/build:lthn-chain-linux" \
-			--include-path "/usr/share/cmake-3.5"
-
-lthn-chain-linux-shrink-ci: ## Gitlab task
-	build-shrink/docker-slim build --http-probe=false --continue-after "exec" --show-plogs --show-clogs --show-blogs \
-			--exec "git clone --recursive --depth 1 --branch next https://gitlab.com/lthn.io/projects/chain/lethean.git && cd lethean && make -j10 static" \
-			--include-shell --dockerfile build-conf/lthn/compile/base.Dockerfile --tag "lthn/build:lthn-compile-linux" \
-			--include-path "/usr/share/cmake-3.16" --include-path "/usr/local" .
+compile: ## Builds lthn/build:compile
+	docker build -t lthn/build:compile -f build-conf/compile/base.Dockerfile build-src
 
 
-lthn-wallet-linux: ## Builds lthn/build:lthn-wallet-linux
-	docker build --no-cache -t lthn/build:lthn-wallet-linux -f build-conf/lthn/wallet/linux.Dockerfile $(dir)/build-src
+depends-x86_64-apple-darwin11: ## Macos
+	docker build --build-arg TARGET=x86_64-apple-darwin11 --build-arg PACKAGE="imagemagick libcap-dev librsvg2-bin libz-dev libbz2-dev libtiff-tools python-dev python3-setuptools-git"  -t lthn/build:depends-x86_64-apple-darwin11 -f build-conf/compile/depends.Dockerfile build-src
+
+depends-x86_64-unknown-freebsd: ## x86_64 Freebsd
+	docker build --build-arg TARGET=x86_64-unknown-freebsd --build-arg PACKAGE="clang libdbus-1-dev libharfbuzz-dev" -t lthn/build:depends-x86_64-unknown-freebsd -f build-conf/compile/depends.Dockerfile build-src
+
+depends-x86_64-unknown-linux-gnu: ## x86_64 Linux
+	docker build --build-arg TARGET=x86_64-unknown-linux-gnu --build-arg PACKAGE="libdbus-1-dev libharfbuzz-dev" -t lthn/build:depends-x86_64-unknown-linux-gnu -f build-conf/compile/depends.Dockerfile build-src
+
+depends-i686-pc-linux-gnu:
+	docker build --build-arg TARGET=i686-pc-linux-gnu --build-arg PACKAGE="gcc-multilib-i686-linux-gnu" -t lthn/build:depends-i686-pc-linux-gnu -f build-conf/compile/depends.Dockerfile build-src
+
+depends-x86_64-w64-mingw32:
+	docker build --build-arg TARGET=x86_64-w64-mingw32 --build-arg PACKAGE=g++-mingw-w64-x86-64 -t lthn/build:depends-x86_64-w64-mingw32 -f build-conf/compile/depends.Dockerfile build-src
+
+depends-i686-w64-mingw32:
+	docker build --build-arg TARGET=i686-w64-mingw32 --build-arg PACKAGE=g++-mingw-w64-i686 -t lthn/build:depends-i686-w64-mingw32 -f build-conf/compile/depends.Dockerfile build-src
+
+depends-arm-linux-gnueabihf:
+	docker build --build-arg TARGET=arm-linux-gnueabihf --build-arg PACKAGE=g++-arm-linux-gnueabihf -t lthn/build:depends-arm-linux-gnueabihf -f build-conf/compile/depends.Dockerfile build-src
+
+depends-aarch64-linux-gnu:
+	docker build --build-arg TARGET=aarch64-linux-gnu --build-arg PACKAGE=g++-aarch64-linux-gnu -t lthn/build:depends-aarch64-linux-gnu -f build-conf/compile/depends.Dockerfile build-src
 
 
-
-base-ubuntu: base-ubuntu-20.04 ## Builds lthn/build:base-ubuntu (20.04)
-	echo "made base-ubuntu-16.04, base-ubuntu-18.04 base-ubuntu-20.04"
-	docker tag lthn/build:base-ubuntu-20.04 lthn/build:base-ubuntu
-
-base-ubuntu-16-04: ## Builds lthn/build:base-ubuntu-16-04
-	docker build --no-cache -t lthn/build:base-ubuntu-16-04 -f build-conf/base/ubuntu/16-04/build.Dockerfile build-src
-
-base-ubuntu-18-04: ## Builds lthn/build:base-ubuntu-18-04
-	docker build --no-cache -t lthn/build:base-ubuntu-18-04 -f build-conf/base/ubuntu/18-04/build.Dockerfile build-src
-
-base-ubuntu-20-04: ## Builds lthn/build:base-ubuntu-20-04
-	docker build --no-cache -t lthn/build:base-ubuntu-20-04 -f build-conf/base/ubuntu/20-04/build.Dockerfile build-src
-
-base-ubuntu-16.04-test: ## Builds lthn/build:base-ubuntu-16.04-test
-	docker build --no-cache -t lthn/build:base-ubuntu-16.04-test -f build-test/base-image/ubuntu.Dockerfile build-src
+depends-riscv64-linux-gnu:
+	docker build --build-arg TARGET=riscv64-linux-gnu --build-arg PACKAGE=g++-riscv64-linux-gnu -t lthn/build:depends-riscv64-linux-gnu -f build-conf/compile/depends.Dockerfile build-src
 
 
 help: ## Show this help
