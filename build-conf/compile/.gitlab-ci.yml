@@ -16,7 +16,7 @@ compile-base:build:
     - changes:
         - build-conf/compile/base.Dockerfile
 
-compile-depends:
+depends:
   stage: build
   image: docker
   variables:
