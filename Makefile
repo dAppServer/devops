@@ -10,7 +10,6 @@ build: ## Builds lthn/build
 compile: ## Builds lthn/build:compile
 	docker build -t lthn/build:compile -f build-conf/compile/base.Dockerfile build-src
 
-
 depends-x86_64-apple-darwin11: ## Macos
 	docker build --build-arg TARGET=x86_64-apple-darwin11 --build-arg PACKAGE="imagemagick libcap-dev librsvg2-bin libz-dev libbz2-dev libtiff-tools python-dev python3-setuptools-git"  -t lthn/build:depends-x86_64-apple-darwin11 -f build-conf/compile/depends.Dockerfile build-src
 
@@ -35,10 +34,8 @@ depends-arm-linux-gnueabihf:
 depends-aarch64-linux-gnu:
 	docker build --build-arg TARGET=aarch64-linux-gnu --build-arg PACKAGE=g++-aarch64-linux-gnu -t lthn/build:depends-aarch64-linux-gnu -f build-conf/compile/depends.Dockerfile build-src
 
-
 depends-riscv64-linux-gnu:
 	docker build --build-arg TARGET=riscv64-linux-gnu --build-arg PACKAGE=g++-riscv64-linux-gnu -t lthn/build:depends-riscv64-linux-gnu -f build-conf/compile/depends.Dockerfile build-src
-
 
 help: ## Show this help
 	@egrep -h '\s##\s' $(MAKEFILE_LIST) | sort | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m make %-30s\033[0m %s\n", $$1, $$2}'
