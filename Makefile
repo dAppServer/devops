@@ -14,7 +14,7 @@ depends-x86_64-apple-darwin11: ## Macos
 	docker build --build-arg TARGET=x86_64-apple-darwin11 --build-arg PACKAGE="imagemagick libcap-dev librsvg2-bin libz-dev libbz2-dev libtiff-tools python-dev python3-setuptools-git"  -t lthn/build:depends-x86_64-apple-darwin11 -f build-conf/compile/depends.Dockerfile build-src
 
 depends-x86_64-unknown-freebsd: ## x86_64 Freebsd
-	docker build --build-arg TARGET=x86_64-unknown-freebsd --build-arg PACKAGE="clang libdbus-1-dev libharfbuzz-dev" -t lthn/build:depends-x86_64-unknown-freebsd -f build-conf/compile/depends.Dockerfile build-src
+	docker build --build-arg TARGET=x86_64-unknown-freebsd --build-arg PACKAGE="clang-9 clang-tools-9 libdbus-1-dev libharfbuzz-dev" -t lthn/build:depends-x86_64-unknown-freebsd -f build-conf/compile/depends.Dockerfile build-src
 
 depends-x86_64-unknown-linux-gnu: ## x86_64 Linux
 	docker build --build-arg TARGET=x86_64-unknown-linux-gnu --build-arg PACKAGE="libdbus-1-dev libharfbuzz-dev" -t lthn/build:depends-x86_64-unknown-linux-gnu -f build-conf/compile/depends.Dockerfile build-src
