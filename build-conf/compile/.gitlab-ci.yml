@@ -24,6 +24,8 @@ depends:
     OSX_SDK: 10:11
   parallel:
     matrix:
+      - TARGET: x86_64-unknown-linux-gnu
+        PACKAGE: libdbus-1-dev libharfbuzz-dev
       - TARGET: i686-pc-linux-gnu
         PACKAGE: g++-multilib-i686-linux-gnu
       - TARGET: x86_64-w64-mingw32
