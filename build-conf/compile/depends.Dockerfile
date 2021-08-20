@@ -17,5 +17,3 @@ RUN make -j$THREADS -C /depends HOST=${TARGET}  NO_QT=1
 
 FROM scratch as export-image
 COPY --from=build /depends /
-#
-#CMD cd lethean/chain && make depends target=i686-w64-mingw32 tag=win-x32 -j$THREADS ;
