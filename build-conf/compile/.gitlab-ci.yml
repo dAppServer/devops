@@ -48,33 +48,45 @@ depends:
   before_script:
     - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" $CI_REGISTRY
   script:
-    - docker build --squash --build-arg TARGET=$TARGET --build-arg PACKAGE=$PACKAGE --cache-from $CI_REGISTRY_IMAGE:depends-$TARGET -t $CI_REGISTRY_IMAGE:depends-$TARGET -f build-conf/compile/depends.Dockerfile build-src
+    - docker build --squash --build-arg TARGET=$TARGET --build-arg PACKAGE="$PACKAGE" --cache-from $CI_REGISTRY_IMAGE:depends-$TARGET -t $CI_REGISTRY_IMAGE:depends-$TARGET -f build-conf/compile/depends.Dockerfile build-src
     - docker push "$CI_REGISTRY_IMAGE:depends-$TARGET"
   rules:
     - changes:
         - build-conf/compile/depends.Dockerfile
+        - build-conf/compile/.gitlab-ci.yml
 
 
-#compile-win64:deploy:
-#  stage: deploy
-#  needs: ["compile-win64:build"]
-#  image: docker
-#  variables:
-#    DOCKER_HOST: tcp://docker:2375
-#    IMG_TAG: compile-win64
-#  services:
-#    - name: docker:dind
-#      command: [ "--experimental" ]
-#  before_script:
-#    - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" $CI_REGISTRY
-#    - docker login -u "$DOCKER_REGISTRY_USER" -p "$DOCKER_REGISTRY_PASSWORD" $DOCKER_REGISTRY
-#  script:
-#    - docker pull $CI_REGISTRY_IMAGE:$IMG_TAG
-#    - docker tag $CI_REGISTRY_IMAGE:$IMG_TAG $DOCKER_REGISTRY_IMAGE:$IMG_TAG
-#    - docker push $DOCKER_REGISTRY/$DOCKER_REGISTRY_IMAGE:$IMG_TAG
-#  environment:
-#    name: $IMG_TAG
-#  rules:
-#    - if: $CI_COMMIT_BRANCH == 'main'
-#      changes:
-#        - build-conf/compile/win64.Dockerfile
+depends:deploy:
+  stage: deploy
+  needs: ["depends"]
+  image: docker
+  variables:
+    DOCKER_HOST: tcp://docker:2375
+  services:
+    - name: docker:dind
+      command: [ "--experimental" ]
+  parallel:
+    matrix:
+      - TARGET: x86_64-apple-darwin11
+      - TARGET: x86_64-unknown-freebsd
+      - TARGET: x86_64-unknown-linux-gnu
+      - TARGET: i686-pc-linux-gnu
+      - TARGET: x86_64-w64-mingw32
+      - TARGET: i686-w64-mingw32
+      - TARGET: arm-linux-gnueabihf
+      - TARGET: aarch64-linux-gnu
+      - TARGET: riscv64-linux-gnu
+  before_script:
+    - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" $CI_REGISTRY
+    - docker login -u "$DOCKER_REGISTRY_USER" -p "$DOCKER_REGISTRY_PASSWORD" $DOCKER_REGISTRY
+  script:
+    - docker pull $CI_REGISTRY_IMAGE:depends-$TARGET
+    - docker tag $CI_REGISTRY_IMAGE:depends-$TARGET $DOCKER_REGISTRY/lthn/build:depends-$TARGET
+    - docker push $DOCKER_REGISTRY/lthn/build:depends-$TARGET
+  environment:
+    name: $IMG_TAG
+  rules:
+    - if: $CI_COMMIT_BRANCH == 'main'
+      changes:
+        - build-conf/compile/depends.Dockerfile
+        - build-conf/compile/.gitlab-ci.yml
