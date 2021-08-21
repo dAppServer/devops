@@ -185,7 +185,7 @@ RUN git clone -b v3.19.7 --depth 1 https://github.com/Kitware/CMake \
     && rm -rf $(pwd)
 
 CMD set -ex \
-    && cd /monero-gui \
+    && cd /wallet-gui \
     && mkdir -p build/Android/release \
     && cd build/Android/release \
     && cmake \

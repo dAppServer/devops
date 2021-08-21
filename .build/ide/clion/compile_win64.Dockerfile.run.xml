@@ -1,5 +1,5 @@
 <component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="lthn/build:lthn-compile-win64" type="docker-deploy" factoryName="dockerfile" server-name="Docker">
+  <configuration default="false" name="compile/win64.Dockerfile: Compose Deployment" type="docker-deploy" factoryName="dockerfile" server-name="Docker">
     <deployment type="dockerfile">
       <settings>
         <option name="imageTag" value="lthn/build:lthn-compile-win64" />
@@ -12,7 +12,7 @@
           </list>
         </option>
         <option name="containerName" value="" />
-        <option name="sourceFilePath" value="build-conf/lthn/compile/win64.Dockerfile" />
+        <option name="sourceFilePath" value="build-conf/compile/win64.Dockerfile" />
       </settings>
     </deployment>
     <method v="2" />

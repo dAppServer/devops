@@ -1,0 +1,84 @@
+compile-base:build:
+  stage: build
+  image: docker
+  variables:
+    DOCKER_HOST: tcp://docker:2375
+    IMG_TAG: compile
+  services:
+    - name: docker:dind
+      command: [ "--experimental" ]
+  before_script:
+    - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" $CI_REGISTRY
+  script:
+    - docker build --squash --cache-from $CI_REGISTRY_IMAGE:$IMG_TAG -t $CI_REGISTRY_IMAGE:$IMG_TAG -f build-conf/compile/base.Dockerfile build-src
+    - docker push "$CI_REGISTRY_IMAGE:$IMG_TAG"
+  rules:
+    - changes:
+        - build-conf/compile/base.Dockerfile
+
+depends:
+  stage: build
+  image: docker
+  variables:
+    DOCKER_HOST: tcp://docker:2375
+    OSX_SDK: 10:11
+  parallel:
+    matrix:
+      - HOST: x86_64-unknown-linux-gnu
+        PACKAGE: "gperf cmake python3-zmq libdbus-1-dev libharfbuzz-dev"
+      - HOST: i686-pc-linux-gnu
+        PACKAGE: "gperf cmake g++-multilib python3-zmq"
+      - HOST: arm-linux-gnueabihf
+        PACKAGE: "python3 gperf g++-arm-linux-gnueabihf"
+      - HOST: aarch64-linux-gnu
+        PACKAGE: "python3 gperf g++-aarch64-linux-gnu"
+      - HOST: riscv64-linux-gnu
+        PACKAGE: "python3 gperf g++-riscv64-linux-gnu"
+      - HOST: x86_64-unknown-freebsd
+        PACKAGE: "clang-8 gperf cmake python3-zmq libdbus-1-dev libharfbuzz-dev"
+  services:
+    - name: docker:dind
+      command: [ "--experimental" ]
+  before_script:
+    - export PATH=$(echo $PATH | tr ':' "\n" | sed '/\/opt\/python/d' | tr "\n" ":" | sed "s|::|:|g")
+    - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" $CI_REGISTRY
+  script:
+    - docker build --squash --build-arg HOST=$HOST --build-arg PACKAGE="$PACKAGE" --cache-from $CI_REGISTRY_IMAGE:depends-$HOST -t $CI_REGISTRY_IMAGE:depends-$HOST -f build-conf/compile/depends.Dockerfile build-src
+    - docker push "$CI_REGISTRY_IMAGE:depends-$HOST"
+  rules:
+    - changes:
+        - build-conf/compile/depends.Dockerfile
+        - build-conf/compile/.gitlab-ci.yml
+
+
+depends:deploy:
+  stage: deploy
+  needs: ["depends"]
+  image: docker
+  variables:
+    DOCKER_HOST: tcp://docker:2375
+  services:
+    - name: docker:dind
+      command: [ "--experimental" ]
+  parallel:
+    matrix:
+      - TARGET: x86_64-unknown-linux-gnu
+      - TARGET: x86_64-unknown-freebsd
+      - TARGET: i686-pc-linux-gnu
+      - TARGET: arm-linux-gnueabihf
+      - TARGET: aarch64-linux-gnu
+      - TARGET: riscv64-linux-gnu
+  before_script:
+    - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" $CI_REGISTRY
+    - docker login -u "$DOCKER_REGISTRY_USER" -p "$DOCKER_REGISTRY_PASSWORD" $DOCKER_REGISTRY
+  script:
+    - docker pull $CI_REGISTRY_IMAGE:depends-$TARGET
+    - docker tag $CI_REGISTRY_IMAGE:depends-$TARGET $DOCKER_REGISTRY/lthn/build:depends-$TARGET
+    - docker push $DOCKER_REGISTRY/lthn/build:depends-$TARGET
+  environment:
+    name: $IMG_TAG
+  rules:
+    - if: $CI_COMMIT_BRANCH == 'main'
+      changes:
+        - build-conf/compile/depends.Dockerfile
+        - build-conf/compile/.gitlab-ci.yml
