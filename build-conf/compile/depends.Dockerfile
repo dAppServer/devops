@@ -11,7 +11,7 @@ RUN apt-get update && apt-get install -y ${PACKAGE}
 
 RUN if [ ${HOST} = *-mingw32 ]; then \
     update-alternatives --set ${HOST}-g++ $(which ${HOST}-g++-posix) && \
-    update-alternatives --set ${HOST}-gcc $(which ${HOST}-g++-posix); \
+    update-alternatives --set ${HOST}-gcc $(which ${HOST}-gcc-posix); \
     fi
 
 RUN git clone --depth 1 --branch ${BRANCH} ${GIT_REPO} && \
