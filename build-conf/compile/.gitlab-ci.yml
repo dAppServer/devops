@@ -28,10 +28,6 @@ depends:
         PACKAGE: "gperf cmake python3-zmq libdbus-1-dev libharfbuzz-dev"
       - HOST: i686-pc-linux-gnu
         PACKAGE: "gperf cmake g++-multilib python3-zmq"
-      - HOST: x86_64-w64-mingw32
-        PACKAGE: "cmake python3 g++-mingw-w64-x86-64 qttools5-dev-tools"
-      - HOST: i686-w64-mingw32
-        PACKAGE: "python3 g++-mingw-w64-i686 qttools5-dev-tools"
       - HOST: arm-linux-gnueabihf
         PACKAGE: "python3 gperf g++-arm-linux-gnueabihf"
       - HOST: aarch64-linux-gnu

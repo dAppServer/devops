@@ -14,6 +14,11 @@ RUN if [ ${HOST} = *-mingw32 ]; then \
     update-alternatives --set ${HOST}-gcc $(which ${HOST}-gcc-posix); \
     fi
 
+ENV CCACHE_COMPRESS=1
+ENV CCACHE_DIR=/lethean/chain/contrib/depends/${HOST}/.ccache
+ENV CCACHE_SIZE=100M
+ENV CCACHE_TEMPDIR=/tmp/.ccache-temp
+
 RUN git clone --depth 1 --branch ${BRANCH} ${GIT_REPO} && \
         make -j${THREADS} -C ${BUILD_PATH} HOST=${HOST}  NO_QT=1
 
