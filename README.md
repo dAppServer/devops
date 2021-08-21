@@ -4,7 +4,7 @@
 
 ## x86_64
 
-- `lthn/build:depends-x86_64-w64-mingw32` precompiled Libs to make Windows 64
+- `lthn/build:depends-x86_64-w64-mingw32` Windows 64
 - `lthn/build:depends-x86_64-apple-darwin11` MacOSX
 - `lthn/build:depends-x86_64-unknown-linux-gnu` Linux 64
 - `lthn/build:depends-x86_64-unknown-freebsd`  FreeBSD 64
