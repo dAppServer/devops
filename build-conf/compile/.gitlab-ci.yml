@@ -66,25 +66,27 @@ depends:deploy:
       command: [ "--experimental" ]
   parallel:
     matrix:
-      - TARGET: x86_64-unknown-linux-gnu
-      - TARGET: x86_64-unknown-freebsd
-      - TARGET: i686-pc-linux-gnu
-      - TARGET: x86_64-w64-mingw32
-      - TARGET: i686-w64-mingw32
-      - TARGET: arm-linux-gnueabihf
-      - TARGET: aarch64-linux-gnu
-      - TARGET: riscv64-linux-gnu
+      - TARGET: compile
+      - TARGET: depends-x86_64-unknown-linux-gnu
+      - TARGET: depends-x86_64-unknown-freebsd
+      - TARGET: depends-i686-pc-linux-gnu
+      - TARGET: depends-x86_64-w64-mingw32
+      - TARGET: depends-i686-w64-mingw32
+      - TARGET: depends-arm-linux-gnueabihf
+      - TARGET: depends-aarch64-linux-gnu
+      - TARGET: depends-riscv64-linux-gnu
   before_script:
     - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" $CI_REGISTRY
     - docker login -u "$DOCKER_REGISTRY_USER" -p "$DOCKER_REGISTRY_PASSWORD" $DOCKER_REGISTRY
   script:
-    - docker pull $CI_REGISTRY_IMAGE:depends-$TARGET
-    - docker tag $CI_REGISTRY_IMAGE:depends-$TARGET $DOCKER_REGISTRY/lthn/build:depends-$TARGET
-    - docker push $DOCKER_REGISTRY/lthn/build:depends-$TARGET
+    - docker pull $CI_REGISTRY_IMAGE:$TARGET
+    - docker tag $CI_REGISTRY_IMAGE:$TARGET $DOCKER_REGISTRY/lthn/build:$TARGET
+    - docker push $DOCKER_REGISTRY/lthn/build:$TARGET
   environment:
     name: $IMG_TAG
   rules:
     - if: $CI_COMMIT_BRANCH == 'main'
       changes:
+        - build-conf/compile/base.Dockerfile
         - build-conf/compile/depends.Dockerfile
         - build-conf/compile/.gitlab-ci.yml
