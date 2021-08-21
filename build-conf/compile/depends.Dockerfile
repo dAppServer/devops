@@ -1,19 +1,21 @@
 FROM lthn/build:compile as build
 
-ARG THREADS=1
+ARG THREADS=20
 ARG BRANCH=next
-ARG CC_TARGET=g++-mingw-w64
-ARG PACKAGE=x86_64-w64-mingw32
+ARG HOST=x86_64-w64-mingw32
+ARG PACKAGE=g++-mingw-w64-x86-64
+ARG GIT_REPO=https://gitlab.com/lthn.io/projects/chain/lethean.git
+ARG BUILD_PATH=/lethean/chain/contrib/depends
 
 RUN apt-get update && apt-get install -y ${PACKAGE}
 
-RUN git clone --depth 1 --branch ${BRANCH} https://gitlab.com/lthn.io/projects/chain/lethean.git && \
-        cd lethean/chain && \
-        cp -a contrib/depends / && \
-        cd ../.. && \
-        rm -rf lethean
+RUN if [[ ${HOST} = *-mingw32 ]]; then \
+    update-alternatives --set ${HOST}-g++ $(which ${HOST}-g++-posix) && \
+    update-alternatives --set ${HOST}-gcc $(which ${HOST}-g++-posix); \
+    fi
 
-RUN make -j$THREADS -C /depends HOST=${CC_TARGET}  NO_QT=1
+RUN git clone --depth 1 --branch ${BRANCH} ${GIT_REPO} && \
+        make -j${THREADS} -C ${BUILD_PATH} HOST=${HOST}  NO_QT=1
 
 FROM scratch as export-image
-COPY --from=build /depends /
+COPY --from=build /lethean/chain/contrib/depends /
