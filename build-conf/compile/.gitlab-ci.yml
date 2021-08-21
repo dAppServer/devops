@@ -25,21 +25,26 @@ depends:
   parallel:
     matrix:
       - HOST: x86_64-unknown-linux-gnu
-        PACKAGE: libdbus-1-dev libharfbuzz-dev
+        PACKAGE: "gperf cmake python3-zmq libdbus-1-dev libharfbuzz-dev"
+      - HOST: i686-pc-linux-gnu
+        PACKAGE: "gperf cmake g++-multilib python3-zmq"
       - HOST: x86_64-w64-mingw32
-        PACKAGE: g++-mingw-w64-x86-64
+        PACKAGE: "cmake python3 g++-mingw-w64-x86-64 qttools5-dev-tools"
       - HOST: i686-w64-mingw32
-        PACKAGE: g++-mingw-w64-i686
+        PACKAGE: "python3 g++-mingw-w64-i686 qttools5-dev-tools"
       - HOST: arm-linux-gnueabihf
-        PACKAGE: g++-arm-linux-gnueabihf
+        PACKAGE: "python3 gperf g++-arm-linux-gnueabihf"
       - HOST: aarch64-linux-gnu
-        PACKAGE: g++-aarch64-linux-gnu
+        PACKAGE: "python3 gperf g++-aarch64-linux-gnu"
       - HOST: riscv64-linux-gnu
-        PACKAGE: g++-riscv64-linux-gnu
+        PACKAGE: "python3 gperf g++-riscv64-linux-gnu"
+      - HOST: x86_64-unknown-freebsd
+        PACKAGE: "clang-8 gperf cmake python3-zmq libdbus-1-dev libharfbuzz-dev"
   services:
     - name: docker:dind
       command: [ "--experimental" ]
   before_script:
+    - export PATH=$(echo $PATH | tr ':' "\n" | sed '/\/opt\/python/d' | tr "\n" ":" | sed "s|::|:|g")
     - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" $CI_REGISTRY
   script:
     - docker build --squash --build-arg HOST=$HOST --build-arg PACKAGE="$PACKAGE" --cache-from $CI_REGISTRY_IMAGE:depends-$HOST -t $CI_REGISTRY_IMAGE:depends-$HOST -f build-conf/compile/depends.Dockerfile build-src

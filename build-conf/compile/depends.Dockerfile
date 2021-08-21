@@ -3,7 +3,7 @@ FROM lthn/build:compile as build
 ARG THREADS=20
 ARG BRANCH=next
 ARG HOST=x86_64-w64-mingw32
-ARG PACKAGE=g++-mingw-w64-x86-64
+ARG PACKAGE="g++-mingw-w64-x86-64 qttools5-dev-tools"
 ARG GIT_REPO=https://gitlab.com/lthn.io/projects/chain/lethean.git
 ARG BUILD_PATH=/lethean/chain/contrib/depends
 
