@@ -67,8 +67,10 @@ depends:deploy:
   parallel:
     matrix:
       - TARGET: x86_64-unknown-linux-gnu
+      - TARGET: x86_64-unknown-freebsd
       - TARGET: x86_64-w64-mingw32
       - TARGET: i686-w64-mingw32
+      - TARGET: i686-pc-linux-gnu
       - TARGET: arm-linux-gnueabihf
       - TARGET: aarch64-linux-gnu
       - TARGET: riscv64-linux-gnu
