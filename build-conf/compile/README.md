@@ -2,7 +2,7 @@
 
 These docker images create linux environment that is able to cross-compile for any arch.
 
-We are using ubuntu trusty for the build stage, each image exports the build assets to a blank fs.
+We are using ubuntu bionic for the build stage, each image exports the build assets to a blank fs.
 
 Rather than asking people to repeat this prep step, we host all the images on Docker Hub.
 
