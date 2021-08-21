@@ -9,7 +9,7 @@ ARG BUILD_PATH=/lethean/chain/contrib/depends
 
 RUN apt-get update && apt-get install -y ${PACKAGE}
 
-RUN if [[ ${HOST} = *-mingw32 ]]; then \
+RUN if [ ${HOST} = *-mingw32 ]; then \
     update-alternatives --set ${HOST}-g++ $(which ${HOST}-g++-posix) && \
     update-alternatives --set ${HOST}-gcc $(which ${HOST}-g++-posix); \
     fi
