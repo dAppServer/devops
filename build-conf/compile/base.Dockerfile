@@ -1,8 +1,7 @@
-FROM debian:11-slim
-
+FROM ubuntu:trusty
+ENV DEBIAN_FRONTEND=noninteractive
 RUN apt-get update && \
-    apt-get install -y --no-install-recommends ca-certificates pkg-config git curl bzip2 wget tar zip unzip rsync make qttools5-dev-tools \
-                    cmake ccache doxygen graphviz automake autopoint bison gettext  gperf  python3 libtool-bin \
-                    xutils-dev build-essential libtool autotools-dev bsdmainutils python3-zmq \
+    apt-get install -y --no-install-recommends build-essential libtool cmake autotools-dev automake pkg-config \
+                    bsdmainutils curl git ca-certificates ccache \
                     && rm -rf /var/lib/apt/lists/*
 
