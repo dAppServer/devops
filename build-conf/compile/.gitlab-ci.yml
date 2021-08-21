@@ -37,7 +37,7 @@ depends:
       - HOST: aarch64-linux-gnu
         PACKAGE: "python3 gperf g++-aarch64-linux-gnu"
       - HOST: riscv64-linux-gnu
-        PACKAGE: "python3 gperf riscv64-linux-gnu"
+        PACKAGE: "python3 gperf g++-riscv64-linux-gnu"
       - HOST: x86_64-unknown-freebsd
         PACKAGE: "clang-8 gperf cmake python3-zmq libdbus-1-dev libharfbuzz-dev"
   services:
