@@ -1,6 +1,6 @@
 FROM lthn/build:compile as build
 
-ARG THREADS=20
+ARG THREADS=1
 ARG BRANCH=next
 ARG BUILD=x86_64-w64-mingw32
 ARG GIT_REPO=https://gitlab.com/lthn.io/projects/chain/lethean.git
@@ -55,13 +55,22 @@ RUN if [ ${BUILD} = x86_64-w64-mingw32 ] || [ ${BUILD} = i686-w64-mingw32 ]; the
     fi
 
 ENV BUILD_TARGET=${BUILD}
-ENV BUILD_THREADS=${THREADS}
+ENV BUILD_THREADS=1
+ENV CCACHE_SIZE=100M
+ENV CCACHE_TEMPDIR=/tmp/.ccache-temp
+ENV CCACHE_COMPRESS=1
+ENV CCACHE_DIR=$HOME/.ccache
+
 RUN make -j${THREADS} -C ${BUILD_PATH} HOST=${BUILD}
 
-CMD if [ ! -f "/build/chain/Makefile" ]; then \
-        cp -r /lethean/chain /build; \
-    fi \
-    && make -j${BUILD_THREADS} -C /build/chain depends target=${BUILD_TARGET}
+CMD if [ -f "/build/chain/Makefile" ]; then \
+        echo "Local code"; \
+        cp -R /build /lethean ; \
+    fi && \
+    (cd /lethean && git submodule update --init --depth 1) && \
+    make -j${BUILD_THREADS} -C /lethean/chain depends target=${BUILD_TARGET} && \
+    mkdir -p /build/dist/${BUILD_TARGET} && \
+    mv -f /lethean/chain/build/release/bin/* /build/dist/${BUILD_TARGET};
 
 FROM scratch as export-image
 COPY --from=build /lethean/chain/contrib/depends/built /built
