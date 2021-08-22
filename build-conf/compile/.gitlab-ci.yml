@@ -191,4 +191,4 @@ sources:deploy:
   rules:
     - if: $CI_COMMIT_BRANCH == 'main'
       changes:
-            - build-conf/compile/sources.Dockerfile
+          - build-conf/compile/sources.Dockerfile
