@@ -17,9 +17,7 @@ RUN if [ ${HOST} = x86_64-w64-mingw32 ] || [ ${HOST} = i686-w64-mingw32 ]; then 
 RUN git clone --depth 1 --branch ${BRANCH} ${GIT_REPO} && \
         make -j${THREADS} -C ${BUILD_PATH} HOST=${HOST}
 
-RUN rm -rf /lethean/chain/contrib/depends/sources
-RUN rm -rf /lethean/chain/contrib/depends/work
-
 FROM scratch as export-image
-
-COPY --from=build /lethean/chain/contrib/depends /
+ARG HOST=x86_64-w64-mingw32
+COPY --from=build /lethean/chain/contrib/depends/${HOST} /
+COPY --from=build /lethean/chain/contrib/depends/built /
