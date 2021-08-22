@@ -2,26 +2,45 @@
 
 - `lthn/build:compile` Compile base image
 
-## x86_64
+## Windows
 
-- `lthn/build:depends-x86_64-w64-mingw32` Windows 64
-- `lthn/build:depends-x86_64-apple-darwin11` MacOSX
-- `lthn/build:depends-x86_64-unknown-linux-gnu` Linux 64
-- `lthn/build:depends-x86_64-unknown-freebsd`  FreeBSD 64
+### Dockerfile
+- 64: `COPY --from=lthn/build:depends-x86_64-w64-mingw32 / chain/contrib/depends`
+- 32: `COPY --from=lthn/build:depends-i686-w64-mingw32 / chain/contrib/depends` 
 
-## i686 
+### Commandline
+- 64: `docker run -v %cd%:/build -it lthn/build:windows-64`
+- 32: `docker run -v %cd%:/build -it lthn/build:windows-32`
 
-- `lthn/build:depends-i686-pc-linux-gnu` Linux 32
-- `lthn/build:depends-i686-w64-mingw32` Windows 32
+## Linux
+ 
+### Dockerfile
+- 64: `COPY --from=lthn/build:depends-x86_64-unknown-linux-gnu / chain/contrib/depends`
+- 32: `COPY --from=lthn/build:depends-i686-pc-linux-gnu / chain/contrib/depends`
+- freebsd: `COPY --from=lthn/build:depends-x86_64-unknown-freebsd / chain/contrib/depends`
+
+### Commandline
+- 64: `docker run -v $(pwd):/build -it lthn/build-linux-64`
+- 32: `docker run -v $(pwd):/build -it lthn/build-linux-32`
+- freebsd: `docker run -v $(pwd):/build -it lthn/build-freebsd`
 
 ## ARM
 
-- `lthn/build:depends-arm-linux-gnueabihf` Linux ARM 32 bit
-- `lthn/build:depends-aarch64-linux-gnu` Linux ARM 64 bit
+### Dockerfile
+- 32: `COPY --from=lthn/build:depends-arm-linux-gnueabihf / chain/contrib/depends`
+- 64: `COPY --from=lthn/build:depends-aarch64-linux-gnu / chain/contrib/depends`
+
+### Commandline
+- 32: `docker run -v $(pwd):/build -it lthn/build-arm-7`
+- 64: `docker run -v $(pwd):/build -it lthn/build-arm-8`
 
 ## RISCV
+### Dockerfile
 
-- `lthn/build:depends-riscv64-linux-gnu` RISCV 64 bit
+- 64: `COPY --from=lthn/build:depends-riscv64-linux-gnu / chain/contrib/depends`
+
+### Commandline
+- 64: `docker run -v $(pwd):/build -it lthn/build-riscv-64`
 
 ## Using the precompiled assets
 
@@ -46,6 +65,6 @@ COPY --from=builder /lethean/chain/build/release/bin/ /
 
 Run the above Dockerfile using the -o flag to export the 'export-image' stage to your local directory.
 
-`docker build -t lthn/chain:riscv64-linux-gnu -o artifacts .`
+`docker build -o artifacts .`
 
 
