@@ -4,8 +4,8 @@ all: help
 clean: ## Docker System Prune
 	docker system prune --all
 
-build: ## Builds lthn/build
-	docker build -t lthn/build -f build-conf/build.Dockerfile build-src
+builder: ## Builds lthn/build
+	docker build -t lthn/build -f Dockerfile build-src
 
 compile: ## Builds lthn/build:compile
 	docker build -t lthn/build:compile -f base.Dockerfile .
