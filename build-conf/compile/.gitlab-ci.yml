@@ -190,3 +190,5 @@ sources:deploy:
     name: $IMG_TAG
   rules:
     - if: $CI_COMMIT_BRANCH == 'main'
+      changes:
+          - build-conf/compile/sources.Dockerfile
