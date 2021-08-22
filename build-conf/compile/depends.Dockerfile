@@ -19,5 +19,4 @@ RUN git clone --depth 1 --branch ${BRANCH} ${GIT_REPO} && \
 
 FROM scratch as export-image
 ARG HOST=x86_64-w64-mingw32
-COPY --from=build /lethean/chain/contrib/depends/${HOST} /
-COPY --from=build /lethean/chain/contrib/depends/built /
+COPY --from=build /lethean/chain/contrib/depends/ /
