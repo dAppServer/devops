@@ -46,6 +46,7 @@ depends:
   before_script:
     - export PATH=$(echo $PATH | tr ':' "\n" | sed '/\/opt\/python/d' | tr "\n" ":" | sed "s|::|:|g")
     - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" $CI_REGISTRY
+    - sleep int(rand(180));
   script:
     - docker build --squash --build-arg HOST=$HOST --build-arg PACKAGE="$PACKAGE" --cache-from $CI_REGISTRY_IMAGE:depends-$HOST -t $CI_REGISTRY_IMAGE:depends-$HOST -f build-conf/compile/depends.Dockerfile build-src
     - docker push "$CI_REGISTRY_IMAGE:depends-$HOST"
