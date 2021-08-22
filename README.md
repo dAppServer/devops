@@ -20,9 +20,9 @@
 - freebsd: `COPY --from=lthn/build:depends-x86_64-unknown-freebsd / chain/contrib/depends`
 
 ### Commandline
-- 64: `docker run -v $(pwd):/build -it lthn/build-linux-64`
-- 32: `docker run -v $(pwd):/build -it lthn/build-linux-32`
-- freebsd: `docker run -v $(pwd):/build -it lthn/build-freebsd`
+- 64: `docker run -v $(pwd):/build -it lthn/build:linux-64`
+- 32: `docker run -v $(pwd):/build -it lthn/build:linux-32`
+- freebsd: `docker run -v $(pwd):/build -it lthn/build:freebsd`
 
 ## ARM
 
@@ -31,8 +31,8 @@
 - 64: `COPY --from=lthn/build:depends-aarch64-linux-gnu / chain/contrib/depends`
 
 ### Commandline
-- 32: `docker run -v $(pwd):/build -it lthn/build-arm-7`
-- 64: `docker run -v $(pwd):/build -it lthn/build-arm-8`
+- 32: `docker run -v $(pwd):/build -it lthn/build:arm-7`
+- 64: `docker run -v $(pwd):/build -it lthn/build:arm-8`
 
 ## RISCV
 ### Dockerfile
@@ -40,7 +40,7 @@
 - 64: `COPY --from=lthn/build:depends-riscv64-linux-gnu / chain/contrib/depends`
 
 ### Commandline
-- 64: `docker run -v $(pwd):/build -it lthn/build-riscv-64`
+- 64: `docker run -v $(pwd):/build -it lthn/build:riscv-64`
 
 ## Using the precompiled assets
 
