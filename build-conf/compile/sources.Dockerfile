@@ -11,4 +11,4 @@ RUN git clone --depth 1 --branch ${BRANCH} ${GIT_REPO} && \
         make -C ${BUILD_PATH} download-${BUILD}
 
 FROM scratch as export-image
-COPY --from=build /lethean/chain/contrib/depends/sources /sources
+COPY --from=build /lethean/chain/contrib/depends/sources /
