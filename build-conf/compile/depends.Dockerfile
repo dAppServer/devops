@@ -9,7 +9,7 @@ ARG BUILD_PATH=/lethean/chain/contrib/depends
 COPY --from=lthn/build:sources-linux / /cache/linux
 COPY --from=lthn/build:sources-win / /cache/win
 
-RUN git clone --depth 1 --branch ${BRANCH} ${GIT_REPO}
+RUN git clone --depth 1 --branch ${BRANCH} ${GIT_REPO};
 
 ENV PACKAGE=""
 RUN case ${BUILD} in \
@@ -54,7 +54,14 @@ RUN if [ ${BUILD} = x86_64-w64-mingw32 ] || [ ${BUILD} = i686-w64-mingw32 ]; the
     update-alternatives --set ${BUILD}-gcc $(which ${BUILD}-gcc-posix); \
     fi
 
+ENV BUILD_TARGET=${BUILD}
+ENV BUILD_THREADS=${THREADS}
 RUN make -j${THREADS} -C ${BUILD_PATH} HOST=${BUILD}
+
+CMD if [ ! -f "/build/chain/Makefile" ]; then \
+        cp -r /lethean/chain /build; \
+    fi \
+    && make -j${BUILD_THREADS} -C /build/chain depends target=${BUILD_TARGET}
 
 FROM scratch as export-image
 COPY --from=build /lethean/chain/contrib/depends/built /built
