@@ -95,6 +95,9 @@ sources:
   script:
     - docker build --squash --build-arg BUILD=$BUILD -t $CI_REGISTRY_IMAGE:sources-$BUILD -f build-conf/compile/sources.Dockerfile build-src
     - docker push "$CI_REGISTRY_IMAGE:sources-$BUILD"
+  rules:
+    - changes:
+        - build-conf/compile/sources.Dockerfile
 
 
 sources:deploy:
