@@ -50,10 +50,6 @@ depends:
   script:
     - docker build --squash --build-arg HOST=$HOST --build-arg PACKAGE="$PACKAGE" --cache-from $CI_REGISTRY_IMAGE:depends-$HOST -t $CI_REGISTRY_IMAGE:depends-$HOST -f build-conf/compile/depends.Dockerfile build-src
     - docker push "$CI_REGISTRY_IMAGE:depends-$HOST"
-  rules:
-    - changes:
-        - build-conf/compile/depends.Dockerfile
-        - build-conf/compile/.gitlab-ci.yml
 
 
 depends:deploy:
@@ -87,7 +83,3 @@ depends:deploy:
     name: $IMG_TAG
   rules:
     - if: $CI_COMMIT_BRANCH == 'main'
-      changes:
-        - build-conf/compile/base.Dockerfile
-        - build-conf/compile/depends.Dockerfile
-        - build-conf/compile/.gitlab-ci.yml
