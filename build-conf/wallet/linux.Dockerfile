@@ -187,7 +187,7 @@ RUN git clone -b v3.10.0 --depth 1 https://github.com/protocolbuffers/protobuf &
     rm -rf $(pwd)
 
 FROM base as cmake
-COPY --from=openssl / /
+COPY --from=openssl /usr /usr
 RUN git clone -b v3.18.4 --depth 1 https://github.com/Kitware/CMake && \
     cd CMake && \
     git reset --hard 3cc3d42aba879fff5e85b363ae8f21386a3f9f9b && \
@@ -197,7 +197,7 @@ RUN git clone -b v3.18.4 --depth 1 https://github.com/Kitware/CMake && \
     rm -rf $(pwd)
 
 FROM base as libxcb
-COPY --from=xcbproto / /
+COPY --from=xcbproto /usr /usr
 RUN git clone -b 1.12 --depth 1 https://gitlab.freedesktop.org/xorg/lib/libxcb && \
     cd libxcb && \
     git reset --hard d34785a34f28fa6a00f8ce00d87e3132ff0f6467 && \
@@ -212,8 +212,8 @@ RUN git clone -b 1.12 --depth 1 https://gitlab.freedesktop.org/xorg/lib/libxcb &
     rm -rf $(pwd)
 
 FROM base as fontconfig
-COPY --from=freetype2 / /
-COPY --from=libexpat / /
+COPY --from=freetype2 /usr /usr
+COPY --from=libexpat /usr /usr
 RUN git clone -b 2.13.92 --depth 1 https://gitlab.freedesktop.org/fontconfig/fontconfig && \
     cd fontconfig && \
     git reset --hard b1df1101a643ae16cdfa1d83b939de2497b1bf27 && \
@@ -223,7 +223,7 @@ RUN git clone -b 2.13.92 --depth 1 https://gitlab.freedesktop.org/fontconfig/fon
     rm -rf $(pwd)
 
 FROM base as libxkbcommon
-COPY --from=libxcb / /
+COPY --from=libxcb /usr /usr
 RUN git clone -b xkbcommon-0.5.0 --depth 1 https://github.com/xkbcommon/libxkbcommon && \
     cd libxkbcommon && \
     git reset --hard c43c3c866eb9d52cd8f61e75cbef1c30d07f3a28 && \
@@ -233,8 +233,8 @@ RUN git clone -b xkbcommon-0.5.0 --depth 1 https://github.com/xkbcommon/libxkbco
     rm -rf $(pwd)
 
 FROM base as libxcb-image
-COPY --from=libxcb / /
-COPY --from=libxcb-util / /
+COPY --from=libxcb /usr /usr
+COPY --from=libxcb-util /usr /usr
 RUN git clone -b 0.4.0 --depth 1 https://gitlab.freedesktop.org/xorg/lib/libxcb-image && \
     cd libxcb-image && \
     git reset --hard d882052fb2ce439c6483fce944ba8f16f7294639 && \
@@ -247,7 +247,7 @@ RUN git clone -b 0.4.0 --depth 1 https://gitlab.freedesktop.org/xorg/lib/libxcb-
     rm -rf $(pwd)
 
 FROM base as boost
-COPY --from=icu / /
+COPY --from=icu /usr /usr
 RUN wget https://downloads.sourceforge.net/project/boost/boost/1.73.0/boost_1_73_0.tar.gz && \
     echo "9995e192e68528793755692917f9eb6422f3052a53c5e13ba278a228af6c7acf boost_1_73_0.tar.gz" | sha256sum -c && \
     tar -xzf boost_1_73_0.tar.gz && \
@@ -258,7 +258,7 @@ RUN wget https://downloads.sourceforge.net/project/boost/boost/1.73.0/boost_1_73
     rm -rf $(pwd)
 
 FROM base as libgcrypt
-COPY --from=libgpg-error / /
+COPY --from=libgpg-error /usr /usr
 RUN git clone -b libgcrypt-1.8.5 --depth 1 git://git.gnupg.org/libgcrypt.git && \
     cd libgcrypt && \
     git reset --hard 56606331bc2a80536db9fc11ad53695126007298 && \
@@ -284,33 +284,34 @@ RUN git clone git://code.qt.io/qt/qt5.git -b ${QT_VERSION} --depth 1 && \
     git clone git://code.qt.io/qt/qtx11extras.git -b ${QT_VERSION} --depth 1 && \
     git clone git://code.qt.io/qt/qtxmlpatterns.git -b ${QT_VERSION} --depth 1
 
+FROM scratch
 FROM base as final
 
-COPY --from=libxcb-util / /
-COPY --from=libxcb / /
-COPY --from=xorgproto / /
-COPY --from=xcbproto / /
-COPY --from=libxau / /
-COPY --from=libxcb-image / /
-COPY --from=libxcb-keysyms / /
-COPY --from=libxcb-render-util / /
-COPY --from=libxcb-wm / /
-COPY --from=libxkbcommon / /
-COPY --from=zlib / /
-COPY --from=freetype2 / /
-COPY --from=libexpat / /
-COPY --from=libusb / /
-COPY --from=hidapi / /
-COPY --from=openssl / /
-COPY --from=protobuf / /
-COPY --from=libgcrypt / /
-COPY --from=libgpg-error / /
-COPY --from=libzmq / /
-COPY --from=fontconfig / /
-COPY --from=icu / /
-COPY --from=boost / /
-COPY --from=cmake / /
-COPY --from=qt5 / /
+COPY --from=libxcb-util /usr /usr
+COPY --from=libxcb /usr /usr
+COPY --from=xorgproto /usr /usr
+COPY --from=xcbproto /usr /usr
+COPY --from=libxau /usr /usr
+COPY --from=libxcb-image /usr /usr
+COPY --from=libxcb-keysyms /usr /usr
+COPY --from=libxcb-render-util /usr /usr
+COPY --from=libxcb-wm /usr /usr
+COPY --from=libxkbcommon /usr /usr
+COPY --from=zlib /usr /usr
+COPY --from=freetype2 /usr /usr
+COPY --from=libexpat /usr /usr
+COPY --from=libusb /usr /usr
+COPY --from=hidapi /usr /usr
+COPY --from=openssl /usr /usr
+COPY --from=protobuf /usr /usr
+COPY --from=libgcrypt /usr /usr
+COPY --from=libgpg-error /usr /usr
+COPY --from=libzmq /usr /usr
+COPY --from=fontconfig /usr /usr
+COPY --from=icu /usr /usr
+COPY --from=boost /usr /usr
+COPY --from=cmake /usr /usr
+COPY --from=qt5 /qt5 /qt5
 
 RUN rm /usr/lib/x86_64-linux-gnu/libX11.a || true && \
     rm /usr/lib/x86_64-linux-gnu/libXext.a || true && \
