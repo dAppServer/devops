@@ -1,6 +1,6 @@
 FROM ubuntu:20.04
 
-ARG THREADS=20
+ARG THREADS=1
 ARG QT_VERSION=5.15.2
 ENV SOURCE_DATE_EPOCH=1397818193
 
@@ -13,13 +13,15 @@ RUN update-alternatives --set x86_64-w64-mingw32-g++ $(which x86_64-w64-mingw32-
     update-alternatives --set x86_64-w64-mingw32-gcc $(which x86_64-w64-mingw32-gcc-posix)
 
 
-RUN git clone --depth 1 --branch next https://gitlab.com/lthn.io/projects/chain/lethean.git && \
-    cd lethean/chain && \
-    cp -a contrib/depends / && \
-    cd ../.. && \
-    rm -rf lethean
+#RUN git clone --depth 1 --branch next https://gitlab.com/lthn.io/projects/chain/lethean.git && \
+#    cd lethean/chain && \
+#    cp -a contrib/depends / && \
+#    cd ../.. && \
+#    rm -rf lethean
+#
+#RUN make -j$THREADS -C /depends HOST=x86_64-w64-mingw32 NO_QT=1
 
-RUN make -j$THREADS -C /depends HOST=x86_64-w64-mingw32 NO_QT=1
+COPY --from=lthn/build:depends-x86_64-w64-mingw32 / /depends
 
 RUN git clone git://code.qt.io/qt/qt5.git -b ${QT_VERSION} --depth 1 && \
     cd qt5 && \
