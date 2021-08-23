@@ -48,7 +48,9 @@ compile:
   script:
     - docker build --squash --build-arg BUILD=$BUILD --target build --cache-from $CI_REGISTRY_IMAGE:$TAG -t $CI_REGISTRY_IMAGE:$TAG -f build-conf/compile/depends.Dockerfile build-src
     - docker push "$CI_REGISTRY_IMAGE:$TAG"
-
+  rules:
+    - changes:
+        - build-conf/compile/depends.Dockerfile
 
 compile:deploy:
   stage: deploy
@@ -80,6 +82,8 @@ compile:deploy:
     name: $TARGET
   rules:
     - if: $CI_COMMIT_BRANCH == 'main'
+      changes:
+        - build-conf/compile/depends.Dockerfile
 
 depends:
   stage: build
@@ -106,7 +110,9 @@ depends:
   script:
     - docker build --squash --build-arg BUILD=$BUILD --cache-from $CI_REGISTRY_IMAGE:depends-$BUILD -t $CI_REGISTRY_IMAGE:depends-$BUILD -f build-conf/compile/depends.Dockerfile build-src
     - docker push "$CI_REGISTRY_IMAGE:depends-$BUILD"
-
+  rules:
+    - changes:
+        - build-conf/compile/depends.Dockerfile
 
 depends:deploy:
   stage: deploy
@@ -139,7 +145,8 @@ depends:deploy:
     name: $IMG_TAG
   rules:
     - if: $CI_COMMIT_BRANCH == 'main'
-
+      changes:
+        - build-conf/compile/depends.Dockerfile
 
 sources:
   stage: build
@@ -163,7 +170,6 @@ sources:
   rules:
     - changes:
         - build-conf/compile/sources.Dockerfile
-
 
 sources:deploy:
   stage: deploy
