@@ -282,7 +282,7 @@ RUN git clone git://code.qt.io/qt/qt5.git -b ${QT_VERSION} --depth 1 && \
     git clone git://code.qt.io/qt/qttools.git -b ${QT_VERSION} --depth 1 && \
     git clone git://code.qt.io/qt/qttranslations.git -b ${QT_VERSION} --depth 1 && \
     git clone git://code.qt.io/qt/qtx11extras.git -b ${QT_VERSION} --depth 1 && \
-    git clone git://code.qt.io/qt/qtxmlpatterns.git -b ${QT_VERSION} --depth 1 \
+    git clone git://code.qt.io/qt/qtxmlpatterns.git -b ${QT_VERSION} --depth 1
 
 FROM base as final
 
