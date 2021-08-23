@@ -26,6 +26,8 @@ wallet:deploy:
   image: docker
   variables:
     DOCKER_HOST: tcp://docker:2375
+    DOCKER_DRIVER: overlay2
+    DOCKER_BUILDKIT: 1
   services:
     - name: docker:dind
       command: [ "--experimental" ]
@@ -52,6 +54,8 @@ sources:
   image: docker
   variables:
     DOCKER_HOST: tcp://docker:2375
+    DOCKER_DRIVER: overlay2
+    DOCKER_BUILDKIT: 1
   parallel:
     matrix:
       - BUILD: osx
@@ -77,6 +81,8 @@ sources:deploy:
   image: docker
   variables:
     DOCKER_HOST: tcp://docker:2375
+    DOCKER_DRIVER: overlay2
+    DOCKER_BUILDKIT: 1
   services:
     - name: docker:dind
       command: [ "--experimental" ]
