@@ -10,6 +10,7 @@ compile-base:build:
   before_script:
     - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" $CI_REGISTRY
   script:
+    - docker pull "$CI_REGISTRY_IMAGE:$IMG_TAG" || true
     - docker build --squash --cache-from $CI_REGISTRY_IMAGE:$IMG_TAG -t $CI_REGISTRY_IMAGE:$IMG_TAG -f build-conf/compile/base.Dockerfile build-src
     - docker push "$CI_REGISTRY_IMAGE:$IMG_TAG"
   rules:
@@ -46,6 +47,7 @@ compile:
     - export PATH=$(echo $PATH | tr ':' "\n" | sed '/\/opt\/python/d' | tr "\n" ":" | sed "s|::|:|g")
     - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" $CI_REGISTRY
   script:
+    - docker push "$CI_REGISTRY_IMAGE:$TAG" || true
     - docker build --squash --build-arg BUILD=$BUILD --target build --cache-from $CI_REGISTRY_IMAGE:$TAG -t $CI_REGISTRY_IMAGE:$TAG -f build-conf/compile/depends.Dockerfile build-src
     - docker push "$CI_REGISTRY_IMAGE:$TAG"
   rules:
@@ -75,7 +77,7 @@ compile:deploy:
     - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" $CI_REGISTRY
     - docker login -u "$DOCKER_REGISTRY_USER" -p "$DOCKER_REGISTRY_PASSWORD" $DOCKER_REGISTRY
   script:
-    - docker pull $CI_REGISTRY_IMAGE:$TARGET
+    - docker pull $CI_REGISTRY_IMAGE:$TARGET || true
     - docker tag $CI_REGISTRY_IMAGE:$TARGET $DOCKER_REGISTRY/lthn/build:$TARGET
     - docker push $DOCKER_REGISTRY/lthn/build:$TARGET
   environment:
@@ -108,6 +110,7 @@ depends:
     - export PATH=$(echo $PATH | tr ':' "\n" | sed '/\/opt\/python/d' | tr "\n" ":" | sed "s|::|:|g")
     - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" $CI_REGISTRY
   script:
+    - docker pull "$CI_REGISTRY_IMAGE:depends-$BUILD" || true
     - docker build --squash --build-arg BUILD=$BUILD --cache-from $CI_REGISTRY_IMAGE:depends-$BUILD -t $CI_REGISTRY_IMAGE:depends-$BUILD -f build-conf/compile/depends.Dockerfile build-src
     - docker push "$CI_REGISTRY_IMAGE:depends-$BUILD"
   rules:
@@ -138,7 +141,7 @@ depends:deploy:
     - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" $CI_REGISTRY
     - docker login -u "$DOCKER_REGISTRY_USER" -p "$DOCKER_REGISTRY_PASSWORD" $DOCKER_REGISTRY
   script:
-    - docker pull $CI_REGISTRY_IMAGE:$TARGET
+    - docker pull $CI_REGISTRY_IMAGE:$TARGET || true
     - docker tag $CI_REGISTRY_IMAGE:$TARGET $DOCKER_REGISTRY/lthn/build:$TARGET
     - docker push $DOCKER_REGISTRY/lthn/build:$TARGET
   environment:
@@ -165,6 +168,7 @@ sources:
     - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" $CI_REGISTRY
     - sleep $(shuf -i1-180 -n1);
   script:
+    - docker pull "$CI_REGISTRY_IMAGE:sources-$BUILD" || true
     - docker build --squash --build-arg BUILD=$BUILD -t $CI_REGISTRY_IMAGE:sources-$BUILD -f build-conf/compile/sources.Dockerfile build-src
     - docker push "$CI_REGISTRY_IMAGE:sources-$BUILD"
   rules:
@@ -189,7 +193,7 @@ sources:deploy:
     - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" $CI_REGISTRY
     - docker login -u "$DOCKER_REGISTRY_USER" -p "$DOCKER_REGISTRY_PASSWORD" $DOCKER_REGISTRY
   script:
-    - docker pull $CI_REGISTRY_IMAGE:$TARGET
+    - docker pull $CI_REGISTRY_IMAGE:$TARGET || true
     - docker tag $CI_REGISTRY_IMAGE:$TARGET $DOCKER_REGISTRY/lthn/build:$TARGET
     - docker push $DOCKER_REGISTRY/lthn/build:$TARGET
   environment:
