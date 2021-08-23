@@ -1,6 +1,6 @@
 wallet:
   stage: build
-  image: docker:latest
+  image: docker
   variables:
     DOCKER_HOST: tcp://docker:2375
     DOCKER_DRIVER: overlay2
@@ -10,7 +10,7 @@ wallet:
       - BUILD: linux
       - BUILD: android
   services:
-    - name: docker:latest-dind
+    - name: docker:dind
       command: [ "--experimental" ]
   before_script:
     - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" $CI_REGISTRY
