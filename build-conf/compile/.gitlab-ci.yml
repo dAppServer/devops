@@ -3,6 +3,7 @@ compile-base:build:
   image: docker
   variables:
     DOCKER_HOST: tcp://docker:2375
+    DOCKER_BUILDKIT: 1
     IMG_TAG: compile
   services:
     - name: docker:dind
@@ -22,6 +23,7 @@ compile:
   image: docker
   variables:
     DOCKER_HOST: tcp://docker:2375
+    DOCKER_BUILDKIT: 1
   parallel:
     matrix:
       - BUILD: x86_64-unknown-linux-gnu
@@ -92,6 +94,7 @@ depends:
   image: docker
   variables:
     DOCKER_HOST: tcp://docker:2375
+    DOCKER_BUILDKIT: 1
     OSX_SDK: 10:11
   parallel:
     matrix:
@@ -156,6 +159,7 @@ sources:
   image: docker
   variables:
     DOCKER_HOST: tcp://docker:2375
+    DOCKER_BUILDKIT: 1
   parallel:
     matrix:
       - BUILD: osx
