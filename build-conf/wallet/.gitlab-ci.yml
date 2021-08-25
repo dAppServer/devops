@@ -9,6 +9,7 @@ wallet:preload:
     matrix:
       - BUILD: linux
       - BUILD: windows
+      - BUILD: android
   services:
     - name: docker:dind
       command: [ "--experimental" ]
@@ -32,6 +33,8 @@ wallet:libs:
       - BUILD: linux
         LIB: [libx, utils, cmake, boost, fontconfig]
       - BUILD: windows
+        LIB: [libx, cmake, qt]
+      - BUILD: android
         LIB: [libx, cmake, qt]
   services:
     - name: docker:dind
