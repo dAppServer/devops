@@ -35,7 +35,7 @@ wallet:libs:
       - BUILD: windows
         LIB: [libx, cmake, qt]
       - BUILD: android
-        LIB: [libx, cmake, qt]
+        LIB: [libx, cmake, qt, boost]
   services:
     - name: docker:dind
       command: [ "--experimental" ]

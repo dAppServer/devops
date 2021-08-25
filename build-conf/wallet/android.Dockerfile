@@ -7,8 +7,7 @@ ENV SOURCE_DATE_EPOCH=1397818193
 COPY --from=${IMG_PREFIX}/build:wallet-lib-android-libx / /
 COPY --from=${IMG_PREFIX}/build:wallet-lib-android-qt / /
 COPY --from=${IMG_PREFIX}/build:wallet-lib-android-cmake / /
-COPY --from=${IMG_PREFIX}/build:wallet-lib-android-fontconfig / /
-COPY --from=${IMG_PREFIX}/build:wallet-lib-android-utils / /
+COPY --from=${IMG_PREFIX}/build:wallet-lib-android-boost / /
 
 RUN cd tools \
     && wget -q http://dl-ssl.google.com/android/repository/tools_r25.2.5-linux.zip \
