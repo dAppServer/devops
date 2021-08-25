@@ -75,7 +75,7 @@ RUN git clone -b v3.10.0 --depth 1 https://github.com/protocolbuffers/protobuf &
     ./configure --enable-static --disable-shared && \
     make -j$THREADS && \
     make -j$THREADS install && \
-    rm -rf $(pwd) \
+    rm -rf $(pwd)
 
 RUN git clone -b 1.12 --depth 1 https://gitlab.freedesktop.org/xorg/lib/libxcb && \
     cd libxcb && \
@@ -107,5 +107,4 @@ RUN git clone -b 0.4.0 --depth 1 https://gitlab.freedesktop.org/xorg/lib/libxcb-
     ./autogen.sh --enable-shared --disable-static && \
     make -j$THREADS && \
     make -j$THREADS install && \
-    rm -rf $(pwd) \
-    \
+    rm -rf $(pwd)
