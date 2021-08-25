@@ -32,7 +32,7 @@ RUN git clone -b hidapi-0.9.0 --depth 1 https://github.com/libusb/hidapi && \
     rm -rf $(pwd)
 
 ARG IMG_PREFIX=lthn
-FROM ${IMG_PREFIX}/build:wallet-base as libzmq
+FROM ${IMG_PREFIX}/build:wallet-linux-base as libzmq
 ARG THREADS=1
 RUN git clone -b v4.3.2 --depth 1 https://github.com/zeromq/libzmq && \
     cd libzmq && \
