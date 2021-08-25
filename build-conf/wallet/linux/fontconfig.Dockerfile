@@ -8,7 +8,7 @@ RUN git clone -b VER-2-10-2 --depth 1 https://git.savannah.gnu.org/git/freetype/
     ./configure --disable-shared --enable-static --with-zlib=no && \
     make -j$THREADS && \
     make -j$THREADS install && \
-    rm -rf $(pwd) \
+    rm -rf $(pwd)
 
 RUN git clone -b R_2_2_9 --depth 1 https://github.com/libexpat/libexpat && \
     cd libexpat/expat && \
