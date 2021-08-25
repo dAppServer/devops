@@ -1,4 +1,4 @@
-FROM lthn/build:wallet-base as xorgproto
+FROM lthn/build:wallet-linux-base as xorgproto
 ARG THREADS=1
 RUN git clone -b xorgproto-2020.1 --depth 1 https://gitlab.freedesktop.org/xorg/proto/xorgproto && \
     cd xorgproto && \

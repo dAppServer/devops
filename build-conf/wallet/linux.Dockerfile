@@ -1,4 +1,4 @@
-FROM lthn/build:wallet-base as xcbproto
+FROM lthn/build:wallet-linux-base as xcbproto
 ARG THREADS=1
 RUN git clone -b 1.12 --depth 1 https://gitlab.freedesktop.org/xorg/proto/xcbproto && \
     cd xcbproto && \
@@ -7,7 +7,7 @@ RUN git clone -b 1.12 --depth 1 https://gitlab.freedesktop.org/xorg/proto/xcbpro
     make -j$THREADS && \
     make -j$THREADS install
 
-FROM lthn/build:wallet-base as libxau
+FROM lthn/build:wallet-linux-base as libxau
 ARG THREADS=1
 RUN git clone -b libXau-1.0.9 --depth 1 https://gitlab.freedesktop.org/xorg/lib/libxau && \
     cd libxau && \
@@ -16,7 +16,7 @@ RUN git clone -b libXau-1.0.9 --depth 1 https://gitlab.freedesktop.org/xorg/lib/
     make -j$THREADS && \
     make -j$THREADS install
 
-FROM lthn/build:wallet-base as libexpat
+FROM lthn/build:wallet-linux-base as libexpat
 ARG THREADS=1
 RUN git clone -b R_2_2_9 --depth 1 https://github.com/libexpat/libexpat && \
     cd libexpat/expat && \
@@ -27,7 +27,7 @@ RUN git clone -b R_2_2_9 --depth 1 https://github.com/libexpat/libexpat && \
     make -j$THREADS install && \
     rm -rf $(pwd)
 
-FROM lthn/build:wallet-base as libxcb-util
+FROM lthn/build:wallet-linux-base as libxcb-util
 ARG THREADS=1
 RUN git clone -b 0.4.0 --depth 1 https://gitlab.freedesktop.org/xorg/lib/libxcb-util && \
     cd libxcb-util && \
@@ -40,7 +40,7 @@ RUN git clone -b 0.4.0 --depth 1 https://gitlab.freedesktop.org/xorg/lib/libxcb-
     make -j$THREADS install && \
     rm -rf $(pwd)
 
-FROM lthn/build:wallet-base as libxcb-keysyms
+FROM lthn/build:wallet-linux-base as libxcb-keysyms
 ARG THREADS=1
 RUN git clone -b 0.4.0 --depth 1 https://gitlab.freedesktop.org/xorg/lib/libxcb-keysyms && \
     cd libxcb-keysyms && \
@@ -53,7 +53,7 @@ RUN git clone -b 0.4.0 --depth 1 https://gitlab.freedesktop.org/xorg/lib/libxcb-
     make -j$THREADS install && \
     rm -rf $(pwd)
 
-FROM lthn/build:wallet-base as libxcb-render-util
+FROM lthn/build:wallet-linux-base as libxcb-render-util
 ARG THREADS=1
 RUN git clone -b 0.3.9 --depth 1 https://gitlab.freedesktop.org/xorg/lib/libxcb-render-util && \
     cd libxcb-render-util && \
@@ -66,7 +66,7 @@ RUN git clone -b 0.3.9 --depth 1 https://gitlab.freedesktop.org/xorg/lib/libxcb-
     make -j$THREADS install && \
     rm -rf $(pwd)
 
-FROM lthn/build:wallet-base as libxcb-wm
+FROM lthn/build:wallet-linux-base as libxcb-wm
 ARG THREADS=1
 RUN git clone -b 0.4.1 --depth 1 https://gitlab.freedesktop.org/xorg/lib/libxcb-wm && \
     cd libxcb-wm && \
@@ -79,7 +79,7 @@ RUN git clone -b 0.4.1 --depth 1 https://gitlab.freedesktop.org/xorg/lib/libxcb-
     make -j$THREADS install && \
     rm -rf $(pwd)
 
-FROM lthn/build:wallet-base as zlib
+FROM lthn/build:wallet-linux-base as zlib
 ARG THREADS=1
 RUN git clone -b v1.2.11 --depth 1 https://github.com/madler/zlib && \
     cd zlib && \
@@ -89,7 +89,7 @@ RUN git clone -b v1.2.11 --depth 1 https://github.com/madler/zlib && \
     make -j$THREADS install && \
     rm -rf $(pwd)
 
-FROM lthn/build:wallet-base as freetype2
+FROM lthn/build:wallet-linux-base as freetype2
 ARG THREADS=1
 RUN git clone -b VER-2-10-2 --depth 1 https://git.savannah.gnu.org/git/freetype/freetype2.git && \
     cd freetype2 && \
@@ -100,7 +100,7 @@ RUN git clone -b VER-2-10-2 --depth 1 https://git.savannah.gnu.org/git/freetype/
     make -j$THREADS install && \
     rm -rf $(pwd)
 
-FROM lthn/build:wallet-base as libusb
+FROM lthn/build:wallet-linux-base as libusb
 ARG THREADS=1
 RUN git clone -b v1.0.23 --depth 1 https://github.com/libusb/libusb && \
     cd libusb && \
@@ -110,7 +110,7 @@ RUN git clone -b v1.0.23 --depth 1 https://github.com/libusb/libusb && \
     make -j$THREADS install && \
     rm -rf $(pwd)
 
-FROM lthn/build:wallet-base as hidapi
+FROM lthn/build:wallet-linux-base as hidapi
 ARG THREADS=1
 RUN git clone -b hidapi-0.9.0 --depth 1 https://github.com/libusb/hidapi && \
     cd hidapi && \
@@ -132,7 +132,7 @@ RUN git clone -b v4.3.2 --depth 1 https://github.com/zeromq/libzmq && \
     make -j$THREADS install && \
     rm -rf $(pwd)
 
-FROM lthn/build:wallet-base as libgpg-error
+FROM lthn/build:wallet-linux-base as libgpg-error
 ARG THREADS=1
 RUN git clone -b libgpg-error-1.38 --depth 1 git://git.gnupg.org/libgpg-error.git && \
     cd libgpg-error && \
@@ -143,7 +143,7 @@ RUN git clone -b libgpg-error-1.38 --depth 1 git://git.gnupg.org/libgpg-error.gi
     make -j$THREADS install && \
     rm -rf $(pwd)
 
-FROM lthn/build:wallet-base as openssl
+FROM lthn/build:wallet-linux-base as openssl
 ARG THREADS=1
 RUN wget https://www.openssl.org/source/openssl-1.1.1g.tar.gz && \
     echo "ddb04774f1e32f0c49751e21b67216ac87852ceb056b75209af2443400636d46 openssl-1.1.1g.tar.gz" | sha256sum -c && \
@@ -155,7 +155,7 @@ RUN wget https://www.openssl.org/source/openssl-1.1.1g.tar.gz && \
     make -j$THREADS install && \
     rm -rf $(pwd)
 
-FROM lthn/build:wallet-base as protobuf
+FROM lthn/build:wallet-linux-base as protobuf
 ARG THREADS=1
 RUN git clone -b v3.10.0 --depth 1 https://github.com/protocolbuffers/protobuf && \
     cd protobuf && \
@@ -166,7 +166,7 @@ RUN git clone -b v3.10.0 --depth 1 https://github.com/protocolbuffers/protobuf &
     make -j$THREADS install && \
     rm -rf $(pwd)
 
-FROM lthn/build:wallet-base as cmake
+FROM lthn/build:wallet-linux-base as cmake
 ARG THREADS=1
 COPY --from=openssl /usr /usr
 RUN git clone -b v3.18.4 --depth 1 https://github.com/Kitware/CMake && \
@@ -177,7 +177,7 @@ RUN git clone -b v3.18.4 --depth 1 https://github.com/Kitware/CMake && \
     make -j$THREADS install && \
     rm -rf $(pwd)
 
-FROM lthn/build:wallet-base as libxcb
+FROM lthn/build:wallet-linux-base as libxcb
 ARG THREADS=1
 COPY --from=xcbproto /usr /usr
 RUN git clone -b 1.12 --depth 1 https://gitlab.freedesktop.org/xorg/lib/libxcb && \
@@ -193,7 +193,7 @@ RUN git clone -b 1.12 --depth 1 https://gitlab.freedesktop.org/xorg/lib/libxcb &
     cp src/.libs/libxcb-xinerama.a /usr/local/lib/ && \
     rm -rf $(pwd)
 
-FROM lthn/build:wallet-base as fontconfig
+FROM lthn/build:wallet-linux-base as fontconfig
 ARG THREADS=1
 COPY --from=freetype2 /usr /usr
 COPY --from=libexpat /usr /usr
@@ -216,7 +216,7 @@ RUN git clone -b xkbcommon-0.5.0 --depth 1 https://github.com/xkbcommon/libxkbco
     make -j$THREADS install && \
     rm -rf $(pwd)
 
-FROM lthn/build:wallet-base as libxcb-image
+FROM lthn/build:wallet-linux-base as libxcb-image
 ARG THREADS=1
 COPY --from=libxcb /usr /usr
 COPY --from=libxcb-util /usr /usr
@@ -243,7 +243,7 @@ RUN git clone -b libgcrypt-1.8.5 --depth 1 git://git.gnupg.org/libgcrypt.git && 
     make -j$THREADS install && \
     rm -rf $(pwd)
 
-FROM lthn/build:wallet-base as qt5
+FROM lthn/build:wallet-linux-base as qt5
 ARG QT_VERSION=5.15.2
 RUN git clone git://code.qt.io/qt/qt5.git -b ${QT_VERSION} --depth 1 && \
     cd qt5 && \
@@ -261,7 +261,7 @@ RUN git clone git://code.qt.io/qt/qt5.git -b ${QT_VERSION} --depth 1 && \
     git clone git://code.qt.io/qt/qtxmlpatterns.git -b ${QT_VERSION} --depth 1
 
 FROM scratch
-FROM lthn/build:wallet-base as final
+FROM lthn/build:wallet-linux-base as final
 ARG QT_VERSION=5.15.2
 ARG THREADS=1
 COPY --from=libxcb-util /usr /usr
