@@ -1,6 +1,7 @@
 ARG IMG_PREFIX=lthn
 FROM ${IMG_PREFIX}/build:wallet-linux-base as fontconfig
 ARG THREADS=1
+RUN find /usr -type f > /files-to-delete.txt
 
 RUN git clone -b VER-2-10-2 --depth 1 https://git.savannah.gnu.org/git/freetype/freetype2.git && \
     cd freetype2 && \
@@ -28,3 +29,8 @@ RUN git clone -b 2.13.92 --depth 1 https://gitlab.freedesktop.org/fontconfig/fon
     make -j$THREADS && \
     make -j$THREADS install && \
     rm -rf $(pwd)
+
+RUN cat /files-to-delete.txt | xargs rm -f
+
+FROM scratch
+COPY --from=fontconfig /usr /

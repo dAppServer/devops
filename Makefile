@@ -49,15 +49,23 @@ depends-riscv64-linux-gnu: ## riscv64
 wallet-linux-base:
 	docker build -t lthn/build:wallet-linux-base -f build-conf/wallet/linux/base.Dockerfile .
 
-wallet-lib-linux-xorgproto:
-	docker build --build-arg THREADS=20 -t=lthn/build:wallet-lib-linux-xorgproto -f=build-conf/wallet/linux/xorgproto.Dockerfile .
+wallet-lib-linux-utils:
+	docker build --build-arg THREADS=20 -t=lthn/build:wallet-lib-linux-utils -f=build-conf/wallet/linux/utils.Dockerfile .
 
 wallet-lib-linux-boost:
 	docker build --build-arg THREADS=20 -t=lthn/build:wallet-lib-linux-boost -f=build-conf/wallet/linux/boost.Dockerfile .
 
+wallet-lib-linux-fontconfig:
+	docker build --build-arg THREADS=20 -t=lthn/build:wallet-lib-linux-fontconfig -f=build-conf/wallet/linux/fontconfig.Dockerfile .
+
+wallet-lib-linux-cmake:
+	docker build --build-arg THREADS=20 -t=lthn/build:wallet-lib-linux-cmake -f=build-conf/wallet/linux/cmake.Dockerfile .
+
+wallet-lib-linux-libx:
+	docker build --build-arg THREADS=20 -t=lthn/build:wallet-lib-linux-libx -f=build-conf/wallet/linux/libx.Dockerfile .
 
 wallet-linux:
-	docker build -t lthn/build:wallet-linux -f build-conf/wallet/linux.Dockerfile .
+	docker build --build-arg THREADS=20  -t=lthn/build:wallet-linux -f=build-conf/wallet/linux.Dockerfile .
 
 wallet-windows:
 	docker build -t lthn/build:wallet-windows -f build-conf/wallet/windows.Dockerfile .

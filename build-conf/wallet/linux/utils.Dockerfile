@@ -3,6 +3,7 @@ FROM ${IMG_PREFIX}/build:wallet-linux-base as base
 ARG THREADS=1
 
 FROM base as zlib
+RUN find /usr -type f > /files-to-delete.txt
 ARG THREADS=1
 RUN git clone -b v1.2.11 --depth 1 https://github.com/madler/zlib && \
     cd zlib && \
@@ -11,8 +12,10 @@ RUN git clone -b v1.2.11 --depth 1 https://github.com/madler/zlib && \
     make -j$THREADS && \
     make -j$THREADS install && \
     rm -rf $(pwd)
+RUN cat /files-to-delete.txt | xargs rm -f
 
 FROM base as libusb
+RUN find /usr -type f > /files-to-delete.txt
 ARG THREADS=1
 RUN git clone -b v1.0.23 --depth 1 https://github.com/libusb/libusb && \
     cd libusb && \
@@ -21,8 +24,10 @@ RUN git clone -b v1.0.23 --depth 1 https://github.com/libusb/libusb && \
     make -j$THREADS && \
     make -j$THREADS install && \
     rm -rf $(pwd)
+RUN cat /files-to-delete.txt | xargs rm -f
 
 FROM base as hidapi
+RUN find /usr -type f > /files-to-delete.txt
 ARG THREADS=1
 RUN git clone -b hidapi-0.9.0 --depth 1 https://github.com/libusb/hidapi && \
     cd hidapi && \
@@ -32,8 +37,10 @@ RUN git clone -b hidapi-0.9.0 --depth 1 https://github.com/libusb/hidapi && \
     make -j$THREADS && \
     make -j$THREADS install && \
     rm -rf $(pwd)
+RUN cat /files-to-delete.txt | xargs rm -f
 
 FROM base as zmq
+RUN find /usr -type f > /files-to-delete.txt
 RUN git clone -b v4.3.2 --depth 1 https://github.com/zeromq/libzmq && \
     cd libzmq && \
     git reset --hard a84ffa12b2eb3569ced199660bac5ad128bff1f0 && \
@@ -43,8 +50,11 @@ RUN git clone -b v4.3.2 --depth 1 https://github.com/zeromq/libzmq && \
     make -j$THREADS install && \
     rm -rf $(pwd)
 
+RUN cat /files-to-delete.txt | xargs rm -f
+
 FROM base as libgpg-error
 ARG THREADS=1
+RUN find /usr -type f > /files-to-delete.txt
 RUN git clone -b libgpg-error-1.38 --depth 1 git://git.gnupg.org/libgpg-error.git && \
     cd libgpg-error && \
     git reset --hard 71d278824c5fe61865f7927a2ed1aa3115f9e439 && \
@@ -63,10 +73,14 @@ RUN git clone -b libgcrypt-1.8.5 --depth 1 git://git.gnupg.org/libgcrypt.git && 
     make -j$THREADS install && \
     rm -rf $(pwd)
 
-FROM base as final
+RUN cat /files-to-delete.txt | xargs rm -f
+
+
+FROM scratch as final
 
 COPY --from=libgpg-error /usr /usr
 COPY --from=zmq /usr /usr
 COPY --from=hidapi /usr /usr
 COPY --from=libusb /usr /usr
 COPY --from=zlib /usr /usr
+

@@ -24,7 +24,7 @@ ENV TOOLCHAIN_DIR=${ANDROID_NDK_ROOT}/toolchains/llvm/prebuilt/linux-x86_64
 RUN apt-get update \
     && apt-get install -y ant automake build-essential ca-certificates-java file gettext git libc6 libncurses5 \
     libssl-dev libstdc++6 libtinfo5 libtool libz1 openjdk-8-jdk-headless openjdk-8-jre-headless pkg-config python3 \
-    unzip wget
+    unzip wget && rm -rf /var/lib/apt/lists/*
 
 RUN wget -q https://dl.google.com/android/repository/sdk-tools-linux-${ANDROID_SDK_REVISION}.zip \
     && unzip -q sdk-tools-linux-${ANDROID_SDK_REVISION}.zip \

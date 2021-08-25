@@ -1,6 +1,8 @@
 ARG IMG_PREFIX=lthn
-FROM ${IMG_PREFIX}/build:wallet-linux-base
+FROM ${IMG_PREFIX}/build:wallet-linux-base as build
 ARG THREADS=1
+
+RUN find /usr -type f > /files-to-delete.txt
 
 RUN git clone -b xorgproto-2020.1 --depth 1 https://gitlab.freedesktop.org/xorg/proto/xorgproto && \
     cd xorgproto && \
@@ -108,3 +110,8 @@ RUN git clone -b 0.4.0 --depth 1 https://gitlab.freedesktop.org/xorg/lib/libxcb-
     make -j$THREADS && \
     make -j$THREADS install && \
     rm -rf $(pwd)
+
+RUN cat /files-to-delete.txt | xargs rm -f
+
+FROM scratch
+COPY --from=build /usr /
