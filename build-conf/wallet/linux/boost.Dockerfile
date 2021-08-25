@@ -1,4 +1,5 @@
-FROM lthn/build:wallet-linux-base
+ARG IMG_PREFIX=lthn
+FROM ${IMG_PREFIX}/build:wallet-linux-base
 ARG THREADS=1
 RUN git clone -b release-64-2 --depth 1 https://github.com/unicode-org/icu && \
     cd icu/icu4c/source && \

@@ -1,4 +1,5 @@
-FROM lthn/build:wallet-linux-base as fontconfig
+ARG IMG_PREFIX=lthn
+FROM ${IMG_PREFIX}/build:wallet-linux-base as fontconfig
 ARG THREADS=1
 
 RUN git clone -b VER-2-10-2 --depth 1 https://git.savannah.gnu.org/git/freetype/freetype2.git && \

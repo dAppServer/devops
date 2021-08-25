@@ -1,4 +1,5 @@
-FROM lthn/build:wallet-linux-base
+ARG IMG_PREFIX=lthn
+FROM ${IMG_PREFIX}/build:wallet-linux-base
 ARG QT_VERSION=5.15.2
 ARG THREADS=1
 ARG IMG_PREFIX=lthn

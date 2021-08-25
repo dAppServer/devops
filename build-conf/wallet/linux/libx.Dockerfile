@@ -1,4 +1,5 @@
-FROM lthn/build:wallet-linux-base
+ARG IMG_PREFIX=lthn
+FROM ${IMG_PREFIX}/build:wallet-linux-base
 ARG THREADS=1
 
 RUN git clone -b xorgproto-2020.1 --depth 1 https://gitlab.freedesktop.org/xorg/proto/xorgproto && \
