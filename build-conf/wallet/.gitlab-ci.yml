@@ -29,14 +29,13 @@ wallet:libs:
   parallel:
     matrix:
       - BUILD: linux
-        LIB: [boost, xorgproto]
+        LIB: [libx, utils, cmake, boost, fontconfig]
   services:
     - name: docker:dind
       command: [ "--experimental" ]
   before_script:
     - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" $CI_REGISTRY
   script:
-    - docker pull "$CI_REGISTRY_IMAGE:wallet-$BUILD-base" || true
     - docker pull "$CI_REGISTRY_IMAGE:wallet-lib-$BUILD-$LIB" || true
     - docker build --build-arg BUILDKIT_INLINE_CACHE=1 --cache-from $CI_REGISTRY_IMAGE:wallet-lib-$BUILD-$LIB -t $CI_REGISTRY_IMAGE:wallet-lib-$BUILD-$LIB -f build-conf/wallet/$BUILD/$LIB.Dockerfile build-src
     - docker push "$CI_REGISTRY_IMAGE:wallet-lib-$BUILD-$LIB"
@@ -62,7 +61,7 @@ wallet:
     - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" $CI_REGISTRY
   script:
     - docker pull "$CI_REGISTRY_IMAGE:wallet-$BUILD" || true
-    - docker build --build-arg BUILDKIT_INLINE_CACHE=1 --build-arg BUILD=$BUILD --cache-from $CI_REGISTRY_IMAGE:wallet-$BUILD -t $CI_REGISTRY_IMAGE:wallet-$BUILD -f build-conf/wallet/$BUILD.Dockerfile build-src
+    - docker build --build-arg BUILDKIT_INLINE_CACHE=1 --build-arg BUILD=$BUILD --build-arg IMG_PREFIX=lthn.io/projects/sdk --cache-from $CI_REGISTRY_IMAGE:wallet-$BUILD -t $CI_REGISTRY_IMAGE:wallet-$BUILD -f build-conf/wallet/$BUILD.Dockerfile build-src
     - docker push "$CI_REGISTRY_IMAGE:wallet-$BUILD"
 
 wallet:deploy:

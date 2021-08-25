@@ -46,8 +46,8 @@ depends-aarch64-linux-gnu: ## ARM 64
 depends-riscv64-linux-gnu: ## riscv64
 	docker build --build-arg=BUILD=riscv64-linux-gnu -t lthn/build:depends-riscv64-linux-gnu -f build-conf/compile/depends.Dockerfile build-src
 
-wallet-base:
-	docker build -t lthn/build:wallet-base -f build-conf/wallet/linux/base.Dockerfile .
+wallet-linux-base:
+	docker build -t lthn/build:wallet-linux-base -f build-conf/wallet/linux/base.Dockerfile .
 
 wallet-lib-linux-xorgproto:
 	docker build --build-arg THREADS=20 -t=lthn/build:wallet-lib-linux-xorgproto -f=build-conf/wallet/linux/xorgproto.Dockerfile .

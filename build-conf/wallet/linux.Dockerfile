@@ -1,300 +1,32 @@
-FROM lthn/build:wallet-linux-base as xcbproto
-ARG THREADS=1
-RUN git clone -b 1.12 --depth 1 https://gitlab.freedesktop.org/xorg/proto/xcbproto && \
-    cd xcbproto && \
-    git reset --hard 6398e42131eedddde0d98759067dde933191f049 && \
-    ./autogen.sh && \
-    make -j$THREADS && \
-    make -j$THREADS install
-
-FROM lthn/build:wallet-linux-base as libxau
-ARG THREADS=1
-RUN git clone -b libXau-1.0.9 --depth 1 https://gitlab.freedesktop.org/xorg/lib/libxau && \
-    cd libxau && \
-    git reset --hard d9443b2c57b512cfb250b35707378654d86c7dea && \
-    ./autogen.sh --enable-shared --disable-static && \
-    make -j$THREADS && \
-    make -j$THREADS install
-
-FROM lthn/build:wallet-linux-base as libexpat
-ARG THREADS=1
-RUN git clone -b R_2_2_9 --depth 1 https://github.com/libexpat/libexpat && \
-    cd libexpat/expat && \
-    git reset --hard a7bc26b69768f7fb24f0c7976fae24b157b85b13 && \
-    ./buildconf.sh && \
-    ./configure --disable-shared --enable-static && \
-    make -j$THREADS && \
-    make -j$THREADS install && \
-    rm -rf $(pwd)
-
-FROM lthn/build:wallet-linux-base as libxcb-util
-ARG THREADS=1
-RUN git clone -b 0.4.0 --depth 1 https://gitlab.freedesktop.org/xorg/lib/libxcb-util && \
-    cd libxcb-util && \
-    git reset --hard acf790d7752f36e450d476ad79807d4012ec863b && \
-    git submodule init && \
-    git clone --depth 1 https://gitlab.freedesktop.org/xorg/util/xcb-util-m4 m4 && \
-    git -C m4 reset --hard f662e3a93ebdec3d1c9374382dcc070093a42fed && \
-    ./autogen.sh --enable-shared --disable-static && \
-    make -j$THREADS && \
-    make -j$THREADS install && \
-    rm -rf $(pwd)
-
-FROM lthn/build:wallet-linux-base as libxcb-keysyms
-ARG THREADS=1
-RUN git clone -b 0.4.0 --depth 1 https://gitlab.freedesktop.org/xorg/lib/libxcb-keysyms && \
-    cd libxcb-keysyms && \
-    git reset --hard 0e51ee5570a6a80bdf98770b975dfe8a57f4eeb1 && \
-    git submodule init && \
-    git clone --depth 1 https://gitlab.freedesktop.org/xorg/util/xcb-util-m4 m4 && \
-    git -C m4 reset --hard f662e3a93ebdec3d1c9374382dcc070093a42fed && \
-    ./autogen.sh --enable-shared --disable-static && \
-    make -j$THREADS && \
-    make -j$THREADS install && \
-    rm -rf $(pwd)
-
-FROM lthn/build:wallet-linux-base as libxcb-render-util
-ARG THREADS=1
-RUN git clone -b 0.3.9 --depth 1 https://gitlab.freedesktop.org/xorg/lib/libxcb-render-util && \
-    cd libxcb-render-util && \
-    git reset --hard 0317caf63de532fd7a0493ed6afa871a67253747 && \
-    git submodule init && \
-    git clone --depth 1 https://gitlab.freedesktop.org/xorg/util/xcb-util-m4 m4 && \
-    git -C m4 reset --hard f662e3a93ebdec3d1c9374382dcc070093a42fed && \
-    ./autogen.sh --enable-shared --disable-static && \
-    make -j$THREADS && \
-    make -j$THREADS install && \
-    rm -rf $(pwd)
-
-FROM lthn/build:wallet-linux-base as libxcb-wm
-ARG THREADS=1
-RUN git clone -b 0.4.1 --depth 1 https://gitlab.freedesktop.org/xorg/lib/libxcb-wm && \
-    cd libxcb-wm && \
-    git reset --hard 24eb17df2e1245885e72c9d4bbb0a0f69f0700f2 && \
-    git submodule init && \
-    git clone --depth 1 https://gitlab.freedesktop.org/xorg/util/xcb-util-m4 m4 && \
-    git -C m4 reset --hard f662e3a93ebdec3d1c9374382dcc070093a42fed && \
-    ./autogen.sh --enable-shared --disable-static && \
-    make -j$THREADS && \
-    make -j$THREADS install && \
-    rm -rf $(pwd)
-
-FROM lthn/build:wallet-linux-base as zlib
-ARG THREADS=1
-RUN git clone -b v1.2.11 --depth 1 https://github.com/madler/zlib && \
-    cd zlib && \
-    git reset --hard cacf7f1d4e3d44d871b605da3b647f07d718623f && \
-    ./configure --static && \
-    make -j$THREADS && \
-    make -j$THREADS install && \
-    rm -rf $(pwd)
-
-FROM lthn/build:wallet-linux-base as freetype2
-ARG THREADS=1
-RUN git clone -b VER-2-10-2 --depth 1 https://git.savannah.gnu.org/git/freetype/freetype2.git && \
-    cd freetype2 && \
-    git reset --hard 132f19b779828b194b3fede187cee719785db4d8 && \
-    ./autogen.sh && \
-    ./configure --disable-shared --enable-static --with-zlib=no && \
-    make -j$THREADS && \
-    make -j$THREADS install && \
-    rm -rf $(pwd)
-
-FROM lthn/build:wallet-linux-base as libusb
-ARG THREADS=1
-RUN git clone -b v1.0.23 --depth 1 https://github.com/libusb/libusb && \
-    cd libusb && \
-    git reset --hard e782eeb2514266f6738e242cdcb18e3ae1ed06fa && \
-    ./autogen.sh --disable-shared --enable-static && \
-    make -j$THREADS && \
-    make -j$THREADS install && \
-    rm -rf $(pwd)
-
-FROM lthn/build:wallet-linux-base as hidapi
-ARG THREADS=1
-RUN git clone -b hidapi-0.9.0 --depth 1 https://github.com/libusb/hidapi && \
-    cd hidapi && \
-    git reset --hard 7da5cc91fc0d2dbe4df4f08cd31f6ca1a262418f && \
-    ./bootstrap && \
-    ./configure --disable-shared --enable-static && \
-    make -j$THREADS && \
-    make -j$THREADS install && \
-    rm -rf $(pwd)
-
-FROM lthn/build:wallet-base as libzmq
-ARG THREADS=1
-RUN git clone -b v4.3.2 --depth 1 https://github.com/zeromq/libzmq && \
-    cd libzmq && \
-    git reset --hard a84ffa12b2eb3569ced199660bac5ad128bff1f0 && \
-    ./autogen.sh && \
-    ./configure --disable-shared --enable-static --disable-libunwind --with-libsodium && \
-    make -j$THREADS && \
-    make -j$THREADS install && \
-    rm -rf $(pwd)
-
-FROM lthn/build:wallet-linux-base as libgpg-error
-ARG THREADS=1
-RUN git clone -b libgpg-error-1.38 --depth 1 git://git.gnupg.org/libgpg-error.git && \
-    cd libgpg-error && \
-    git reset --hard 71d278824c5fe61865f7927a2ed1aa3115f9e439 && \
-    ./autogen.sh && \
-    ./configure --disable-shared --enable-static --disable-doc --disable-tests && \
-    make -j$THREADS && \
-    make -j$THREADS install && \
-    rm -rf $(pwd)
-
-FROM lthn/build:wallet-linux-base as openssl
-ARG THREADS=1
-RUN wget https://www.openssl.org/source/openssl-1.1.1g.tar.gz && \
-    echo "ddb04774f1e32f0c49751e21b67216ac87852ceb056b75209af2443400636d46 openssl-1.1.1g.tar.gz" | sha256sum -c && \
-    tar -xzf openssl-1.1.1g.tar.gz && \
-    rm openssl-1.1.1g.tar.gz && \
-    cd openssl-1.1.1g && \
-    ./config no-asm no-shared no-zlib-dynamic --openssldir=/usr && \
-    make -j$THREADS && \
-    make -j$THREADS install && \
-    rm -rf $(pwd)
-
-FROM lthn/build:wallet-linux-base as protobuf
-ARG THREADS=1
-RUN git clone -b v3.10.0 --depth 1 https://github.com/protocolbuffers/protobuf && \
-    cd protobuf && \
-    git reset --hard 6d4e7fd7966c989e38024a8ea693db83758944f1 && \
-    ./autogen.sh && \
-    ./configure --enable-static --disable-shared && \
-    make -j$THREADS && \
-    make -j$THREADS install && \
-    rm -rf $(pwd)
-
-FROM lthn/build:wallet-linux-base as cmake
-ARG THREADS=1
-COPY --from=openssl /usr /usr
-RUN git clone -b v3.18.4 --depth 1 https://github.com/Kitware/CMake && \
-    cd CMake && \
-    git reset --hard 3cc3d42aba879fff5e85b363ae8f21386a3f9f9b && \
-    ./bootstrap && \
-    make -j$THREADS && \
-    make -j$THREADS install && \
-    rm -rf $(pwd)
-
-FROM lthn/build:wallet-linux-base as libxcb
-ARG THREADS=1
-COPY --from=xcbproto /usr /usr
-RUN git clone -b 1.12 --depth 1 https://gitlab.freedesktop.org/xorg/lib/libxcb && \
-    cd libxcb && \
-    git reset --hard d34785a34f28fa6a00f8ce00d87e3132ff0f6467 && \
-    ./autogen.sh --enable-shared --disable-static && \
-    make -j$THREADS && \
-    make -j$THREADS install && \
-    make -j$THREADS clean && \
-    rm /usr/local/lib/libxcb-xinerama.so && \
-    ./autogen.sh --disable-shared --enable-static && \
-    make -j$THREADS && \
-    cp src/.libs/libxcb-xinerama.a /usr/local/lib/ && \
-    rm -rf $(pwd)
-
-FROM lthn/build:wallet-linux-base as fontconfig
-ARG THREADS=1
-COPY --from=freetype2 /usr /usr
-COPY --from=libexpat /usr /usr
-RUN git clone -b 2.13.92 --depth 1 https://gitlab.freedesktop.org/fontconfig/fontconfig && \
-    cd fontconfig && \
-    git reset --hard b1df1101a643ae16cdfa1d83b939de2497b1bf27 && \
-    ./autogen.sh --disable-shared --enable-static --sysconfdir=/etc --localstatedir=/var && \
-    make -j$THREADS && \
-    make -j$THREADS install && \
-    rm -rf $(pwd)
-
-FROM lthn/build:wallet-base as libxkbcommon
-ARG THREADS=1
-COPY --from=libxcb /usr /usr
-RUN git clone -b xkbcommon-0.5.0 --depth 1 https://github.com/xkbcommon/libxkbcommon && \
-    cd libxkbcommon && \
-    git reset --hard c43c3c866eb9d52cd8f61e75cbef1c30d07f3a28 && \
-    ./autogen.sh --prefix=/usr --enable-shared --disable-static --enable-x11 --disable-docs && \
-    make -j$THREADS && \
-    make -j$THREADS install && \
-    rm -rf $(pwd)
-
-FROM lthn/build:wallet-linux-base as libxcb-image
-ARG THREADS=1
-COPY --from=libxcb /usr /usr
-COPY --from=libxcb-util /usr /usr
-RUN git clone -b 0.4.0 --depth 1 https://gitlab.freedesktop.org/xorg/lib/libxcb-image && \
-    cd libxcb-image && \
-    git reset --hard d882052fb2ce439c6483fce944ba8f16f7294639 && \
-    git submodule init && \
-    git clone --depth 1 https://gitlab.freedesktop.org/xorg/util/xcb-util-m4 m4 && \
-    git -C m4 reset --hard f662e3a93ebdec3d1c9374382dcc070093a42fed && \
-    ./autogen.sh --enable-shared --disable-static && \
-    make -j$THREADS && \
-    make -j$THREADS install && \
-    rm -rf $(pwd)
-
-FROM lthn/build:wallet-base as libgcrypt
-ARG THREADS=1
-COPY --from=libgpg-error /usr /usr
-RUN git clone -b libgcrypt-1.8.5 --depth 1 git://git.gnupg.org/libgcrypt.git && \
-    cd libgcrypt && \
-    git reset --hard 56606331bc2a80536db9fc11ad53695126007298 && \
-    ./autogen.sh && \
-    ./configure --disable-shared --enable-static --disable-doc && \
-    make -j$THREADS && \
-    make -j$THREADS install && \
-    rm -rf $(pwd)
-
-FROM lthn/build:wallet-linux-base as qt5
-ARG QT_VERSION=5.15.2
-RUN git clone git://code.qt.io/qt/qt5.git -b ${QT_VERSION} --depth 1 && \
-    cd qt5 && \
-    git clone git://code.qt.io/qt/qtbase.git -b ${QT_VERSION} --depth 1 && \
-    git clone git://code.qt.io/qt/qtdeclarative.git -b ${QT_VERSION} --depth 1 && \
-    git clone git://code.qt.io/qt/qtgraphicaleffects.git -b ${QT_VERSION} --depth 1 && \
-    git clone git://code.qt.io/qt/qtimageformats.git -b ${QT_VERSION} --depth 1 && \
-    git clone git://code.qt.io/qt/qtmultimedia.git -b ${QT_VERSION} --depth 1 && \
-    git clone git://code.qt.io/qt/qtquickcontrols.git -b ${QT_VERSION} --depth 1 && \
-    git clone git://code.qt.io/qt/qtquickcontrols2.git -b ${QT_VERSION} --depth 1 && \
-    git clone git://code.qt.io/qt/qtsvg.git -b ${QT_VERSION} --depth 1 && \
-    git clone git://code.qt.io/qt/qttools.git -b ${QT_VERSION} --depth 1 && \
-    git clone git://code.qt.io/qt/qttranslations.git -b ${QT_VERSION} --depth 1 && \
-    git clone git://code.qt.io/qt/qtx11extras.git -b ${QT_VERSION} --depth 1 && \
-    git clone git://code.qt.io/qt/qtxmlpatterns.git -b ${QT_VERSION} --depth 1
-
-FROM scratch
-FROM lthn/build:wallet-linux-base as final
+FROM lthn/build:wallet-linux-base
 ARG QT_VERSION=5.15.2
 ARG THREADS=1
-COPY --from=libxcb-util /usr /usr
-COPY --from=libxcb /usr /usr
+ARG IMG_PREFIX=lthn
 
-COPY --from=xcbproto /usr /usr
-COPY --from=libxau /usr /usr
-COPY --from=libxcb-image /usr /usr
-COPY --from=libxcb-keysyms /usr /usr
-COPY --from=libxcb-render-util /usr /usr
-COPY --from=libxcb-wm /usr /usr
-COPY --from=libxkbcommon /usr /usr
-COPY --from=zlib /usr /usr
-COPY --from=freetype2 /usr /usr
-COPY --from=libexpat /usr /usr
-COPY --from=libusb /usr /usr
-COPY --from=hidapi /usr /usr
-COPY --from=openssl /usr /usr
-COPY --from=protobuf /usr /usr
-COPY --from=libgcrypt /usr /usr
-COPY --from=libgpg-error /usr /usr
-COPY --from=libzmq /usr /usr
-COPY --from=fontconfig /usr /usr
-COPY --from=lthn/build:wallet-lib-linux-xorgproto /usr /usr
-COPY --from=lthn/build:wallet-lib-linux-boost /usr /usr
+COPY --from=${IMG_PREFIX}/build:wallet-lib-linux-libx /usr /usr
+COPY --from=${IMG_PREFIX}/projects/sdk/build:wallet-lib-linux-boost /usr /usr
+COPY --from=${IMG_PREFIX}/projects/sdk/build:wallet-lib-linux-cmake /usr /usr
+COPY --from=${IMG_PREFIX}/projects/sdk/build:wallet-lib-linux-fontconfig /usr /usr
+COPY --from=${IMG_PREFIX}/projects/sdk/build:wallet-lib-linux-utils /usr /usr
 
-COPY --from=cmake /usr /usr
-COPY --from=qt5 /qt5 /qt5
 
 RUN rm /usr/lib/x86_64-linux-gnu/libX11.a || true && \
     rm /usr/lib/x86_64-linux-gnu/libXext.a || true && \
     rm /usr/lib/x86_64-linux-gnu/libX11-xcb.a || true && \
-    cd qt5 && \
+    git clone git://code.qt.io/qt/qt5.git -b ${QT_VERSION} --depth 1 && \
+        cd qt5 && \
+        git clone git://code.qt.io/qt/qtbase.git -b ${QT_VERSION} --depth 1 && \
+        git clone git://code.qt.io/qt/qtdeclarative.git -b ${QT_VERSION} --depth 1 && \
+        git clone git://code.qt.io/qt/qtgraphicaleffects.git -b ${QT_VERSION} --depth 1 && \
+        git clone git://code.qt.io/qt/qtimageformats.git -b ${QT_VERSION} --depth 1 && \
+        git clone git://code.qt.io/qt/qtmultimedia.git -b ${QT_VERSION} --depth 1 && \
+        git clone git://code.qt.io/qt/qtquickcontrols.git -b ${QT_VERSION} --depth 1 && \
+        git clone git://code.qt.io/qt/qtquickcontrols2.git -b ${QT_VERSION} --depth 1 && \
+        git clone git://code.qt.io/qt/qtsvg.git -b ${QT_VERSION} --depth 1 && \
+        git clone git://code.qt.io/qt/qttools.git -b ${QT_VERSION} --depth 1 && \
+        git clone git://code.qt.io/qt/qttranslations.git -b ${QT_VERSION} --depth 1 && \
+        git clone git://code.qt.io/qt/qtx11extras.git -b ${QT_VERSION} --depth 1 && \
+        git clone git://code.qt.io/qt/qtxmlpatterns.git -b ${QT_VERSION} --depth 1 && \
     sed -ri s/\(Libs:.*\)/\\1\ -lexpat/ /usr/local/lib/pkgconfig/fontconfig.pc && \
     sed -ri s/\(Libs:.*\)/\\1\ -lz/ /usr/local/lib/pkgconfig/freetype2.pc && \
     sed -ri s/\(Libs:.*\)/\\1\ -lXau/ /usr/local/lib/pkgconfig/xcb.pc && \
