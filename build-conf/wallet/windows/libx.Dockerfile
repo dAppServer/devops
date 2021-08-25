@@ -1,6 +1,8 @@
 ARG IMG_PREFIX=lthn
-FROM ${IMG_PREFIX}/build:wallet-windows-base
+FROM ${IMG_PREFIX}/build:wallet-windows-base as build
 ARG THREADS=1
+
+RUN find /usr -type f > /files-to-delete.txt
 
 RUN git clone -b libgpg-error-1.38 --depth 1 git://git.gnupg.org/libgpg-error.git && \
     cd libgpg-error && \
@@ -24,3 +26,8 @@ RUN git clone -b libgcrypt-1.8.5 --depth 1 git://git.gnupg.org/libgcrypt.git && 
     make -j$THREADS install && \
     cd .. && \
     rm -rf libgcrypt
+
+RUN cat /files-to-delete.txt | xargs rm -f
+
+FROM scratch
+COPY --from=build /usr /usr

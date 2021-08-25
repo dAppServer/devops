@@ -9,7 +9,6 @@ wallet:preload:
     matrix:
       - BUILD: linux
       - BUILD: windows
-      - BUILD: android
   services:
     - name: docker:dind
       command: [ "--experimental" ]
@@ -34,8 +33,6 @@ wallet:libs:
         LIB: [libx, utils, cmake, boost, fontconfig]
       - BUILD: windows
         LIB: [libx, cmake, qt]
-      - BUILD: android
-        LIB: [libx, cmake, qt, boost]
   services:
     - name: docker:dind
       command: [ "--experimental" ]
@@ -59,7 +56,6 @@ wallet:
     matrix:
       - BUILD: windows
       - BUILD: linux
-      - BUILD: android
   services:
     - name: docker:dind
       command: [ "--experimental" ]
@@ -85,7 +81,6 @@ wallet:deploy:
     matrix:
       - TARGET: wallet-windows
       - TARGET: wallet-linux
-      - TARGET: wallet-android
   before_script:
     - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" $CI_REGISTRY
     - docker login -u "$DOCKER_REGISTRY_USER" -p "$DOCKER_REGISTRY_PASSWORD" $DOCKER_REGISTRY
