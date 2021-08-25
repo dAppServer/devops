@@ -23,4 +23,4 @@ RUN wget https://downloads.sourceforge.net/project/boost/boost/1.73.0/boost_1_73
 RUN cat /files-to-delete.txt | xargs rm -f
 
 FROM scratch
-COPY --from=build /usr /
+COPY --from=build /usr /usr

@@ -114,4 +114,4 @@ RUN git clone -b 0.4.0 --depth 1 https://gitlab.freedesktop.org/xorg/lib/libxcb-
 RUN cat /files-to-delete.txt | xargs rm -f
 
 FROM scratch
-COPY --from=build /usr /
+COPY --from=build /usr /usr

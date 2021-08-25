@@ -33,4 +33,4 @@ RUN git clone -b 2.13.92 --depth 1 https://gitlab.freedesktop.org/fontconfig/fon
 RUN cat /files-to-delete.txt | xargs rm -f
 
 FROM scratch
-COPY --from=fontconfig /usr /
+COPY --from=fontconfig /usr /usr

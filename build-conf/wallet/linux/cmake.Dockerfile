@@ -24,4 +24,4 @@ RUN git clone -b v3.18.4 --depth 1 https://github.com/Kitware/CMake && \
 RUN cat /files-to-delete.txt | xargs rm -f
 
 FROM scratch
-COPY --from=openssl /usr /
+COPY --from=openssl /usr /usr
