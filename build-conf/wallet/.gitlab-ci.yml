@@ -1,5 +1,5 @@
 wallet:preload:
-  stage: build
+  stage: prep
   image: docker
   variables:
     DOCKER_HOST: tcp://docker:2375
@@ -20,7 +20,7 @@ wallet:preload:
     - docker push "$CI_REGISTRY_IMAGE:wallet-$BUILD-base"
 
 wallet:libs:
-  stage: build
+  stage: libs
   image: docker
   needs: ["wallet:preload"]
   variables:
