@@ -1,80 +1,10 @@
+ARG IMG_PREFIX=lthn
+FROM ${IMG_PREFIX}/build:wallet-windows-base
+ARG QT_VERSION=5.15.2
+ARG THREADS=1
+ENV SOURCE_DATE_EPOCH=1397818193
 
-FROM base as qt
-RUN git clone git://code.qt.io/qt/qt5.git -b ${QT_VERSION} --depth 1 && \
-    cd qt5 && \
-    git clone git://code.qt.io/qt/qtbase.git -b ${QT_VERSION} --depth 1 && \
-    git clone git://code.qt.io/qt/qtdeclarative.git -b ${QT_VERSION} --depth 1 && \
-    git clone git://code.qt.io/qt/qtgraphicaleffects.git -b ${QT_VERSION} --depth 1 && \
-    git clone git://code.qt.io/qt/qtimageformats.git -b ${QT_VERSION} --depth 1 && \
-    git clone git://code.qt.io/qt/qtmultimedia.git -b ${QT_VERSION} --depth 1 && \
-    git clone git://code.qt.io/qt/qtquickcontrols.git -b ${QT_VERSION} --depth 1 && \
-    git clone git://code.qt.io/qt/qtquickcontrols2.git -b ${QT_VERSION} --depth 1 && \
-    git clone git://code.qt.io/qt/qtsvg.git -b ${QT_VERSION} --depth 1 && \
-    git clone git://code.qt.io/qt/qttools.git -b ${QT_VERSION} --depth 1 && \
-    git clone git://code.qt.io/qt/qttranslations.git -b ${QT_VERSION} --depth 1 && \
-    git clone git://code.qt.io/qt/qtxmlpatterns.git -b ${QT_VERSION} --depth 1 && \
-    ./configure --prefix=/depends/x86_64-w64-mingw32 -xplatform win32-g++ \
-    -device-option CROSS_COMPILE=/usr/bin/x86_64-w64-mingw32- \
-    -I $(pwd)/qtbase/src/3rdparty/angle/include \
-    -opensource -confirm-license -release -static -static-runtime -opengl dynamic -no-angle \
-    -no-avx -no-openssl -no-sql-sqlite \
-    -no-feature-qml-worker-script -no-openssl -no-sql-sqlite \
-    -qt-freetype -qt-harfbuzz -qt-libjpeg -qt-libpng -qt-pcre -qt-zlib \
-    -skip gamepad -skip location -skip qt3d -skip qtactiveqt -skip qtandroidextras \
-    -skip qtcanvas3d -skip qtcharts -skip qtconnectivity -skip qtdatavis3d -skip qtdoc \
-    -skip qtgamepad -skip qtlocation -skip qtmacextras -skip qtnetworkauth -skip qtpurchasing \
-    -skip qtscript -skip qtscxml -skip qtsensors -skip qtserialbus -skip qtserialport \
-    -skip qtspeech -skip qttools -skip qtvirtualkeyboard -skip qtwayland -skip qtwebchannel \
-    -skip qtwebengine -skip qtwebsockets -skip qtwebview -skip qtwinextras -skip qtx11extras \
-    -skip serialbus -skip webengine \
-    -nomake examples -nomake tests -nomake tools && \
-    make -j$THREADS && \
-    make -j$THREADS install && \
-    cd qttools/src/linguist/lrelease && \
-    ../../../../qtbase/bin/qmake && \
-    make -j$THREADS && \
-    make -j$THREADS install && \
-    cd ../../../.. && \
-    rm -rf $(pwd)
 
-FROM base as libgpg-error
-RUN git clone -b libgpg-error-1.38 --depth 1 git://git.gnupg.org/libgpg-error.git && \
-    cd libgpg-error && \
-    git reset --hard 71d278824c5fe61865f7927a2ed1aa3115f9e439 && \
-    ./autogen.sh && \
-    ./configure --disable-shared --enable-static --disable-doc --disable-tests \
-    --host=x86_64-w64-mingw32 --prefix=/depends/x86_64-w64-mingw32 && \
-    make -j$THREADS && \
-    make -j$THREADS install && \
-    cd .. && \
-    rm -rf libgpg-error
-
-FROM base as libgcrypt
-COPY --from=libgpg-error /depends /depends
-RUN git clone -b libgcrypt-1.8.5 --depth 1 git://git.gnupg.org/libgcrypt.git && \
-    cd libgcrypt && \
-    git reset --hard 56606331bc2a80536db9fc11ad53695126007298 && \
-    ./autogen.sh && \
-    ./configure --disable-shared --enable-static --disable-doc \
-    --host=x86_64-w64-mingw32 --prefix=/depends/x86_64-w64-mingw32 \
-    --with-gpg-error-prefix=/depends/x86_64-w64-mingw32 && \
-    make -j$THREADS && \
-    make -j$THREADS install && \
-    cd .. && \
-    rm -rf libgcrypt
-
-FROM base as cmake
-RUN git clone -b v3.19.7 --depth 1 https://github.com/Kitware/CMake \
-    && cd CMake \
-    && git reset --hard 22612dd53a46c7f9b4c3f4b7dbe5c78f9afd9581 \
-    && ./bootstrap \
-    && make -j${THREADS} \
-    && make -j${THREADS} install \
-    && rm -rf $(pwd)
-
-FROM base as final
-
-COPY --from=qt /depends /depends
-COPY --from=libgpg-error /depends /depends
-COPY --from=libgcrypt /depends /depends
-COPY --from=cmake /usr /usr
+COPY --from=${IMG_PREFIX}/projects/sdk/build:wallet-lib-windows-qt /depends /depends
+COPY --from=${IMG_PREFIX}/projects/sdk/build:wallet-lib-windows-libx /depends /depends
+COPY --from=${IMG_PREFIX}/projects/sdk/build:wallet-lib-windows-cmake /usr /usr

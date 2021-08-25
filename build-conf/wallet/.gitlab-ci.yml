@@ -31,6 +31,8 @@ wallet:libs:
     matrix:
       - BUILD: linux
         LIB: [libx, utils, cmake, boost, fontconfig]
+      - BUILD: windows
+        LIB: [libx, cmake, qt]
   services:
     - name: docker:dind
       command: [ "--experimental" ]

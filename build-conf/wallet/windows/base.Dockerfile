@@ -1,7 +1,7 @@
 FROM ubuntu:20.04 as base
 
 ARG THREADS=1
-ARG QT_VERSION=5.15.2
+
 ENV SOURCE_DATE_EPOCH=1397818193
 
 RUN apt-get update && \
