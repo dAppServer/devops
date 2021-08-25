@@ -6,6 +6,7 @@ stages:
   - prep
   - libs
   - build
+  - test
   - deploy
 
 
