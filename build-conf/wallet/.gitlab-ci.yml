@@ -1,6 +1,50 @@
+wallet:preload:
+  stage: build
+  image: docker
+  variables:
+    DOCKER_HOST: tcp://docker:2375
+    DOCKER_DRIVER: overlay2
+    DOCKER_BUILDKIT: 1
+    parallel:
+      matrix:
+        - BUILD: linux
+    services:
+      - name: docker:dind
+        command: [ "--experimental" ]
+    before_script:
+      - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" $CI_REGISTRY
+    script:
+      - docker pull "$CI_REGISTRY_IMAGE:wallet-base" || true
+      - docker build --build-arg BUILDKIT_INLINE_CACHE=1 --cache-from $CI_REGISTRY_IMAGE:wallet-base -t $CI_REGISTRY_IMAGE:wallet-$BUILD -f build-conf/wallet/$BUILD/base.Dockerfile build-src
+      - docker push "$CI_REGISTRY_IMAGE:wallet-base"
+
+wallet:libs:
+  stage: build
+  image: docker
+  needs: ["wallet:preload"]
+  variables:
+    DOCKER_HOST: tcp://docker:2375
+    DOCKER_DRIVER: overlay2
+    DOCKER_BUILDKIT: 1
+    parallel:
+      matrix:
+        - BUILD: linux
+          LIB: [boost, xorgproto]
+    services:
+      - name: docker:dind
+        command: [ "--experimental" ]
+    before_script:
+      - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" $CI_REGISTRY
+    script:
+      - docker pull "$CI_REGISTRY_IMAGE:wallet-lib-$BUILD-$LIB" || true
+      - docker build --build-arg BUILDKIT_INLINE_CACHE=1 --cache-from $CI_REGISTRY_IMAGE:wallet-lib-$BUILD-$LIB -t $CI_REGISTRY_IMAGE:wallet-lib-$BUILD-$LIB -f build-conf/wallet/$BUILD/$LIB.Dockerfile build-src
+      - docker push "$CI_REGISTRY_IMAGE:wallet-lib-$BUILD-$LIB"
+
+
 wallet:
   stage: build
   image: docker
+  needs: ["wallet:libs"]
   variables:
     DOCKER_HOST: tcp://docker:2375
     DOCKER_DRIVER: overlay2

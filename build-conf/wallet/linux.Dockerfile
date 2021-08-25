@@ -1,55 +1,23 @@
-FROM ubuntu:16.04 as base
-
-ARG THREADS=2
-ARG QT_VERSION=5.15.2
-
-ENV CFLAGS="-fPIC"
-ENV CPPFLAGS="-fPIC"
-ENV CXXFLAGS="-fPIC"
-ENV SOURCE_DATE_EPOCH=1397818193
-
-RUN apt-get update && \
-    apt-get install -y make ccache build-essential automake autopoint bison gettext git gperf libgl1-mesa-dev libglib2.0-dev \
-    libpng12-dev libpthread-stubs0-dev libsodium-dev libtool-bin libudev-dev libusb-1.0-0-dev mesa-common-dev \
-    pkg-config python wget xutils-dev
-
-FROM base as icu
-RUN git clone -b release-64-2 --depth 1 https://github.com/unicode-org/icu && \
-    cd icu/icu4c/source && \
-    git reset --hard e2d85306162d3a0691b070b4f0a73e4012433444 && \
-    ./configure --disable-shared --enable-static --disable-tests --disable-samples && \
-    make -j$THREADS && \
-    make -j$THREADS install && \
-    rm -rf $(pwd)
-
-FROM base as xorgproto
-RUN git clone -b xorgproto-2020.1 --depth 1 https://gitlab.freedesktop.org/xorg/proto/xorgproto && \
-    cd xorgproto && \
-    git reset --hard c62e8203402cafafa5ba0357b6d1c019156c9f36 && \
-    ./autogen.sh && \
-    make -j$THREADS && \
-    make -j$THREADS install && \
-    rm -rf $(pwd)
-
-FROM base as xcbproto
+FROM lthn/build:wallet-base as xcbproto
+ARG THREADS=1
 RUN git clone -b 1.12 --depth 1 https://gitlab.freedesktop.org/xorg/proto/xcbproto && \
     cd xcbproto && \
     git reset --hard 6398e42131eedddde0d98759067dde933191f049 && \
     ./autogen.sh && \
     make -j$THREADS && \
-    make -j$THREADS install && \
-    rm -rf $(pwd)
+    make -j$THREADS install
 
-FROM base as libxau
+FROM lthn/build:wallet-base as libxau
+ARG THREADS=1
 RUN git clone -b libXau-1.0.9 --depth 1 https://gitlab.freedesktop.org/xorg/lib/libxau && \
     cd libxau && \
     git reset --hard d9443b2c57b512cfb250b35707378654d86c7dea && \
     ./autogen.sh --enable-shared --disable-static && \
     make -j$THREADS && \
-    make -j$THREADS install && \
-    rm -rf $(pwd)
+    make -j$THREADS install
 
-FROM base as libexpat
+FROM lthn/build:wallet-base as libexpat
+ARG THREADS=1
 RUN git clone -b R_2_2_9 --depth 1 https://github.com/libexpat/libexpat && \
     cd libexpat/expat && \
     git reset --hard a7bc26b69768f7fb24f0c7976fae24b157b85b13 && \
@@ -59,7 +27,8 @@ RUN git clone -b R_2_2_9 --depth 1 https://github.com/libexpat/libexpat && \
     make -j$THREADS install && \
     rm -rf $(pwd)
 
-FROM base as libxcb-util
+FROM lthn/build:wallet-base as libxcb-util
+ARG THREADS=1
 RUN git clone -b 0.4.0 --depth 1 https://gitlab.freedesktop.org/xorg/lib/libxcb-util && \
     cd libxcb-util && \
     git reset --hard acf790d7752f36e450d476ad79807d4012ec863b && \
@@ -71,7 +40,8 @@ RUN git clone -b 0.4.0 --depth 1 https://gitlab.freedesktop.org/xorg/lib/libxcb-
     make -j$THREADS install && \
     rm -rf $(pwd)
 
-FROM base as libxcb-keysyms
+FROM lthn/build:wallet-base as libxcb-keysyms
+ARG THREADS=1
 RUN git clone -b 0.4.0 --depth 1 https://gitlab.freedesktop.org/xorg/lib/libxcb-keysyms && \
     cd libxcb-keysyms && \
     git reset --hard 0e51ee5570a6a80bdf98770b975dfe8a57f4eeb1 && \
@@ -83,7 +53,8 @@ RUN git clone -b 0.4.0 --depth 1 https://gitlab.freedesktop.org/xorg/lib/libxcb-
     make -j$THREADS install && \
     rm -rf $(pwd)
 
-FROM base as libxcb-render-util
+FROM lthn/build:wallet-base as libxcb-render-util
+ARG THREADS=1
 RUN git clone -b 0.3.9 --depth 1 https://gitlab.freedesktop.org/xorg/lib/libxcb-render-util && \
     cd libxcb-render-util && \
     git reset --hard 0317caf63de532fd7a0493ed6afa871a67253747 && \
@@ -95,7 +66,8 @@ RUN git clone -b 0.3.9 --depth 1 https://gitlab.freedesktop.org/xorg/lib/libxcb-
     make -j$THREADS install && \
     rm -rf $(pwd)
 
-FROM base as libxcb-wm
+FROM lthn/build:wallet-base as libxcb-wm
+ARG THREADS=1
 RUN git clone -b 0.4.1 --depth 1 https://gitlab.freedesktop.org/xorg/lib/libxcb-wm && \
     cd libxcb-wm && \
     git reset --hard 24eb17df2e1245885e72c9d4bbb0a0f69f0700f2 && \
@@ -107,7 +79,8 @@ RUN git clone -b 0.4.1 --depth 1 https://gitlab.freedesktop.org/xorg/lib/libxcb-
     make -j$THREADS install && \
     rm -rf $(pwd)
 
-FROM base as zlib
+FROM lthn/build:wallet-base as zlib
+ARG THREADS=1
 RUN git clone -b v1.2.11 --depth 1 https://github.com/madler/zlib && \
     cd zlib && \
     git reset --hard cacf7f1d4e3d44d871b605da3b647f07d718623f && \
@@ -116,7 +89,8 @@ RUN git clone -b v1.2.11 --depth 1 https://github.com/madler/zlib && \
     make -j$THREADS install && \
     rm -rf $(pwd)
 
-FROM base as freetype2
+FROM lthn/build:wallet-base as freetype2
+ARG THREADS=1
 RUN git clone -b VER-2-10-2 --depth 1 https://git.savannah.gnu.org/git/freetype/freetype2.git && \
     cd freetype2 && \
     git reset --hard 132f19b779828b194b3fede187cee719785db4d8 && \
@@ -126,7 +100,8 @@ RUN git clone -b VER-2-10-2 --depth 1 https://git.savannah.gnu.org/git/freetype/
     make -j$THREADS install && \
     rm -rf $(pwd)
 
-FROM base as libusb
+FROM lthn/build:wallet-base as libusb
+ARG THREADS=1
 RUN git clone -b v1.0.23 --depth 1 https://github.com/libusb/libusb && \
     cd libusb && \
     git reset --hard e782eeb2514266f6738e242cdcb18e3ae1ed06fa && \
@@ -135,7 +110,8 @@ RUN git clone -b v1.0.23 --depth 1 https://github.com/libusb/libusb && \
     make -j$THREADS install && \
     rm -rf $(pwd)
 
-FROM base as hidapi
+FROM lthn/build:wallet-base as hidapi
+ARG THREADS=1
 RUN git clone -b hidapi-0.9.0 --depth 1 https://github.com/libusb/hidapi && \
     cd hidapi && \
     git reset --hard 7da5cc91fc0d2dbe4df4f08cd31f6ca1a262418f && \
@@ -145,7 +121,8 @@ RUN git clone -b hidapi-0.9.0 --depth 1 https://github.com/libusb/hidapi && \
     make -j$THREADS install && \
     rm -rf $(pwd)
 
-FROM base as libzmq
+FROM lthn/build:wallet-base as libzmq
+ARG THREADS=1
 RUN git clone -b v4.3.2 --depth 1 https://github.com/zeromq/libzmq && \
     cd libzmq && \
     git reset --hard a84ffa12b2eb3569ced199660bac5ad128bff1f0 && \
@@ -155,7 +132,8 @@ RUN git clone -b v4.3.2 --depth 1 https://github.com/zeromq/libzmq && \
     make -j$THREADS install && \
     rm -rf $(pwd)
 
-FROM base as libgpg-error
+FROM lthn/build:wallet-base as libgpg-error
+ARG THREADS=1
 RUN git clone -b libgpg-error-1.38 --depth 1 git://git.gnupg.org/libgpg-error.git && \
     cd libgpg-error && \
     git reset --hard 71d278824c5fe61865f7927a2ed1aa3115f9e439 && \
@@ -165,7 +143,8 @@ RUN git clone -b libgpg-error-1.38 --depth 1 git://git.gnupg.org/libgpg-error.gi
     make -j$THREADS install && \
     rm -rf $(pwd)
 
-FROM base as openssl
+FROM lthn/build:wallet-base as openssl
+ARG THREADS=1
 RUN wget https://www.openssl.org/source/openssl-1.1.1g.tar.gz && \
     echo "ddb04774f1e32f0c49751e21b67216ac87852ceb056b75209af2443400636d46 openssl-1.1.1g.tar.gz" | sha256sum -c && \
     tar -xzf openssl-1.1.1g.tar.gz && \
@@ -176,7 +155,8 @@ RUN wget https://www.openssl.org/source/openssl-1.1.1g.tar.gz && \
     make -j$THREADS install && \
     rm -rf $(pwd)
 
-FROM base as protobuf
+FROM lthn/build:wallet-base as protobuf
+ARG THREADS=1
 RUN git clone -b v3.10.0 --depth 1 https://github.com/protocolbuffers/protobuf && \
     cd protobuf && \
     git reset --hard 6d4e7fd7966c989e38024a8ea693db83758944f1 && \
@@ -186,7 +166,8 @@ RUN git clone -b v3.10.0 --depth 1 https://github.com/protocolbuffers/protobuf &
     make -j$THREADS install && \
     rm -rf $(pwd)
 
-FROM base as cmake
+FROM lthn/build:wallet-base as cmake
+ARG THREADS=1
 COPY --from=openssl /usr /usr
 RUN git clone -b v3.18.4 --depth 1 https://github.com/Kitware/CMake && \
     cd CMake && \
@@ -196,7 +177,8 @@ RUN git clone -b v3.18.4 --depth 1 https://github.com/Kitware/CMake && \
     make -j$THREADS install && \
     rm -rf $(pwd)
 
-FROM base as libxcb
+FROM lthn/build:wallet-base as libxcb
+ARG THREADS=1
 COPY --from=xcbproto /usr /usr
 RUN git clone -b 1.12 --depth 1 https://gitlab.freedesktop.org/xorg/lib/libxcb && \
     cd libxcb && \
@@ -211,7 +193,8 @@ RUN git clone -b 1.12 --depth 1 https://gitlab.freedesktop.org/xorg/lib/libxcb &
     cp src/.libs/libxcb-xinerama.a /usr/local/lib/ && \
     rm -rf $(pwd)
 
-FROM base as fontconfig
+FROM lthn/build:wallet-base as fontconfig
+ARG THREADS=1
 COPY --from=freetype2 /usr /usr
 COPY --from=libexpat /usr /usr
 RUN git clone -b 2.13.92 --depth 1 https://gitlab.freedesktop.org/fontconfig/fontconfig && \
@@ -222,7 +205,8 @@ RUN git clone -b 2.13.92 --depth 1 https://gitlab.freedesktop.org/fontconfig/fon
     make -j$THREADS install && \
     rm -rf $(pwd)
 
-FROM base as libxkbcommon
+FROM lthn/build:wallet-base as libxkbcommon
+ARG THREADS=1
 COPY --from=libxcb /usr /usr
 RUN git clone -b xkbcommon-0.5.0 --depth 1 https://github.com/xkbcommon/libxkbcommon && \
     cd libxkbcommon && \
@@ -232,7 +216,8 @@ RUN git clone -b xkbcommon-0.5.0 --depth 1 https://github.com/xkbcommon/libxkbco
     make -j$THREADS install && \
     rm -rf $(pwd)
 
-FROM base as libxcb-image
+FROM lthn/build:wallet-base as libxcb-image
+ARG THREADS=1
 COPY --from=libxcb /usr /usr
 COPY --from=libxcb-util /usr /usr
 RUN git clone -b 0.4.0 --depth 1 https://gitlab.freedesktop.org/xorg/lib/libxcb-image && \
@@ -246,18 +231,8 @@ RUN git clone -b 0.4.0 --depth 1 https://gitlab.freedesktop.org/xorg/lib/libxcb-
     make -j$THREADS install && \
     rm -rf $(pwd)
 
-FROM base as boost
-COPY --from=icu /usr /usr
-RUN wget https://downloads.sourceforge.net/project/boost/boost/1.73.0/boost_1_73_0.tar.gz && \
-    echo "9995e192e68528793755692917f9eb6422f3052a53c5e13ba278a228af6c7acf boost_1_73_0.tar.gz" | sha256sum -c && \
-    tar -xzf boost_1_73_0.tar.gz && \
-    rm boost_1_73_0.tar.gz && \
-    cd boost_1_73_0 && \
-    ./bootstrap.sh && \
-    ./b2 --with-atomic --with-system --with-filesystem --with-thread --with-date_time --with-chrono --with-regex --with-serialization --with-program_options --with-locale variant=release link=static runtime-link=static cflags="${CFLAGS}" cxxflags="${CXXFLAGS}" install -a --prefix=/usr && \
-    rm -rf $(pwd)
-
-FROM base as libgcrypt
+FROM lthn/build:wallet-base as libgcrypt
+ARG THREADS=1
 COPY --from=libgpg-error /usr /usr
 RUN git clone -b libgcrypt-1.8.5 --depth 1 git://git.gnupg.org/libgcrypt.git && \
     cd libgcrypt && \
@@ -268,7 +243,8 @@ RUN git clone -b libgcrypt-1.8.5 --depth 1 git://git.gnupg.org/libgcrypt.git && 
     make -j$THREADS install && \
     rm -rf $(pwd)
 
-FROM base as qt5
+FROM lthn/build:wallet-base as qt5
+ARG QT_VERSION=5.15.2
 RUN git clone git://code.qt.io/qt/qt5.git -b ${QT_VERSION} --depth 1 && \
     cd qt5 && \
     git clone git://code.qt.io/qt/qtbase.git -b ${QT_VERSION} --depth 1 && \
@@ -285,11 +261,12 @@ RUN git clone git://code.qt.io/qt/qt5.git -b ${QT_VERSION} --depth 1 && \
     git clone git://code.qt.io/qt/qtxmlpatterns.git -b ${QT_VERSION} --depth 1
 
 FROM scratch
-FROM base as final
-
+FROM lthn/build:wallet-base as final
+ARG QT_VERSION=5.15.2
+ARG THREADS=1
 COPY --from=libxcb-util /usr /usr
 COPY --from=libxcb /usr /usr
-COPY --from=xorgproto /usr /usr
+
 COPY --from=xcbproto /usr /usr
 COPY --from=libxau /usr /usr
 COPY --from=libxcb-image /usr /usr
@@ -308,8 +285,9 @@ COPY --from=libgcrypt /usr /usr
 COPY --from=libgpg-error /usr /usr
 COPY --from=libzmq /usr /usr
 COPY --from=fontconfig /usr /usr
-COPY --from=icu /usr /usr
-COPY --from=boost /usr /usr
+COPY --from=lthn/build:wallet-lib-linux-xorgproto /usr /usr
+COPY --from=lthn/build:wallet-lib-linux-boost /usr /usr
+
 COPY --from=cmake /usr /usr
 COPY --from=qt5 /qt5 /qt5
 

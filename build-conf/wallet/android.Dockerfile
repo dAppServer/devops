@@ -1,4 +1,4 @@
-FROM debian:stretch
+FROM debian:stretch as base
 
 ARG THREADS=1
 ARG ANDROID_NDK_REVISION=21d
@@ -40,6 +40,7 @@ RUN cp -r ${WORKDIR}/platforms ${WORKDIR}/platform-tools ${ANDROID_SDK_ROOT}
 ENV HOST_PATH=${PATH}
 ENV PATH=${TOOLCHAIN_DIR}/aarch64-linux-android/bin:${TOOLCHAIN_DIR}/bin:${PATH}
 
+FROM base as zlib
 ARG ZLIB_VERSION=1.2.11
 ARG ZLIB_HASH=c3e5e9fdd5004dcb542feda5ee4f0ff0744628baf8ed2dd5d66f8ca1197cb1a1
 RUN wget -q https://zlib.net/zlib-${ZLIB_VERSION}.tar.gz \
@@ -51,6 +52,7 @@ RUN wget -q https://zlib.net/zlib-${ZLIB_VERSION}.tar.gz \
     && make -j${THREADS} install \
     && rm -rf $(pwd)
 
+FROM base as qt
 RUN git clone git://code.qt.io/qt/qt5.git -b ${QT_VERSION} --depth 1 \
     && cd qt5 \
     && perl init-repository --module-subset=default,-qtwebengine \
@@ -84,6 +86,7 @@ RUN git clone git://code.qt.io/qt/qt5.git -b ${QT_VERSION} --depth 1 \
     && cd ../../../.. \
     && rm -rf $(pwd)
 
+FROM base as iconv
 ARG ICONV_VERSION=1.16
 ARG ICONV_HASH=e6a1b1b589654277ee790cce3734f07876ac4ccfaecbee8afa0b649cf529cc04
 RUN wget -q http://ftp.gnu.org/pub/gnu/libiconv/libiconv-${ICONV_VERSION}.tar.gz \
@@ -95,6 +98,7 @@ RUN wget -q http://ftp.gnu.org/pub/gnu/libiconv/libiconv-${ICONV_VERSION}.tar.gz
     && make -j${THREADS} \
     && make -j${THREADS} install
 
+FROM base as boost
 ARG BOOST_VERSION=1_74_0
 ARG BOOST_VERSION_DOT=1.74.0
 ARG BOOST_HASH=83bfc1507731a0906e387fc28b7ef5417d591429e51e788417fe9ff025e116b1
@@ -114,6 +118,7 @@ RUN wget -q https://downloads.sourceforge.net/project/boost/boost/${BOOST_VERSIO
     install -j${THREADS} \
     && rm -rf $(pwd)
 
+FROM base as openssl
 ARG OPENSSL_VERSION=1.1.1g
 ARG OPENSSL_HASH=ddb04774f1e32f0c49751e21b67216ac87852ceb056b75209af2443400636d46
 RUN wget -q https://www.openssl.org/source/openssl-${OPENSSL_VERSION}.tar.gz \
@@ -129,6 +134,8 @@ RUN wget -q https://www.openssl.org/source/openssl-${OPENSSL_VERSION}.tar.gz \
     && make -j${THREADS} install \
     && rm -rf $(pwd)
 
+FROM base as libzmq
+
 ARG ZMQ_VERSION=v4.3.3
 ARG ZMQ_HASH=04f5bbedee58c538934374dc45182d8fc5926fa3
 RUN git clone https://github.com/zeromq/libzmq.git -b ${ZMQ_VERSION} --depth 1 \
@@ -141,6 +148,7 @@ RUN git clone https://github.com/zeromq/libzmq.git -b ${ZMQ_VERSION} --depth 1 \
     && make -j${THREADS} install \
     && rm -rf $(pwd)
 
+FROM base as sodium
 ARG SODIUM_VERSION=1.0.18
 ARG SODIUM_HASH=4f5e89fa84ce1d178a6765b8b46f2b6f91216677
 RUN set -ex \
@@ -152,6 +160,7 @@ RUN set -ex \
     && make -j${THREADS} install \
     && rm -rf $(pwd)
 
+FROM base as libgpg-error
 RUN git clone -b libgpg-error-1.38 --depth 1 git://git.gnupg.org/libgpg-error.git \
     && cd libgpg-error \
     && git reset --hard 71d278824c5fe61865f7927a2ed1aa3115f9e439 \
@@ -161,6 +170,8 @@ RUN git clone -b libgpg-error-1.38 --depth 1 git://git.gnupg.org/libgpg-error.gi
     && make -j${THREADS} install \
     && rm -rf $(pwd)
 
+FROM base as libgcrypt
+COPY --from=libgpg-error ${PREFIX} ${PREFIX}
 RUN git clone -b libgcrypt-1.8.5 --depth 1 git://git.gnupg.org/libgcrypt.git \
     && cd libgcrypt \
     && git reset --hard 56606331bc2a80536db9fc11ad53695126007298 \
@@ -170,12 +181,15 @@ RUN git clone -b libgcrypt-1.8.5 --depth 1 git://git.gnupg.org/libgcrypt.git \
     && make -j${THREADS} install \
     && rm -rf $(pwd)
 
+FROM base as tools
 RUN cd tools \
     && wget -q http://dl-ssl.google.com/android/repository/tools_r25.2.5-linux.zip \
     && unzip -q tools_r25.2.5-linux.zip \
     && rm -f tools_r25.2.5-linux.zip \
     && echo y | ${ANDROID_SDK_ROOT}/tools/android update sdk --no-ui --all --filter build-tools-28.0.3
 
+FROM base as cmake
+COPY --from=openssl / /
 RUN git clone -b v3.19.7 --depth 1 https://github.com/Kitware/CMake \
     && cd CMake \
     && git reset --hard 22612dd53a46c7f9b4c3f4b7dbe5c78f9afd9581 \
@@ -183,6 +197,20 @@ RUN git clone -b v3.19.7 --depth 1 https://github.com/Kitware/CMake \
     && PATH=${HOST_PATH} make -j${THREADS} \
     && PATH=${HOST_PATH} make -j${THREADS} install \
     && rm -rf $(pwd)
+
+FROM base as final
+
+COPY --from=libzmq / /
+COPY --from=sodium / /
+COPY --from=boost / /
+COPY --from=iconv / /
+COPY --from=openssl / /
+COPY --from=cmake / /
+COPY --from=libgpg-error / /
+COPY --from=libgcrypt / /
+COPY --from=tools / /
+COPY --from=qt / /
+COPY --from=zlib / /
 
 CMD set -ex \
     && cd /wallet-gui \

@@ -1,4 +1,4 @@
-FROM ubuntu:20.04
+FROM ubuntu:20.04 as base
 
 ARG THREADS=1
 ARG QT_VERSION=5.15.2
@@ -12,17 +12,9 @@ RUN apt-get update && \
 RUN update-alternatives --set x86_64-w64-mingw32-g++ $(which x86_64-w64-mingw32-g++-posix) && \
     update-alternatives --set x86_64-w64-mingw32-gcc $(which x86_64-w64-mingw32-gcc-posix)
 
-
-#RUN git clone --depth 1 --branch next https://gitlab.com/lthn.io/projects/chain/lethean.git && \
-#    cd lethean/chain && \
-#    cp -a contrib/depends / && \
-#    cd ../.. && \
-#    rm -rf lethean
-#
-#RUN make -j$THREADS -C /depends HOST=x86_64-w64-mingw32 NO_QT=1
-
 COPY --from=lthn/build:depends-x86_64-w64-mingw32 / /depends
 
+FROM base as qt
 RUN git clone git://code.qt.io/qt/qt5.git -b ${QT_VERSION} --depth 1 && \
     cd qt5 && \
     git clone git://code.qt.io/qt/qtbase.git -b ${QT_VERSION} --depth 1 && \
@@ -60,6 +52,7 @@ RUN git clone git://code.qt.io/qt/qt5.git -b ${QT_VERSION} --depth 1 && \
     cd ../../../.. && \
     rm -rf $(pwd)
 
+FROM base as libgpg-error
 RUN git clone -b libgpg-error-1.38 --depth 1 git://git.gnupg.org/libgpg-error.git && \
     cd libgpg-error && \
     git reset --hard 71d278824c5fe61865f7927a2ed1aa3115f9e439 && \
@@ -71,6 +64,8 @@ RUN git clone -b libgpg-error-1.38 --depth 1 git://git.gnupg.org/libgpg-error.gi
     cd .. && \
     rm -rf libgpg-error
 
+FROM base as libgcrypt
+COPY --from=libgpg-error /depends /depends
 RUN git clone -b libgcrypt-1.8.5 --depth 1 git://git.gnupg.org/libgcrypt.git && \
     cd libgcrypt && \
     git reset --hard 56606331bc2a80536db9fc11ad53695126007298 && \
@@ -83,8 +78,7 @@ RUN git clone -b libgcrypt-1.8.5 --depth 1 git://git.gnupg.org/libgcrypt.git && 
     cd .. && \
     rm -rf libgcrypt
 
-
-
+FROM base as cmake
 RUN git clone -b v3.19.7 --depth 1 https://github.com/Kitware/CMake \
     && cd CMake \
     && git reset --hard 22612dd53a46c7f9b4c3f4b7dbe5c78f9afd9581 \
@@ -92,3 +86,10 @@ RUN git clone -b v3.19.7 --depth 1 https://github.com/Kitware/CMake \
     && make -j${THREADS} \
     && make -j${THREADS} install \
     && rm -rf $(pwd)
+
+FROM base as final
+
+COPY --from=qt /depends /depends
+COPY --from=libgpg-error /depends /depends
+COPY --from=libgcrypt /depends /depends
+COPY --from=cmake /usr /usr
