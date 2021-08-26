@@ -7,12 +7,7 @@ RUN git clone -b v3.19.7 --depth 1 https://github.com/Kitware/CMake \
     && git reset --hard 22612dd53a46c7f9b4c3f4b7dbe5c78f9afd9581 \
     && ./bootstrap \
     && make -j${THREADS} \
-    && make -j${THREADS} install \
-    && rm -rf $(pwd)
-RUN find /usr/*cmake* -type f > /files-to-delete.txt
-RUN cat /files-to-delete.txt | xargs rm -f
+    && make -j${THREADS} install
 
 FROM scratch
-COPY --from=build /usr/local/bin/cmake /usr
-COPY --from=build /usr/local/bin/cpack /usr
-COPY --from=build /usr/local/bin/ctest /usr
+COPY --from=build /usr /usr
