@@ -10,4 +10,4 @@ RUN git clone -b v3.19.7 --depth 1 https://github.com/Kitware/CMake \
     && make -j${THREADS} install
 
 FROM scratch
-COPY --from=build /usr /usr
+COPY --from=build / /
