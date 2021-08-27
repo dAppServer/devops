@@ -30,4 +30,4 @@ RUN git clone -b libgcrypt-1.8.5 --depth 1 git://git.gnupg.org/libgcrypt.git && 
 RUN cat /files-to-delete.txt | xargs rm -f
 
 FROM scratch
-COPY --from=build /usr /usr
+COPY --from=build /depends /depends
