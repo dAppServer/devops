@@ -2,7 +2,7 @@ ARG IMG_PREFIX=lthn
 FROM ${IMG_PREFIX}/build:wallet-linux-base
 ARG QT_VERSION=5.15.2
 ARG THREADS=1
-ARG IMG_PREFIX=lthn
+ARG IMG_BASE=${IMG_PREFIX}/build:wallet-linux-base
 
 COPY --from=registry.gitlab.com/lthn.io/projects/sdk/build:wallet-lib-linux-libx / /
 COPY --from=registry.gitlab.com/lthn.io/projects/sdk/build:wallet-lib-linux-boost / /

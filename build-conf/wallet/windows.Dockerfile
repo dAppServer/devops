@@ -5,6 +5,6 @@ ARG THREADS=1
 ENV SOURCE_DATE_EPOCH=1397818193
 
 
-COPY --from=registry.gitlab.com/lthn.io/build:wallet-lib-windows-qt /depends /depends
-COPY --from=registry.gitlab.com/lthn.io/build:wallet-lib-windows-libx /depends /depends
-COPY --from=registry.gitlab.com/lthn.io/build:wallet-lib-windows-cmake /usr /usr
+COPY --from=registry.gitlab.com/lthn.io/projects/sdk/build:wallet-lib-windows-qt /depends /depends
+COPY --from=registry.gitlab.com/lthn.io/projects/sdk/build:wallet-lib-windows-libx /depends /depends
+COPY --from=registry.gitlab.com/lthn.io/projects/sdk/build:wallet-lib-windows-cmake /usr /usr
