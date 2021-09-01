@@ -44,7 +44,35 @@ depends-aarch64-linux-gnu: ## ARM 64
 	docker build --build-arg BUILD=aarch64-linux-gnu -t lthn/build:depends-aarch64-linux-gnu -f build-conf/compile/depends.Dockerfile build-src
 
 depends-riscv64-linux-gnu: ## riscv64
-	docker build --build-arg BUILD=riscv64-linux-gnu -t lthn/build:depends-riscv64-linux-gnu -f build-conf/compile/depends.Dockerfile build-src
+	docker build --build-arg=BUILD=riscv64-linux-gnu -t lthn/build:depends-riscv64-linux-gnu -f build-conf/compile/depends.Dockerfile build-src
+
+wallet-linux-base:
+	docker build -t lthn/build:wallet-linux-base -f build-conf/wallet/linux/base.Dockerfile .
+
+wallet-lib-linux-utils:
+	docker build --build-arg THREADS=20 -t=lthn/build:wallet-lib-linux-utils -f=build-conf/wallet/linux/utils.Dockerfile .
+
+wallet-lib-linux-boost:
+	docker build --build-arg THREADS=20 -t=lthn/build:wallet-lib-linux-boost -f=build-conf/wallet/linux/boost.Dockerfile .
+
+wallet-lib-linux-fontconfig:
+	docker build --build-arg THREADS=20 -t=lthn/build:wallet-lib-linux-fontconfig -f=build-conf/wallet/linux/fontconfig.Dockerfile .
+
+wallet-lib-linux-cmake:
+	docker build --build-arg THREADS=20 -t=lthn/build:wallet-lib-linux-cmake -f=build-conf/wallet/linux/cmake.Dockerfile .
+
+wallet-lib-linux-libx:
+	docker build --build-arg THREADS=20 -t=lthn/build:wallet-lib-linux-libx -f=build-conf/wallet/linux/libx.Dockerfile .
+
+wallet-linux:
+	docker build --build-arg THREADS=20  -t=lthn/build:wallet-linux -f=build-conf/wallet/linux.Dockerfile .
+
+wallet-windows:
+	docker build -t lthn/build:wallet-windows -f build-conf/wallet/windows.Dockerfile .
+
+wallet-android:
+	docker build -t lthn/build:wallet-android -f build-conf/wallet/android.Dockerfile .
+
 
 help: ## Show this help
 	@egrep -h '\s##\s' $(MAKEFILE_LIST) | sort | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m make %-30s\033[0m %s\n", $$1, $$2}'

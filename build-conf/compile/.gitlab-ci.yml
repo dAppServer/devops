@@ -3,6 +3,8 @@ compile-base:build:
   image: docker
   variables:
     DOCKER_HOST: tcp://docker:2375
+    DOCKER_DRIVER: overlay2
+    DOCKER_BUILDKIT: 1
     IMG_TAG: compile
   services:
     - name: docker:dind
@@ -10,6 +12,7 @@ compile-base:build:
   before_script:
     - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" $CI_REGISTRY
   script:
+    - docker pull "$CI_REGISTRY_IMAGE:$IMG_TAG" || true
     - docker build --squash --cache-from $CI_REGISTRY_IMAGE:$IMG_TAG -t $CI_REGISTRY_IMAGE:$IMG_TAG -f build-conf/compile/base.Dockerfile build-src
     - docker push "$CI_REGISTRY_IMAGE:$IMG_TAG"
   rules:
@@ -21,6 +24,8 @@ compile:
   image: docker
   variables:
     DOCKER_HOST: tcp://docker:2375
+    DOCKER_DRIVER: overlay2
+    DOCKER_BUILDKIT: 1
   parallel:
     matrix:
       - BUILD: x86_64-unknown-linux-gnu
@@ -46,9 +51,12 @@ compile:
     - export PATH=$(echo $PATH | tr ':' "\n" | sed '/\/opt\/python/d' | tr "\n" ":" | sed "s|::|:|g")
     - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" $CI_REGISTRY
   script:
+    - docker push "$CI_REGISTRY_IMAGE:$TAG" || true
     - docker build --squash --build-arg BUILD=$BUILD --target build --cache-from $CI_REGISTRY_IMAGE:$TAG -t $CI_REGISTRY_IMAGE:$TAG -f build-conf/compile/depends.Dockerfile build-src
     - docker push "$CI_REGISTRY_IMAGE:$TAG"
-
+  rules:
+    - changes:
+        - build-conf/compile/depends.Dockerfile
 
 compile:deploy:
   stage: deploy
@@ -56,6 +64,8 @@ compile:deploy:
   image: docker
   variables:
     DOCKER_HOST: tcp://docker:2375
+    DOCKER_DRIVER: overlay2
+    DOCKER_BUILDKIT: 1
   services:
     - name: docker:dind
       command: [ "--experimental" ]
@@ -73,19 +83,23 @@ compile:deploy:
     - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" $CI_REGISTRY
     - docker login -u "$DOCKER_REGISTRY_USER" -p "$DOCKER_REGISTRY_PASSWORD" $DOCKER_REGISTRY
   script:
-    - docker pull $CI_REGISTRY_IMAGE:$TARGET
+    - docker pull $CI_REGISTRY_IMAGE:$TARGET || true
     - docker tag $CI_REGISTRY_IMAGE:$TARGET $DOCKER_REGISTRY/lthn/build:$TARGET
     - docker push $DOCKER_REGISTRY/lthn/build:$TARGET
   environment:
     name: $TARGET
   rules:
     - if: $CI_COMMIT_BRANCH == 'main'
+      changes:
+        - build-conf/compile/depends.Dockerfile
 
 depends:
   stage: build
   image: docker
   variables:
     DOCKER_HOST: tcp://docker:2375
+    DOCKER_DRIVER: overlay2
+    DOCKER_BUILDKIT: 1
     OSX_SDK: 10:11
   parallel:
     matrix:
@@ -104,9 +118,12 @@ depends:
     - export PATH=$(echo $PATH | tr ':' "\n" | sed '/\/opt\/python/d' | tr "\n" ":" | sed "s|::|:|g")
     - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" $CI_REGISTRY
   script:
+    - docker pull "$CI_REGISTRY_IMAGE:depends-$BUILD" || true
     - docker build --squash --build-arg BUILD=$BUILD --cache-from $CI_REGISTRY_IMAGE:depends-$BUILD -t $CI_REGISTRY_IMAGE:depends-$BUILD -f build-conf/compile/depends.Dockerfile build-src
     - docker push "$CI_REGISTRY_IMAGE:depends-$BUILD"
-
+  rules:
+    - changes:
+        - build-conf/compile/depends.Dockerfile
 
 depends:deploy:
   stage: deploy
@@ -114,6 +131,8 @@ depends:deploy:
   image: docker
   variables:
     DOCKER_HOST: tcp://docker:2375
+    DOCKER_DRIVER: overlay2
+    DOCKER_BUILDKIT: 1
   services:
     - name: docker:dind
       command: [ "--experimental" ]
@@ -132,20 +151,23 @@ depends:deploy:
     - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" $CI_REGISTRY
     - docker login -u "$DOCKER_REGISTRY_USER" -p "$DOCKER_REGISTRY_PASSWORD" $DOCKER_REGISTRY
   script:
-    - docker pull $CI_REGISTRY_IMAGE:$TARGET
+    - docker pull $CI_REGISTRY_IMAGE:$TARGET || true
     - docker tag $CI_REGISTRY_IMAGE:$TARGET $DOCKER_REGISTRY/lthn/build:$TARGET
     - docker push $DOCKER_REGISTRY/lthn/build:$TARGET
   environment:
     name: $IMG_TAG
   rules:
     - if: $CI_COMMIT_BRANCH == 'main'
-
+      changes:
+        - build-conf/compile/depends.Dockerfile
 
 sources:
   stage: build
   image: docker
   variables:
     DOCKER_HOST: tcp://docker:2375
+    DOCKER_DRIVER: overlay2
+    DOCKER_BUILDKIT: 1
   parallel:
     matrix:
       - BUILD: osx
@@ -158,12 +180,12 @@ sources:
     - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" $CI_REGISTRY
     - sleep $(shuf -i1-180 -n1);
   script:
+    - docker pull "$CI_REGISTRY_IMAGE:sources-$BUILD" || true
     - docker build --squash --build-arg BUILD=$BUILD -t $CI_REGISTRY_IMAGE:sources-$BUILD -f build-conf/compile/sources.Dockerfile build-src
     - docker push "$CI_REGISTRY_IMAGE:sources-$BUILD"
   rules:
     - changes:
         - build-conf/compile/sources.Dockerfile
-
 
 sources:deploy:
   stage: deploy
@@ -171,6 +193,8 @@ sources:deploy:
   image: docker
   variables:
     DOCKER_HOST: tcp://docker:2375
+    DOCKER_DRIVER: overlay2
+    DOCKER_BUILDKIT: 1
   services:
     - name: docker:dind
       command: [ "--experimental" ]
@@ -183,7 +207,7 @@ sources:deploy:
     - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" $CI_REGISTRY
     - docker login -u "$DOCKER_REGISTRY_USER" -p "$DOCKER_REGISTRY_PASSWORD" $DOCKER_REGISTRY
   script:
-    - docker pull $CI_REGISTRY_IMAGE:$TARGET
+    - docker pull $CI_REGISTRY_IMAGE:$TARGET || true
     - docker tag $CI_REGISTRY_IMAGE:$TARGET $DOCKER_REGISTRY/lthn/build:$TARGET
     - docker push $DOCKER_REGISTRY/lthn/build:$TARGET
   environment:

@@ -1,7 +1,12 @@
 include:
-  - template: Auto-DevOps.gitlab-ci.yml
   - local: 'build-conf/**/*.gitlab-ci.yml'
 
+stages:
+  - prep
+  - libs
+  - build
+  - test
+  - deploy
 
 
 
