@@ -12,4 +12,8 @@ RUN apt-get update && \
 RUN update-alternatives --set x86_64-w64-mingw32-g++ $(which x86_64-w64-mingw32-g++-posix) && \
     update-alternatives --set x86_64-w64-mingw32-gcc $(which x86_64-w64-mingw32-gcc-posix)
 
+RUN update-alternatives --set i686-w64-mingw32-g++ $(which i686-w64-mingw32-g++-posix) && \
+    update-alternatives --set i686-w64-mingw32-gcc $(which i686-w64-mingw32-gcc-posix)
+
 COPY --from=lthn/build:depends-x86_64-w64-mingw32 / /depends
+COPY --from=lthn/build:depends-i686-w64-mingw32 / /depends

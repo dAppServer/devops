@@ -64,6 +64,19 @@ wallet-lib-linux-cmake:
 wallet-lib-linux-libx:
 	docker build --build-arg THREADS=20 -t=lthn/build:wallet-lib-linux-libx -f=build-conf/wallet/linux/libx.Dockerfile .
 
+wallet-lib-windows-base:
+	docker build --build-arg THREADS=20 -t=lthn/build:wallet-lib-windows-base -f=build-conf/wallet/windows/base.Dockerfile .
+
+wallet-lib-windows-cmake:
+	docker build --build-arg THREADS=20 -t=lthn/build:wallet-lib-windows-cmake -f=build-conf/wallet/windows/cmake.Dockerfile .
+
+wallet-lib-windows-libx:
+	docker build --build-arg THREADS=20 -t=lthn/build:wallet-lib-windows-libx -f=build-conf/wallet/windows/libx.Dockerfile .
+
+wallet-lib-windows-qt:
+	docker build --build-arg THREADS=20 -t=lthn/build:wallet-lib-windows-qt -f=build-conf/wallet/windows/qt.Dockerfile .
+
+
 wallet-linux:
 	docker build --build-arg THREADS=20  -t=lthn/build:wallet-linux -f=build-conf/wallet/linux.Dockerfile .
 

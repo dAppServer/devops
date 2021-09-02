@@ -1,5 +1,5 @@
 compile-base:build:
-  stage: build
+  stage: libs
   image: docker
   variables:
     DOCKER_HOST: tcp://docker:2375
