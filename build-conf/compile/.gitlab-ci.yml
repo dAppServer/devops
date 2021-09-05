@@ -1,5 +1,5 @@
 compile-base:build:
-  stage: build
+  stage: libs
   image: docker
   variables:
     DOCKER_HOST: tcp://docker:2375
@@ -162,7 +162,7 @@ depends:deploy:
         - build-conf/compile/depends.Dockerfile
 
 sources:
-  stage: build
+  stage: libs
   image: docker
   variables:
     DOCKER_HOST: tcp://docker:2375
