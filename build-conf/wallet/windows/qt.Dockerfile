@@ -3,8 +3,6 @@ FROM ${IMG_PREFIX}/build:wallet-windows-base as build
 ARG QT_VERSION=5.15.2
 ARG THREADS=1
 
-RUN find /depends -type f > /files-to-delete.txt
-
 RUN git clone git://code.qt.io/qt/qt5.git -b ${QT_VERSION} --depth 1 && \
     cd qt5 && \
     git clone git://code.qt.io/qt/qtbase.git -b ${QT_VERSION} --depth 1 && \
@@ -41,8 +39,6 @@ RUN git clone git://code.qt.io/qt/qt5.git -b ${QT_VERSION} --depth 1 && \
     make -j$THREADS install && \
     cd ../../../.. && \
     rm -rf $(pwd)
-
-RUN cat /files-to-delete.txt | xargs rm -f
 
 FROM scratch
 COPY --from=build /depends /depends
