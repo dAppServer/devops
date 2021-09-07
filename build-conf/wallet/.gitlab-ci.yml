@@ -16,7 +16,7 @@ wallet:preload:
     - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" $CI_REGISTRY
   script:
     - docker pull "lthn/build:wallet-$BUILD-base" || true
-    - docker build --build-arg BUILDKIT_INLINE_CACHE=1 --cache-from $CI_REGISTRY_IMAGE:wallet-$BUILD-base -t lthn/build:wallet-$BUILD-base -f build-conf/wallet/$BUILD/base.Dockerfile build-src
+    - docker build --build-arg BUILDKIT_INLINE_CACHE=1 --cache-from $CI_REGISTRY/lthn/build:wallet-$BUILD-base -t lthn/build:wallet-$BUILD-base -f build-conf/wallet/$BUILD/base.Dockerfile build-src
     - docker image tag "lthn/build:wallet-$BUILD-base" "$CI_REGISTRY/$CI_REGISTRY_IMAGE:wallet-$BUILD-base"
 
 wallet:libs:
@@ -41,7 +41,7 @@ wallet:libs:
   script:
     - docker pull "lthn/build:wallet-lib-$BUILD-$LIB" || true
     - docker build --build-arg BUILDKIT_INLINE_CACHE=1 --cache-from $CI_REGISTRY_IMAGE:wallet-lib-$BUILD-$LIB -t lthn/build:wallet-lib-$BUILD-$LIB -f build-conf/wallet/$BUILD/$LIB.Dockerfile build-src
-    - docker push "lthn/build:wallet-lib-$BUILD-$LIB"
+    - docker image tag "lthn/build:wallet-lib-$BUILD-$LIB" "$CI_REGISTRY/$CI_REGISTRY_IMAGE:wallet-lib-$BUILD-$LIB"
 
 
 wallet:
@@ -64,7 +64,7 @@ wallet:
   script:
     - docker pull "lthn/build:wallet-$BUILD" || true
     - docker build --build-arg BUILDKIT_INLINE_CACHE=1 --build-arg BUILD=$BUILD --cache-from $CI_REGISTRY_IMAGE:wallet-$BUILD -t lthn/build:wallet-$BUILD -f build-conf/wallet/$BUILD.Dockerfile build-src
-    - docker image push "lthn/build:wallet-$BUILD" "$CI_REGISTRY_IMAGE:wallet-$BUILD"
+    - docker image tag "lthn/build:wallet-$BUILD" "$CI_REGISTRY_IMAGE:wallet-$BUILD"
 
 wallet:deploy:
   stage: deploy
@@ -113,8 +113,8 @@ sources:
     - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" $CI_REGISTRY
     - sleep $(shuf -i1-180 -n1);
   script:
-    - docker build --build-arg BUILD=$BUILD -t $CI_REGISTRY_IMAGE:sources-$BUILD -f build-conf/compile/sources.Dockerfile build-src
-    - docker push "$CI_REGISTRY_IMAGE:sources-$BUILD"
+    - docker build --build-arg BUILD=$BUILD -t lthn/build:sources-$BUILD -f build-conf/compile/sources.Dockerfile build-src
+    - docker image tag "lthn/build:sources-$BUILD" "$CI_REGISTRY_IMAGE:sources-$BUILD"
   rules:
     - changes:
         - build-conf/compile/sources.Dockerfile
