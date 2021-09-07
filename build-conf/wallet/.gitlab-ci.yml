@@ -32,7 +32,7 @@ wallet:libs:
       - BUILD: linux
         LIB: [libx, utils, cmake, boost, fontconfig]
       - BUILD: windows
-        LIB: [libx, qt]
+        LIB: [libx, cmake]
   services:
     - name: docker:dind
       command: [ "--experimental" ]
