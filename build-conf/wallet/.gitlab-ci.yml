@@ -17,7 +17,7 @@ wallet:preload:
   script:
     - docker pull "lthn/build:wallet-$BUILD-base" || true
     - docker build --build-arg BUILDKIT_INLINE_CACHE=1 --cache-from $CI_REGISTRY_IMAGE:wallet-$BUILD-base -t lthn/build:wallet-$BUILD-base -f build-conf/wallet/$BUILD/base.Dockerfile build-src
-    - docker image push "lthn/build:wallet-$BUILD-base" "$CI_REGISTRY/$CI_REGISTRY_IMAGE:wallet-$BUILD-base"
+    - docker image tag "lthn/build:wallet-$BUILD-base" "$CI_REGISTRY/$CI_REGISTRY_IMAGE:wallet-$BUILD-base"
 
 wallet:libs:
   stage: libs
