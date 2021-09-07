@@ -4,11 +4,11 @@ ARG QT_VERSION=5.15.2
 ARG THREADS=1
 ARG IMG_BASE=${IMG_PREFIX}/build:wallet-linux-base
 
-COPY --from=registry.gitlab.com/lthn.io/projects/sdk/build:wallet-lib-linux-libx / /
-COPY --from=registry.gitlab.com/lthn.io/projects/sdk/build:wallet-lib-linux-boost / /
-COPY --from=registry.gitlab.com/lthn.io/projects/sdk/build:wallet-lib-linux-cmake / /
-COPY --from=registry.gitlab.com/lthn.io/projects/sdk/build:wallet-lib-linux-fontconfig / /
-COPY --from=registry.gitlab.com/lthn.io/projects/sdk/build:wallet-lib-linux-utils / /
+COPY --from=lthn/build:wallet-lib-linux-libx / /
+COPY --from=lthn/build:wallet-lib-linux-boost / /
+COPY --from=lthn/build:wallet-lib-linux-cmake / /
+COPY --from=lthn/build:wallet-lib-linux-fontconfig / /
+COPY --from=lthn/build:wallet-lib-linux-utils / /
 
 #COPY --from=lthn/build:wallet-lib-linux-libx / /usr
 #COPY --from=lthn/build:wallet-lib-linux-boost / /usr
