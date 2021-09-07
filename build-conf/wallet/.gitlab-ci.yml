@@ -17,7 +17,7 @@ wallet:preload:
   script:
     - docker pull "lthn/build:wallet-$BUILD-base" || true
     - docker build --build-arg BUILDKIT_INLINE_CACHE=1 --cache-from $CI_REGISTRY_IMAGE:wallet-$BUILD-base -t lthn/build:wallet-$BUILD-base -f build-conf/wallet/$BUILD/base.Dockerfile build-src
-    - docker push "lthn/build:wallet-$BUILD-base"
+    - docker image push "lthn/build:wallet-$BUILD-base" "$CI_REGISTRY_IMAGE:wallet-$BUILD-base"
 
 wallet:libs:
   stage: libs
@@ -64,7 +64,7 @@ wallet:
   script:
     - docker pull "lthn/build:wallet-$BUILD" || true
     - docker build --build-arg BUILDKIT_INLINE_CACHE=1 --build-arg BUILD=$BUILD --cache-from $CI_REGISTRY_IMAGE:wallet-$BUILD -t lthn/build:wallet-$BUILD -f build-conf/wallet/$BUILD.Dockerfile build-src
-    - docker push "lthn/build:wallet-$BUILD"
+    - docker image push "lthn/build:wallet-$BUILD" "$CI_REGISTRY_IMAGE:wallet-$BUILD"
 
 wallet:deploy:
   stage: deploy
