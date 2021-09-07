@@ -20,7 +20,7 @@ compile-base:build:
         - build-conf/compile/base.Dockerfile
 
 depends:
-  stage: build
+  stage: depends
   image: docker
   variables:
     DOCKER_HOST: tcp://docker:2375
