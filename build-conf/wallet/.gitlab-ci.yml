@@ -15,9 +15,9 @@ wallet:preload:
   before_script:
     - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" $CI_REGISTRY
   script:
-    - docker pull "$CI_REGISTRY_IMAGE:wallet-$BUILD-base" || true
-    - docker build --build-arg BUILDKIT_INLINE_CACHE=1 --cache-from $CI_REGISTRY_IMAGE:wallet-$BUILD-base -t $CI_REGISTRY_IMAGE:wallet-$BUILD-base -f build-conf/wallet/$BUILD/base.Dockerfile build-src
-    - docker push "$CI_REGISTRY_IMAGE:wallet-$BUILD-base"
+    - docker pull "lthn/build:wallet-$BUILD-base" || true
+    - docker build --build-arg BUILDKIT_INLINE_CACHE=1 --cache-from lthn/build:wallet-$BUILD-base -t lthn/build:wallet-$BUILD-base -f build-conf/wallet/$BUILD/base.Dockerfile build-src
+    - docker push "lthn/build:wallet-$BUILD-base"
 
 wallet:libs:
   stage: libs
@@ -63,7 +63,7 @@ wallet:
     - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" $CI_REGISTRY
   script:
     - docker pull "$CI_REGISTRY_IMAGE:wallet-$BUILD" || true
-    - docker build --build-arg BUILDKIT_INLINE_CACHE=1 --build-arg BUILD=$BUILD --build-arg IMG_PREFIX=registry.gitlab.com/lthn.io/projects/sdk --cache-from $CI_REGISTRY_IMAGE:wallet-$BUILD -t $CI_REGISTRY_IMAGE:wallet-$BUILD -f build-conf/wallet/$BUILD.Dockerfile build-src
+    - docker build --build-arg BUILDKIT_INLINE_CACHE=1 --build-arg BUILD=$BUILD --cache-from $CI_REGISTRY_IMAGE:wallet-$BUILD -t $CI_REGISTRY_IMAGE:wallet-$BUILD -f build-conf/wallet/$BUILD.Dockerfile build-src
     - docker push "$CI_REGISTRY_IMAGE:wallet-$BUILD"
 
 wallet:deploy:
