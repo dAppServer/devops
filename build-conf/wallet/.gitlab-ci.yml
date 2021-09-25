@@ -39,7 +39,7 @@ wallet:libs:
   before_script:
     - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" $CI_REGISTRY
   script:
-    - docker pull "lthn/build:wallet-lib-$BUILD-$LIB" || true
+    - docker pull "$CI_REGISTRY/lthn/build:wallet-lib-$BUILD-$LIB" || true
     - docker build --build-arg BUILDKIT_INLINE_CACHE=1 --cache-from $CI_REGISTRY/lthn/build:wallet-lib-$BUILD-$LIB -t lthn/build:wallet-lib-$BUILD-$LIB -f build-conf/wallet/$BUILD/$LIB.Dockerfile build-src
     - docker image tag "lthn/build:wallet-lib-$BUILD-$LIB" "$CI_REGISTRY/lthn/build:wallet-lib-$BUILD-$LIB"
 
