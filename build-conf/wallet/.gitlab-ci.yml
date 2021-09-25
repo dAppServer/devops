@@ -8,7 +8,6 @@ wallet:preload:
   parallel:
     matrix:
       - BUILD: linux
-      - BUILD: windows
   services:
     - name: docker:dind
       command: [ "--experimental" ]
@@ -31,8 +30,6 @@ wallet:libs:
     matrix:
       - BUILD: linux
         LIB: [libx, utils, cmake, boost, fontconfig]
-      - BUILD: windows
-        LIB: [libx]
   services:
     - name: docker:dind
       command: [ "--experimental" ]
@@ -54,7 +51,6 @@ wallet:
     DOCKER_BUILDKIT: 1
   parallel:
     matrix:
-      - BUILD: windows
       - BUILD: linux
   services:
     - name: docker:dind
@@ -79,7 +75,6 @@ wallet:deploy:
       command: [ "--experimental" ]
   parallel:
     matrix:
-      - TARGET: wallet-windows
       - TARGET: wallet-linux
   before_script:
     - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" $CI_REGISTRY
