@@ -4,6 +4,7 @@ include:
 stages:
   - prep
   - libs
+  - depends
   - build
   - test
   - deploy

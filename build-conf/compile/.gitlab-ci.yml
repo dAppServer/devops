@@ -1,5 +1,5 @@
 compile-base:build:
-  stage: libs
+  stage: prep
   image: docker
   variables:
     DOCKER_HOST: tcp://docker:2375
@@ -19,82 +19,8 @@ compile-base:build:
     - changes:
         - build-conf/compile/base.Dockerfile
 
-compile:
-  stage: build
-  image: docker
-  variables:
-    DOCKER_HOST: tcp://docker:2375
-    DOCKER_DRIVER: overlay2
-    DOCKER_BUILDKIT: 1
-  parallel:
-    matrix:
-      - BUILD: x86_64-unknown-linux-gnu
-        TAG: linux-64
-      - BUILD: i686-pc-linux-gnu
-        TAG: linux-32
-      - BUILD: arm-linux-gnueabihf
-        TAG: arm-7
-      - BUILD: aarch64-linux-gnu
-        TAG: arm-8
-      - BUILD: x86_64-w64-mingw32
-        TAG: windows-64
-      - BUILD: i686-w64-mingw32
-        TAG: windows-32
-      - BUILD: riscv64-linux-gnu
-        TAG: riscv-64
-      - BUILD: x86_64-unknown-freebsd
-        TAG: freebsd-64
-  services:
-    - name: docker:dind
-      command: [ "--experimental" ]
-  before_script:
-    - export PATH=$(echo $PATH | tr ':' "\n" | sed '/\/opt\/python/d' | tr "\n" ":" | sed "s|::|:|g")
-    - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" $CI_REGISTRY
-  script:
-    - docker push "$CI_REGISTRY_IMAGE:$TAG" || true
-    - docker build --squash --build-arg BUILD=$BUILD --target build --cache-from $CI_REGISTRY_IMAGE:$TAG -t $CI_REGISTRY_IMAGE:$TAG -f build-conf/compile/depends.Dockerfile build-src
-    - docker push "$CI_REGISTRY_IMAGE:$TAG"
-  rules:
-    - changes:
-        - build-conf/compile/depends.Dockerfile
-
-compile:deploy:
-  stage: deploy
-  needs: ["compile"]
-  image: docker
-  variables:
-    DOCKER_HOST: tcp://docker:2375
-    DOCKER_DRIVER: overlay2
-    DOCKER_BUILDKIT: 1
-  services:
-    - name: docker:dind
-      command: [ "--experimental" ]
-  parallel:
-    matrix:
-      - TARGET: linux-64
-      - TARGET: linux-32
-      - TARGET: arm-7
-      - TARGET: arm-8
-      - TARGET: windows-64
-      - TARGET: windows-32
-      - TARGET: riscv-64
-      - TARGET: freebsd-64
-  before_script:
-    - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" $CI_REGISTRY
-    - docker login -u "$DOCKER_REGISTRY_USER" -p "$DOCKER_REGISTRY_PASSWORD" $DOCKER_REGISTRY
-  script:
-    - docker pull $CI_REGISTRY_IMAGE:$TARGET || true
-    - docker tag $CI_REGISTRY_IMAGE:$TARGET $DOCKER_REGISTRY/lthn/build:$TARGET
-    - docker push $DOCKER_REGISTRY/lthn/build:$TARGET
-  environment:
-    name: $TARGET
-  rules:
-    - if: $CI_COMMIT_BRANCH == 'main'
-      changes:
-        - build-conf/compile/depends.Dockerfile
-
 depends:
-  stage: build
+  stage: depends
   image: docker
   variables:
     DOCKER_HOST: tcp://docker:2375

@@ -15,9 +15,9 @@ wallet:preload:
   before_script:
     - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" $CI_REGISTRY
   script:
-    - docker pull "$CI_REGISTRY_IMAGE:wallet-$BUILD-base" || true
-    - docker build --build-arg BUILDKIT_INLINE_CACHE=1 --cache-from $CI_REGISTRY_IMAGE:wallet-$BUILD-base -t $CI_REGISTRY_IMAGE:wallet-$BUILD-base -f build-conf/wallet/$BUILD/base.Dockerfile build-src
-    - docker push "$CI_REGISTRY_IMAGE:wallet-$BUILD-base"
+    - docker pull "lthn/build:wallet-$BUILD-base" || true
+    - docker build --build-arg BUILDKIT_INLINE_CACHE=1 --cache-from $CI_REGISTRY/lthn/build:wallet-$BUILD-base -t lthn/build:wallet-$BUILD-base -f build-conf/wallet/$BUILD/base.Dockerfile build-src
+    - docker image tag "lthn/build:wallet-$BUILD-base" "$CI_REGISTRY/lthn/build:wallet-$BUILD-base"
 
 wallet:libs:
   stage: libs
@@ -32,16 +32,16 @@ wallet:libs:
       - BUILD: linux
         LIB: [libx, utils, cmake, boost, fontconfig]
       - BUILD: windows
-        LIB: [libx, cmake, qt]
+        LIB: [libx]
   services:
     - name: docker:dind
       command: [ "--experimental" ]
   before_script:
     - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" $CI_REGISTRY
   script:
-    - docker pull "$CI_REGISTRY_IMAGE:wallet-lib-$BUILD-$LIB" || true
-    - docker build --build-arg BUILDKIT_INLINE_CACHE=1 --build-arg IMG_PREFIX=registry.gitlab.com/lthn.io/projects/sdk --cache-from $CI_REGISTRY_IMAGE:wallet-lib-$BUILD-$LIB -t $CI_REGISTRY_IMAGE:wallet-lib-$BUILD-$LIB -f build-conf/wallet/$BUILD/$LIB.Dockerfile build-src
-    - docker push "$CI_REGISTRY_IMAGE:wallet-lib-$BUILD-$LIB"
+    - docker pull "$CI_REGISTRY/lthn/build:wallet-lib-$BUILD-$LIB" || true
+    - docker build --build-arg BUILDKIT_INLINE_CACHE=1 --cache-from $CI_REGISTRY/lthn/build:wallet-lib-$BUILD-$LIB -t lthn/build:wallet-lib-$BUILD-$LIB -f build-conf/wallet/$BUILD/$LIB.Dockerfile build-src
+    - docker image tag "lthn/build:wallet-lib-$BUILD-$LIB" "$CI_REGISTRY/lthn/build:wallet-lib-$BUILD-$LIB"
 
 
 wallet:
@@ -62,9 +62,9 @@ wallet:
   before_script:
     - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" $CI_REGISTRY
   script:
-    - docker pull "$CI_REGISTRY_IMAGE:wallet-$BUILD" || true
-    - docker build --build-arg BUILDKIT_INLINE_CACHE=1 --build-arg BUILD=$BUILD --build-arg IMG_PREFIX=registry.gitlab.com/lthn.io/projects/sdk --cache-from $CI_REGISTRY_IMAGE:wallet-$BUILD -t $CI_REGISTRY_IMAGE:wallet-$BUILD -f build-conf/wallet/$BUILD.Dockerfile build-src
-    - docker push "$CI_REGISTRY_IMAGE:wallet-$BUILD"
+    - docker pull "$CI_REGISTRY/lthn/build:wallet-$BUILD" || true
+    - docker build --build-arg BUILDKIT_INLINE_CACHE=1 --build-arg BUILD=$BUILD --cache-from $CI_REGISTRY/lthn/build:wallet-$BUILD -t lthn/build:wallet-$BUILD -f build-conf/wallet/$BUILD.Dockerfile build-src
+    - docker image tag "lthn/build:wallet-$BUILD" "$CI_REGISTRY/lthn/build:wallet-$BUILD"
 
 wallet:deploy:
   stage: deploy
@@ -95,7 +95,7 @@ wallet:deploy:
 
 
 sources:
-  stage: build
+  stage: libs
   image: docker
   variables:
     DOCKER_HOST: tcp://docker:2375
@@ -113,8 +113,8 @@ sources:
     - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" $CI_REGISTRY
     - sleep $(shuf -i1-180 -n1);
   script:
-    - docker build --build-arg BUILD=$BUILD -t $CI_REGISTRY_IMAGE:sources-$BUILD -f build-conf/compile/sources.Dockerfile build-src
-    - docker push "$CI_REGISTRY_IMAGE:sources-$BUILD"
+    - docker build --build-arg BUILD=$BUILD -t lthn/build:sources-$BUILD -f build-conf/compile/sources.Dockerfile build-src
+    - docker image tag "lthn/build:sources-$BUILD" "$CI_REGISTRY/lthn/build:sources-$BUILD"
   rules:
     - changes:
         - build-conf/compile/sources.Dockerfile
@@ -133,16 +133,16 @@ sources:deploy:
       command: [ "--experimental" ]
   parallel:
     matrix:
-      - TARGET: sources-osx
-      - TARGET: sources-linux
-      - TARGET: sources-win
+      - TARGET: osx
+      - TARGET: linux
+      - TARGET: win
   before_script:
     - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" $CI_REGISTRY
     - docker login -u "$DOCKER_REGISTRY_USER" -p "$DOCKER_REGISTRY_PASSWORD" $DOCKER_REGISTRY
   script:
-    - docker pull $CI_REGISTRY_IMAGE:$TARGET
-    - docker tag $CI_REGISTRY_IMAGE:$TARGET $DOCKER_REGISTRY/lthn/build:$TARGET
-    - docker push $DOCKER_REGISTRY/lthn/build:$TARGET
+    - docker pull $CI_REGISTRY/lthn/build:sources-$TARGET
+    - docker tag $CI_REGISTRY/lthn/build:sources-$TARGET $DOCKER_REGISTRY/lthn/build:sources-$TARGET
+    - docker push $DOCKER_REGISTRY/lthn/build:sources-$TARGET
   environment:
     name: $IMG_TAG
   rules:
