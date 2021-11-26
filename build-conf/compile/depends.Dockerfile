@@ -17,6 +17,10 @@ RUN case ${BUILD} in \
      PACKAGE="gperf cmake python3-zmq libdbus-1-dev libharfbuzz-dev"; \
       cp -r /cache/linux /lethean/chain/contrib/depends/sources; \
     ;; \
+    x86_64-apple-darwin11) \
+     PACKAGE="python-setuptools libcap-dev zlib1g-dev libbz2-dev"; \
+      cp -r /cache/linux /lethean/chain/contrib/depends/sources; \
+    ;; \
     i686-pc-linux-gnu) \
      PACKAGE="gperf cmake g++-multilib python3-zmq"; \
      cp -r /cache/linux /lethean/chain/contrib/depends/sources; \
@@ -53,6 +57,15 @@ RUN if [ ${BUILD} = x86_64-w64-mingw32 ] || [ ${BUILD} = i686-w64-mingw32 ]; the
     update-alternatives --set ${BUILD}-g++ $(which ${BUILD}-g++-posix) && \
     update-alternatives --set ${BUILD}-gcc $(which ${BUILD}-gcc-posix); \
     fi
+
+ARG OSX_SDK_NAME=MacOSX10.11.sdk.tar.xz
+ARG OSX_SDK_URL="https://github.com/phracker/MacOSX-SDKs/releases/download/11.3/${OSX_SDK_NAME}"
+
+RUN if [ ${BUILD} = x86_64-apple-darwin11 ]; then \
+	wget ${OSX_SDK_URL} && \
+	mkdir /lethean/chain/contrib/depends/SDKs && \
+	tar -xf ${OSX_SDK_NAME} -C /lethean/chain/contrib/depends/SDKs/; \
+	fi
 
 ENV BUILD_TARGET=${BUILD}
 ENV BUILD_THREADS=1
