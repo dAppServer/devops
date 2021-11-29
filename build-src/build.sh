@@ -1,7 +1,12 @@
 #!/usr/bin/env bash
 
 BUILD_TARGET=x86_64-unknown-linux-gnu
+BRANCH=next
+GIT_REPO=https://github.com/letheanVPN/blockchain.git
+BUILD_PATH=/lethean/chain
+MAKE_CMD=release
 
+ENV PACKAGE=""
 if [[ -n $2 ]]; then
   case $2 in
   "win64")
@@ -40,10 +45,15 @@ case $1 in
 "chain")
   shift
   rm src/.lthnkeep || echo "Could not delete .lthnkeep from build directory, not an error if this builds"
-  git clone --depth 1 --recursive --branch next https://gitlab.com/lthn.io/projects/chain/lethean.git /lethean
-  make -C /lethean/chain depends root=/depends target=$BUILD_TARGET
+  git clone --depth 1 --recursive --branch ${BRANCH} ${GIT_REPO} ${BUILD_PATH}
+  make -C ${BUILD_PATH} depends root=/depends target=$BUILD_TARGET
   ;;
-
+"compile")
+  shift
+  rm src/.lthnkeep || echo "Could not delete .lthnkeep from build directory, not an error if this builds"
+  git clone --depth 1 --recursive --branch ${BRANCH} ${GIT_REPO} ${BUILD_PATH}
+  make -C ${BUILD_PATH} ${MAKE_CMD}
+  ;;
 *)
  echo "chain"
   ;;
