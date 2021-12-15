@@ -1,4 +1,4 @@
-FROM debian:bullseye-slim as base
+FROM ubuntu:18.04 as base
 # This sets the build target, you can pick from:
 # 64: x86_64-unknown-linux-gnu, x86_64-unknown-freebsd, x86_64-w64-mingw32
 # 32: i686-pc-linux-gnu, i686-w64-mingw32, arm-linux-gnueabihf
@@ -11,11 +11,12 @@ RUN echo "Acquire::Retries \"3\";"         | tee -a /etc/apt/apt.conf.d/80-custo
 RUN echo "Acquire::http::Timeout \"120\";" | tee -a /etc/apt/apt.conf.d/80-custom
 RUN echo "Acquire::ftp::Timeout \"120\";"  | tee -a /etc/apt/apt.conf.d/80-custom
 
-RUN apt-get update && apt-get install -y curl librsvg2-bin libtiff-tools bsdmainutils cmake imagemagick libz-dev python3-setuptools libtinfo5 xorriso \
-    make automake cmake curl libtool binutils-gold bsdmainutils pkg-config python3 patch bison \
+RUN apt-get update && apt-get install -y curl librsvg2-bin libtiff-tools bsdmainutils cmake imagemagick libz-dev  libtinfo5 xorriso \
+    make automake cmake curl libtool binutils-gold bsdmainutils pkg-config patch bison \
     g++-arm-linux-gnueabihf binutils-arm-linux-gnueabihf g++-aarch64-linux-gnu binutils-aarch64-linux-gnu \
-    g++-riscv64-linux-gnu binutils-riscv64-linux-gnu ccache python python-setuptools-git \
-    build-essential libtool autotools-dev automake pkg-config bsdmainutils curl git nsis
+    g++-riscv64-linux-gnu binutils-riscv64-linux-gnu ccache  \
+    build-essential libtool autotools-dev automake pkg-config bsdmainutils curl git nsis \
+    python python-dev python3-setuptools-git python-setuptools-git python3 python3-setuptools
 
 WORKDIR /lethean
 
