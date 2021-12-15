@@ -26,5 +26,5 @@ depends:
       - BUILD: x86_64-unknown-freebsd
       - BUILD: x86_64-apple-darwin
   script:
-    - docker build --pull --build-arg BUILD=$BUILD --cache-from $DOCKER_REGISTRY/lthn/build:$BUILD --target=$BUILD -t $DOCKER_REGISTRY/lthn/build:$BUILD .
+    - docker build --build-arg BUILD=$BUILD --target=$BUILD -t $DOCKER_REGISTRY/lthn/build:$BUILD .
     - docker push $DOCKER_REGISTRY/lthn/build:$BUILD
