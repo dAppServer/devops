@@ -1,13 +1,59 @@
-include:
-  - local: 'build-conf/**/*.gitlab-ci.yml'
+image: docker
+services:
+  - name: docker:dind
+    command: [ "--experimental" ]
+variables:
+  DOCKER_HOST: tcp://docker:2375
+  DOCKER_DRIVER: overlay2
+  DOCKER_BUILDKIT: 1
+  IMG_TAG: compile
+before_script:
+  - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" $CI_REGISTRY
 
-stages:
-  - prep
-  - libs
-  - depends
-  - build
-  - test
-  - deploy
+base:
+  stage: .pre
+  script:
+    - docker build --pull --push --target=base --cache-from $CI_REGISTRY_IMAGE:$IMG_TAG -t $CI_REGISTRY_IMAGE:$IMG_TAG .
 
+depends:
+  stage: build
+  parallel:
+    matrix:
+      - BUILD: x86_64-unknown-linux-gnu
+      - BUILD: i686-pc-linux-gnu
+      - BUILD: arm-linux-gnueabihf
+      - BUILD: aarch64-linux-gnu
+      - BUILD: x86_64-w64-mingw32
+      - BUILD: i686-w64-mingw32
+      - BUILD: riscv64-linux-gnu
+      - BUILD: x86_64-unknown-freebsd
+      - BUILD: x86_64-apple-darwin11
+  script:
+    - docker build --pull --push --build-arg BUILD=$BUILD --cache-from $CI_REGISTRY_IMAGE:depends-$BUILD -t $CI_REGISTRY_IMAGE:depends-$BUILD .
 
-
+depends:deploy:
+  stage: deploy
+  needs: ["build"]
+  services:
+    - name: docker:dind
+      command: [ "--experimental" ]
+  parallel:
+    matrix:
+      - TARGET: x86_64-unknown-linux-gnu
+      - TARGET: x86_64-unknown-freebsd
+      - TARGET: i686-pc-linux-gnu
+      - TARGET: x86_64-w64-mingw32
+      - TARGET: i686-w64-mingw32
+      - TARGET: arm-linux-gnueabihf
+      - TARGET: aarch64-linux-gnu
+      - TARGET: riscv64-linux-gnu
+      - TARGET: x86_64-apple-darwin11
+  before_script:
+    - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" $CI_REGISTRY
+    - docker login -u "$DOCKER_REGISTRY_USER" -p "$DOCKER_REGISTRY_PASSWORD" $DOCKER_REGISTRY
+  script:
+    - docker pull $CI_REGISTRY_IMAGE:depends-$TARGET || true
+    - docker tag $CI_REGISTRY_IMAGE:depends-$TARGET $DOCKER_REGISTRY/lthn/build:$TARGET
+    - docker push $DOCKER_REGISTRY/lthn/build:$TARGET
+  environment:
+    name: lthn/build:$TARGET
