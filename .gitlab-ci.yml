@@ -36,7 +36,6 @@ depends:
 
 depends:deploy:
   stage: deploy
-  needs: ["build"]
   services:
     - name: docker:dind
       command: [ "--experimental" ]
