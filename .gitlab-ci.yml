@@ -13,8 +13,8 @@ before_script:
 base:
   stage: .pre
   script:
-    - docker build --pull --target=base --cache-from $CI_REGISTRY_IMAGE -t $CI_REGISTRY_IMAGE .
-    - docker push $CI_REGISTRY_IMAGE
+    - docker build --pull --target=base -t $CI_REGISTRY_IMAGE:base .
+    - docker push $CI_REGISTRY_IMAGE:base
 
 depends:
   stage: build
@@ -32,5 +32,5 @@ depends:
       - BUILD: x86_64-unknown-freebsd
       - BUILD: x86_64-apple-darwin
   script:
-    - docker build --pull --build-arg BUILD=$BUILD --cache-from $DOCKER_REGISTRY/lthn/build:$BUILD -t $CI_REGISTRY_IMAGE:depends-$BUILD .
+    - docker build --pull --build-arg BUILD=$BUILD --cache-from $CI_REGISTRY_IMAGE:base --target=$BUILD -t $CI_REGISTRY_IMAGE:depends-$BUILD .
     - docker push $DOCKER_REGISTRY/lthn/build:$BUILD
