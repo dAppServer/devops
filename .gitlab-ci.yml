@@ -10,12 +10,6 @@ variables:
 before_script:
   - docker login -u "$DOCKER_REGISTRY_USER" -p "$DOCKER_REGISTRY_PASSWORD" $DOCKER_REGISTRY
 
-base:
-  stage: .pre
-  script:
-    - docker build --pull --target=base -t $CI_REGISTRY_IMAGE:base .
-    - docker push $CI_REGISTRY_IMAGE:base
-
 depends:
   stage: build
   parallel:
@@ -32,5 +26,5 @@ depends:
       - BUILD: x86_64-unknown-freebsd
       - BUILD: x86_64-apple-darwin
   script:
-    - docker build --pull --build-arg BUILD=$BUILD --cache-from $CI_REGISTRY_IMAGE:base --target=$BUILD -t $CI_REGISTRY_IMAGE:depends-$BUILD .
+    - docker build --pull --build-arg BUILD=$BUILD --cache-from $DOCKER_REGISTRY/lthn/build:$BUILD --target=$BUILD -t $DOCKER_REGISTRY/lthn/build:$BUILD .
     - docker push $DOCKER_REGISTRY/lthn/build:$BUILD
