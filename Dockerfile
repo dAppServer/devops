@@ -14,7 +14,7 @@ RUN echo "Acquire::ftp::Timeout \"120\";"  | tee -a /etc/apt/apt.conf.d/80-custo
 RUN apt-get update && apt-get install -y curl librsvg2-bin libtiff-tools bsdmainutils cmake imagemagick libz-dev  libtinfo5 xorriso \
     make automake cmake curl libtool binutils-gold bsdmainutils pkg-config patch bison \
     g++-arm-linux-gnueabihf binutils-arm-linux-gnueabihf g++-aarch64-linux-gnu binutils-aarch64-linux-gnu \
-    g++-riscv64-linux-gnu binutils-riscv64-linux-gnu ccache  \
+    g++-riscv64-linux-gnu binutils-riscv64-linux-gnu ccache dpkg-dev g++-mingw-w64-x86-64 \
     build-essential libtool autotools-dev automake pkg-config bsdmainutils curl git nsis \
     python python-dev python3-setuptools-git python-setuptools-git python3 python3-setuptools
 
