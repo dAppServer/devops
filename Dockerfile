@@ -22,10 +22,6 @@ WORKDIR /lethean
 
 COPY ./depends /lethean/depends
 
-RUN make -C /lethean/depends download-win
-RUN make -C /lethean/depends download-linux
-RUN make -C /lethean/depends download-osx
-
 RUN ccache --max-size=150M
 RUN ccache --set-config=compression=true
 
