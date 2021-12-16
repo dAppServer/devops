@@ -16,13 +16,7 @@ depends:
     matrix:
       - BUILD: x86_64-unknown-linux-gnu
       - BUILD: x86_64-pc-linux-gnu
-      - BUILD: i686-pc-linux-gnu
-      - BUILD: arm-linux-gnueabihf
-      - BUILD: aarch64-linux-gnu
       - BUILD: x86_64-w64-mingw32
-      - BUILD: i686-w64-mingw32
-      - BUILD: riscv64-linux-gnu
-      - BUILD: riscv32-linux-gnu
       - BUILD: x86_64-unknown-freebsd
       - BUILD: x86_64-apple-darwin
   script:
