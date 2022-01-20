@@ -15,7 +15,6 @@ on:
 jobs:
   sources:
     runs-on: ubuntu-latest
-    needs: compile
     strategy:
       max-parallel: 9
       fail-fast: false
