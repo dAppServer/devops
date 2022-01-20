@@ -46,7 +46,7 @@ jobs:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
       - name: Build and push
-        id: docker_build
+        id: source_macos
         uses: docker/build-push-action@v2
         with:
           push: true
@@ -54,7 +54,7 @@ jobs:
           tags: lthn/build:sources-osx
           file: build-conf/compile/sources.Dockerfile
       - name: Build and push
-        id: docker_build
+        id: source_linux
         uses: docker/build-push-action@v2
         with:
           push: true
@@ -62,7 +62,7 @@ jobs:
           tags: lthn/build:sources-linux
           file: build-conf/compile/sources.Dockerfile
       - name: Build and push
-        id: docker_build
+        id: source_windows
         uses: docker/build-push-action@v2
         with:
           push: true
