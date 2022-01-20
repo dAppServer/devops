@@ -5,9 +5,11 @@ on:
     branches: [ main ]
     paths:
       - build-conf/compile/depends.Dockerfile
+      - .github/workflows/depends.yml
   pull_request:
     paths:
       - build-conf/compile/depends.Dockerfile
+      - .github/workflows/depends.yml
     branches: [ main ]
 
 jobs:
