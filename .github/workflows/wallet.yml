@@ -1,4 +1,4 @@
-name: build:compile
+name: build:wallet
 
 on:
   push:
