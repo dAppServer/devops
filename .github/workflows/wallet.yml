@@ -37,6 +37,7 @@ jobs:
           file: build-conf/wallet/linux/base.Dockerfile
   libs:
     runs-on: ubuntu-latest
+    needs: base
     strategy:
       max-parallel: 9
       fail-fast: false
