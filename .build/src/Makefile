@@ -4,7 +4,7 @@ DOCKER_FILE ?= .build/src/Dockerfile
 K8_BUILD_DIR ?= .build/dist/dist/k8
 DOCKER_IMAGE ?= lthn/build
 BUILD_RESULT_PATH ?= /home/build/build
-BUILD_GIT_REPO ?= "https://gitlab.com/letheanVPN/build-template.git#master"
+BUILD_GIT_REPO ?= "https://github.com/letheanVPN/build-template.git#master"
 
 # Internal Behaviour Settings
 DOCKER_NAME_NORMALISED ?= lthn-$(subst /,-,$(DOCKER_IMAGE))
