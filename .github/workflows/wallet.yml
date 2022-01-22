@@ -98,4 +98,4 @@ jobs:
           push: true
           build-args: BUILD=${{ matrix.build }}
           tags: lthn/build:wallet-${{ matrix.build }}
-          file: build-conf/wallet/{{ matrix.build }}.Dockerfile
+          file: build-conf/wallet/${{ matrix.build }}.Dockerfile
