@@ -4,13 +4,13 @@ on:
   push:
     branches: [ main ]
     paths:
-      - build-conf/compile/sources.Dockerfile
-      - build-conf/compile/base.Dockerfile
+      - .build/conf/compile/sources.Dockerfile
+      - .build/conf/compile/base.Dockerfile
       - .github/workflows/compile.yml
   pull_request:
     paths:
-      - build-conf/compile/sources.Dockerfile
-      - build-conf/compile/base.Dockerfile
+      - .build/conf/compile/sources.Dockerfile
+      - .build/conf/compile/base.Dockerfile
       - .github/workflows/compile.yml
     branches: [ main ]
 
@@ -36,7 +36,7 @@ jobs:
         with:
           push: true
           tags: lthn/build:compile
-          file: build-conf/compile/base.Dockerfile
+          file: .build/conf/compile/base.Dockerfile
   sources:
     runs-on: ubuntu-latest
     needs: compile
@@ -60,7 +60,7 @@ jobs:
           push: true
           build-args: BUILD=osx
           tags: lthn/build:sources-osx
-          file: build-conf/compile/sources.Dockerfile
+          file: .build/conf/compile/sources.Dockerfile
       - name: Build and push
         id: source_linux
         uses: docker/build-push-action@v2
@@ -68,7 +68,7 @@ jobs:
           push: true
           build-args: BUILD=linux
           tags: lthn/build:sources-linux
-          file: build-conf/compile/sources.Dockerfile
+          file: .build/conf/compile/sources.Dockerfile
       - name: Build and push
         id: source_windows
         uses: docker/build-push-action@v2
@@ -76,4 +76,4 @@ jobs:
           push: true
           build-args: BUILD=win
           tags: lthn/build:sources-win
-          file: build-conf/compile/sources.Dockerfile
+          file: .build/conf/compile/sources.Dockerfile

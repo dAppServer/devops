@@ -2,7 +2,7 @@
 
 "Forgetful Build System" 
 
-![image](docs/img/lethean-meaning.png)
+![image](.build/docs/img/lethean-meaning.png)
 
 Your project, your end users; this is just a build system.
 
