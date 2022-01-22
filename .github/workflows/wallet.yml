@@ -64,8 +64,8 @@ jobs:
         uses: docker/build-push-action@v2
         with:
           push: true
-          cache-from: lthn/build:wallet-lib-${{ matrix.build }}
-          tags: lthn/build:wallet-lib-${{ matrix.build }}
+          cache-from: lthn/build:wallet-lib-linux-${{ matrix.build }}
+          tags: lthn/build:wallet-lib-linux-${{ matrix.build }}
           file: build-conf/wallet/linux/${{ matrix.build }}.Dockerfile
 
   wallet:
