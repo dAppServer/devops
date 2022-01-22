@@ -10,7 +10,7 @@ BUILD_GIT_REPO ?= "https://gitlab.com/letheanVPN/build-template.git#master"
 DOCKER_NAME_NORMALISED ?= lthn-$(subst /,-,$(DOCKER_IMAGE))
 
 all:
-	echo "Please see our documentation on how to use: https://build.lethean.help/"
+	echo "Please see our documentation on how to use: https://letheanvpn.github.io/build-template/"
 
 # Build Stage
 .PHONY: build

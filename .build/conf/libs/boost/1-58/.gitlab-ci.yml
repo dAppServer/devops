@@ -1,0 +1,45 @@
+libs-boost-1-58.linux:
+  stage: build
+  image: docker
+  services:
+    - name: docker:dind
+      command: [ "--experimental" ]
+  allow_failure: false
+  variables:
+    DOCKER_HOST: tcp://docker:2375
+    IMAGE_TAG: "$CI_REGISTRY_IMAGE:libs-boost-1-58"
+  before_script:
+    - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" $CI_REGISTRY
+  script:
+    - docker build --squash --cache-from "$IMAGE_TAG" -t "$IMAGE_TAG" -f build-conf/lthn/chain/linux.Dockerfile build-src
+    - docker push "$IMAGE_TAG"
+  rules:
+    - if: $CI_COMMIT_BRANCH == 'main'
+      changes:
+        - build-conf/libs/boost/1-58/linux.Dockerfile
+        - build-conf/libs/boost/1-58/.gitlab-ci.yml
+
+lthn-chain-linux.deploy:
+  stage: deploy
+  needs: ["libs-boost-1-58.linux"]
+  image: docker
+  variables:
+    DOCKER_HOST: tcp://docker:2375
+    IMAGE_TAG: "$CI_REGISTRY_IMAGE:libs-boost-1-58"
+  services:
+    - name: docker:dind
+      command: [ "--experimental" ]
+  before_script:
+    - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" $CI_REGISTRY
+    - docker login -u "$DOCKER_REGISTRY_USER" -p "$DOCKER_REGISTRY_PASSWORD" $DOCKER_REGISTRY
+  script:
+    - docker pull "$IMAGE_TAG"
+    - docker tag "$IMAGE_TAG" $DOCKER_REGISTRY_IMAGE:libs-boost-1-58
+    - docker push $DOCKER_REGISTRY/$DOCKER_REGISTRY_IMAGE:libs-boost-1-58
+  environment:
+    name: libs-boost-1-58
+  rules:
+    - if: $CI_COMMIT_BRANCH == 'main'
+      changes:
+        - build-conf/libs/boost/1-58/linux.Dockerfile
+        - build-conf/libs/boost/1-58/.gitlab-ci.yml
