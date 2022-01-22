@@ -1,3 +1,19 @@
+## Sponsor Docker Inc
+
+Docker Inc sponsor us with Opensource access, meaning the opensource community can leverage their very generous sponsorship, without affecting their personal quotas. 
+
+With docker, Opensource developers have access to "pull and play" build environments, for any playform. <3 TY Docker 
+
+![Docker](https://www.docker.com/sites/default/files/d8/2019-07/horizontal-logo-monochromatic-white.png)  
+
+* [lthn/build](https://hub.docker.com/r/lthn/build)
+* [Docker Desktop](https://www.docker.com/products/docker-desktop)
+* [Free & Paid Information](https://www.docker.com/pricing)
+
+
+
+
+
 # Compile images
 
 - `lthn/build:compile` Compile base image
