@@ -1,5 +1,7 @@
 # Sponsors
 
+Both Sponsors have free public access; meaning you are more than welcome to fork and use for yourself, for commercial projects, they have options for you too. 
+
 ## Build systems: Docker Inc
 Docker Inc sponsor us with Opensource access, meaning the opensource community can leverage their very generous sponsorship, without affecting their personal quotas. 
 
