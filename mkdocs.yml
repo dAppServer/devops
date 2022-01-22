@@ -1,0 +1,34 @@
+site_name: Build Docs
+site_dir: .build/public
+theme:
+  name: material
+  custom_dir: .build/docs/overrides
+  favicon: .build/img/favicon.ico
+  features:
+    - toc.integrate
+  palette:
+    # Light mode
+    - media: "(prefers-color-scheme: light)"
+      scheme: lethean
+      primary: indigo
+      accent: indigo
+      toggle:
+        icon: material/toggle-switch-off-outline
+        name: Switch to dark mode
+
+    # Dark mode
+    - media: "(prefers-color-scheme: dark)"
+      scheme: slate
+      primary: blue
+      accent: blue
+      toggle:
+        icon: material/toggle-switch
+        name: Switch to light mode
+extra:
+  generator: true
+extra_css:
+  - stylesheets/extra.css
+markdown_extensions:
+  - meta
+  - toc:
+      permalink: true

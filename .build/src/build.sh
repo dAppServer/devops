@@ -1,61 +1,81 @@
 #!/usr/bin/env bash
 
-BUILD_TARGET=x86_64-unknown-linux-gnu
-BRANCH=next
-GIT_REPO=https://github.com/letheanVPN/blockchain.git
-BUILD_PATH=/lethean/chain
-MAKE_CMD=release
+function start_docker() {
+  echo "Starting Docker and sleeping for a few seconds"
+  dockerd-entrypoint.sh dockerd &>/dev/null &
+  sleep 5
+}
 
-ENV PACKAGE=""
-if [[ -n $2 ]]; then
-  case $2 in
-  "win64")
-  BUILD_TARGET=x86_64-w64-mingw32
-  ;;
-  "win32")
-  BUILD_TARGET=i686-w64-mingw32
-  ;;
-  "macos")
-  BUILD_TARGET=x86_64-apple-darwin11
-  ;;
-  "arm7")
-  BUILD_TARGET=arm-linux-gnueabihf
-  ;;
-  "arm8")
-  BUILD_TARGET=aarch64-linux-gnu
-  ;;
-  "riscv")
-  BUILD_TARGET=riscv64-linux-gnu
-  ;;
-  "freebsd")
-  BUILD_TARGET=x86_64-unknown-freebsd
-  ;;
-  "linux64")
-  BUILD_TARGET=x86_64-unknown-linux-gnu
-  ;;
-  "linux32")
-  BUILD_TARGET=i686-pc-linux-gnu
-  ;;
-esac
-fi
-
-echo "Lethean Builder Running Command \"$1\" for: ${BUILD_TARGET}"
-
+echo "Lethean Builder Running Command \"$1\""
 case $1 in
-"chain")
+"lthn/chain")
   shift
   rm src/.lthnkeep || echo "Could not delete .lthnkeep from build directory, not an error if this builds"
-  git clone --depth 1 --recursive --branch ${BRANCH} ${GIT_REPO} ${BUILD_PATH}
-  make -C ${BUILD_PATH} depends root=/depends target=$BUILD_TARGET
+  git clone --depth=1 --branch master https://gitlab.com/lthn.io/projects/chain/lethean.git src || exit
+  export DOCKER_IMAGE='lthn/chain'
+  export BUILD_RESULT_PATH='/home/lthn/bin/chain'
+  start_docker
+  make build
+  make eject-build
   ;;
-"compile")
+"lthn/wallet")
   shift
   rm src/.lthnkeep || echo "Could not delete .lthnkeep from build directory, not an error if this builds"
-  git clone --depth 1 --recursive --branch ${BRANCH} ${GIT_REPO} ${BUILD_PATH}
-  make -C ${BUILD_PATH} ${MAKE_CMD}
+  git clone --depth=1 --branch master https://gitlab.com/lthn.io/projects/chain/wallet.git src || exit
+  export DOCKER_IMAGE='lthn/wallet'
+  export BUILD_RESULT_PATH='/home/lthn/wallet/build/release/bin/'
+  start_docker
+  make build
+  make eject-build
+  ;;
+"lthn/vpn")
+  shift
+  rm src/.lthnkeep || echo "Could not delete .lthnkeep from build directory, not an error if this builds"
+  git clone --depth=1 --branch master https://gitlab.com/lthn.io/projects/vpn/node.git src || exit
+  export DOCKER_IMAGE='lthn/vpn'
+  export BUILD_RESULT_PATH='/home/lthn/bin/vpn'
+  start_docker
+  make build
+  make eject-build
+  ;;
+"c" | "compile")
+  shift
+  rm src/.lthnkeep || echo "Could not delete .lthnkeep from build directory, not an error if this builds"
+  export BUILD_GIT_REPO="$*"
+  export DOCKER_IMAGE='compile'
+  export BUILD_RESULT_PATH='/compile/build'
+  git clone --depth=1 --branch master --recurse-submodules "${BUILD_GIT_REPO}" src || exit
+  start_docker
+  make build
+  make eject-build
+  ;;
+"b" | "build")
+  shift
+  export BUILD_GIT_REPO="$*"
+  start_docker
+  make build-git
+  make eject-build
+  ;;
+"bash")
+  /usr/bin/env bash
+  ;;
+"sh")
+  /usr/bin/env sh
+  ;;
+"ci-scan")
+  rm src/.lthnkeep || echo "Could not delete .lthnkeep from build directory, not an error if this builds"
+  export BUILD_GIT_REPO="$*"
+  git clone --depth=1 --branch master --recurse-submodules "${BUILD_GIT_REPO}" src || exit
+  cd src
+  make release-static
   ;;
 *)
- echo "chain"
+  rm src/.lthnkeep || echo "Could not delete .lthnkeep from build directory, not an error if this builds"
+  export BUILD_GIT_REPO="$*"
+  git clone --depth=1 --branch master --recurse-submodules "${BUILD_GIT_REPO}" src || exit
+  start_docker
+  make build
+  make eject-build
   ;;
 
 esac
