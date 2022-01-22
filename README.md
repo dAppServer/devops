@@ -1,5 +1,4 @@
-## Sponsor Docker Inc
-
+## Made possible with sponsorship from Docker Inc
 Docker Inc sponsor us with Opensource access, meaning the opensource community can leverage their very generous sponsorship, without affecting their personal quotas. 
 
 With docker, Opensource developers have access to "pull and play" build environments, for any playform. <3 TY Docker 
