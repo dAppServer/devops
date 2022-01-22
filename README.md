@@ -1,4 +1,4 @@
-# OS Friendly Lethean Build System
+# OS Friendly Build System
 
 "Forgetful Build System" 
 
