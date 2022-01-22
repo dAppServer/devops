@@ -38,7 +38,7 @@ With docker, Opensource developers have access to "pull and play" build environm
 
 ## Secure Build Environments: Kasm Workspaces 
 
-![Kasm Workspaces](https://kasmweb.com/docs/latest/_static/kasm_horizontal_logo_white.png)
+![image](https://user-images.githubusercontent.com/631881/150638496-112a2249-fe9a-46ef-ae4b-664196ebbd53.png)
 
 With our concurrent licence sponsorship from [Kasm Workspaces](https://www.kasmweb.com/); we can not only test applications,
 using [SANS SIFT Workstation](https://www.sans.org/tools/sift-workstation/);
