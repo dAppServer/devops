@@ -3,7 +3,7 @@ all: help
 .PHONY: all help clean build tool-gcc lthn-chain-linux lthn-wallet-linux shrink-chain-build
 .PHONY: base-ubuntu base-ubuntu-16.04 base-ubuntu-18.04 base-ubuntu-20.04
 .ONESHELL: shrink-chain-build base-ubuntu
-all: help
+
 
 clean: ## Docker System Prune
 	docker system prune --all
