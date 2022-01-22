@@ -30,15 +30,11 @@ Docker Inc sponsor us with Opensource access, meaning the opensource community c
 
 With docker, Opensource developers have access to "pull and play" build environments, for any playform. <3 TY Docker 
 
-![Docker](https://www.docker.com/sites/default/files/d8/2019-07/horizontal-logo-monochromatic-white.png)  
-
 * [lthn/build](https://hub.docker.com/r/lthn/build)
 * [Docker Desktop](https://www.docker.com/products/docker-desktop)
 * [Free & Paid Information](https://www.docker.com/pricing)
 
 ## Secure Build Environments: Kasm Workspaces 
-
-![image](https://user-images.githubusercontent.com/631881/150638496-112a2249-fe9a-46ef-ae4b-664196ebbd53.png)
 
 With our concurrent licence sponsorship from [Kasm Workspaces](https://www.kasmweb.com/); we can not only test applications,
 using [SANS SIFT Workstation](https://www.sans.org/tools/sift-workstation/);
