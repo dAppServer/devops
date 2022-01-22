@@ -1,5 +1,6 @@
 site_name: Build Docs
 site_dir: .build/public
+docs_dir: .build/docs
 theme:
   name: material
   custom_dir: .build/docs/overrides
