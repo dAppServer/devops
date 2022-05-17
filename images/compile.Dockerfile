@@ -7,7 +7,7 @@ ENV DEBIAN_FRONTEND=noninteractive
 
 RUN apt-get update
 RUN apt-get install -y build-essential libicu-dev git curl g++ ca-certificates make pkg-config  \
-            zlib1g-dev mesa-common-dev libglu1-mesa-dev python-dev autotools-dev libbz2-dev
+            zlib1g-dev mesa-common-dev libglu1-mesa-dev python-dev autotools-dev libbz2-dev ccache
 
 WORKDIR /root
 
