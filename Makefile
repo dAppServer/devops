@@ -8,7 +8,7 @@ clean: ## Docker System Prune
 	docker system prune --all
 
 build: ## Builds lthn/build
-	docker build --no-cache -t lthn/build -f .build/conf/build.Dockerfile build-src
+	docker build --no-cache -t lthn/build:chain -f images/compile.Dockerfile build-context
 
 tool-gcc: ## Builds lthn/build:tool-gcc
 	docker build --no-cache -t lthn/build:tool-gcc -f .build/conf/tool/gcc/build.Dockerfile .build/src
