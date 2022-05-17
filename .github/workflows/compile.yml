@@ -17,6 +17,11 @@ jobs:
       packages: write
       contents: read
     steps:
+      - name: set lower case owner name
+        run: |
+          echo "OWNER_LC=${OWNER,,}" >>${GITHUB_ENV}
+        env:
+          OWNER: '${{ github.repository_owner }}'
       - uses: actions/checkout@v2
       - uses: docker/setup-buildx-action@v2
         with:
@@ -38,8 +43,8 @@ jobs:
         with:
           push: true
           target: build-base
-          cache-to: ghcr.io/${{ github.repository }}:base
-          cache-from: ghcr.io/${{ github.repository }}:base
-          tags: lthn/build:base,ghcr.io/${{ github.repository }}:base
+          cache-to: ghcr.io/${{ OWNER_LC }}/build:base
+          cache-from: ghcr.io/${{ OWNER_LC }}/build:base
+          tags: lthn/build:base,ghcr.io/${{ OWNER_LC }}/build:base
           file: images/compile.Dockerfile
 
