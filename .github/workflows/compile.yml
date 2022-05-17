@@ -43,8 +43,8 @@ jobs:
         with:
           push: true
           target: build-base
-          cache-to: ghcr.io/${{ OWNER_LC }}/build:base
-          cache-from: ghcr.io/${{ OWNER_LC }}/build:base
-          tags: lthn/build:base,ghcr.io/${{ OWNER_LC }}/build:base
+          cache-to: ghcr.io/${OWNER_LC}/build:base
+          cache-from: ghcr.io/${OWNER_LC}/build:base
+          tags: lthn/build:base,ghcr.io/${OWNER_LC}/build:base
           file: images/compile.Dockerfile
 
