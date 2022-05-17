@@ -72,6 +72,6 @@ jobs:
           target: build-prep
           cache-to: ghcr.io/letheanvpn/build:server
           cache-from: ghcr.io/letheanvpn/build:server
-          tags: lthn/build:base,ghcr.io/letheanvpn/build:server
+          tags: lthn/build:server,ghcr.io/letheanvpn/build:server
           file: images/compile.Dockerfile
 
