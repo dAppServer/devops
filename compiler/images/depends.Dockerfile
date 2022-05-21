@@ -1,4 +1,4 @@
-FROM lthn/build:compile as build
+FROM ghcr.io/dappserver/compiler:compile as build
 
 ARG THREADS=1
 ARG BRANCH=master
