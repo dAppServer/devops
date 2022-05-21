@@ -1,4 +1,4 @@
-FROM ghcr.io/dappserver/compiler:compile as build
+FROM lthn/build:compile as build
 
 ARG BRANCH=master
 ARG BUILD=osx
