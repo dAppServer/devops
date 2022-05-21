@@ -1,13 +1,14 @@
 FROM lthn/build:compile as build
 
 ARG THREADS=1
-ARG BRANCH=main
+ARG BRANCH=master
 ARG BUILD=x86_64-w64-mingw32
 ARG GIT_REPO=https://github.com/Snider/blockchain.git
 ARG BUILD_PATH=/build/contrib/depends
 
 COPY --from=lthn/build:sources-linux / /cache/linux
 COPY --from=lthn/build:sources-win / /cache/win
+COPY --from=lthn/build:sources-osx / /cache/osx
 
 RUN git clone --depth 1 --branch ${BRANCH} ${GIT_REPO};
 
@@ -65,9 +66,8 @@ RUN make -j${THREADS} -C ${BUILD_PATH} HOST=${BUILD}
 
 CMD if [ -f "/build/chain/Makefile" ]; then \
         echo "Local code"; \
-        cp -R /build /lethean ; \
     fi && \
-    (cd /lethean && git submodule update --init --depth 1) && \
+    (cd /build && git submodule update --init --depth 1) && \
     make -j${BUILD_THREADS} -C /build depends target=${BUILD_TARGET} && \
     mkdir -p /build/dist/${BUILD_TARGET} && \
     mv -f /build/build/release/bin/* /build/dist/${BUILD_TARGET};

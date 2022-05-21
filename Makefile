@@ -37,16 +37,16 @@ lthn-libs-linux: ## Builds lthn/build:lthn-wallet-linux
 builder: ## Builds lthn/build
 	docker build -t lthn/build -f compiler/Dockerfile src
 
-compile: ## Builds lthn/build:images
+compile: ## Builds lthn/build:compile
 	docker build -t lthn/build:compile -f base.Dockerfile .
 
-sources-linux:
+sources-linux: ## Download Linux Source Code
 	docker build --build-arg BUILD=linux  -t lthn/build:sources-linux -f compiler/images/sources.Dockerfile compiler/src
 
-sources-win:
+sources-win: ## Download Windows Source Code
 	docker build --build-arg BUILD=win  -t lthn/build:sources-win -f compiler/images/sources.Dockerfile compiler/src
 
-sources-osx:
+sources-osx: ## Download macOS Source Code
 	docker build --build-arg BUILD=osx  -t lthn/build:sources-osx -f compiler/images/sources.Dockerfile compiler/src
 
 depends-x86_64-apple-darwin11: ## Macos
