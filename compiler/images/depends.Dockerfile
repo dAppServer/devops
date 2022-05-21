@@ -10,7 +10,7 @@ COPY --from=lthn/build:sources-linux / /cache/linux
 COPY --from=lthn/build:sources-win / /cache/win
 COPY --from=lthn/build:sources-osx / /cache/osx
 
-RUN git clone --depth 1 --branch ${BRANCH} ${GIT_REPO};
+RUN git clone --depth 1 --branch ${BRANCH} ${GIT_REPO} /build;
 
 ENV PACKAGE=""
 RUN case ${BUILD} in \
