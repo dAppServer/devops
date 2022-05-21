@@ -1,6 +1,6 @@
 site_name: Build Docs
-site_dir: compiler/docs/public
-docs_dir: docs
+site_dir: public
+docs_dir: compiler/docs
 theme:
   name: material
   custom_dir: compiler/docs/overrides
