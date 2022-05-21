@@ -11,7 +11,7 @@ on:
       - .github/workflows/compiler.yml
 
 env:
-  CI_REGISTRY_IMAGE: ghcr.io/dAppServer/compiler
+  CI_REGISTRY_IMAGE: ghcr.io/dappserver/compiler
 
 jobs:
   compile:
