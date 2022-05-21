@@ -38,9 +38,9 @@ jobs:
         with:
           push: true
           context: compiler/src
-          cache-to: $CI_REGISTRY_IMAGE:compile
-          cache-from: $CI_REGISTRY_IMAGE:compile
-          tags: lthn/build:compile,$CI_REGISTRY_IMAGE:compile
+          cache-to: ${{ env.CI_REGISTRY_IMAGE }}:compile
+          cache-from: ${{ env.CI_REGISTRY_IMAGE }}:compile
+          tags: lthn/build:compile,${{ env.CI_REGISTRY_IMAGE }}:compile
           file: compiler/images/compile.Dockerfile
   sources:
     runs-on: ubuntu-latest
@@ -73,9 +73,9 @@ jobs:
           context: compiler/src
           build-args:
             BUILD:${{ matrix.os }}
-          cache-to: $CI_REGISTRY_IMAGE:sources-${{ matrix.os }}
-          cache-from: $CI_REGISTRY_IMAGE:sources-${{ matrix.os }}
-          tags: lthn/build:sources-${{ matrix.os }},$CI_REGISTRY_IMAGE:sources-${{ matrix.os }}
+          cache-to: ${{ env.CI_REGISTRY_IMAGE }}:sources-${{ matrix.os }}
+          cache-from: ${{ env.CI_REGISTRY_IMAGE }}:sources-${{ matrix.os }}
+          tags: lthn/build:sources-${{ matrix.os }},${{ env.CI_REGISTRY_IMAGE}}:sources-${{ matrix.os }}
           file: compiler/images/sources.Dockerfile
 
   depends:
@@ -112,7 +112,7 @@ jobs:
           context: compiler/src
           build-args:
             BUILD:${{ matrix.os }}
-          cache-to: $CI_REGISTRY_IMAGE:depends-${{ matrix.os }}
-          cache-from: $CI_REGISTRY_IMAGE:depends-${{ matrix.os }}
-          tags: lthn/build:depends-${{ matrix.os }},$CI_REGISTRY_IMAGE:depends-${{ matrix.os }}
+          cache-to: $${{ env.CI_REGISTRY_IMAGE }}:depends-${{ matrix.os }}
+          cache-from: ${{ envCI_REGISTRY_IMAGE }}:depends-${{ matrix.os }}
+          tags: lthn/build:depends-${{ matrix.os }},${{ env.CI_REGISTRY_IMAGE }}:depends-${{ matrix.os }}
           file: compiler/images/depends.Dockerfile
