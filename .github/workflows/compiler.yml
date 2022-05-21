@@ -1,4 +1,4 @@
-name: lthn/build
+name: Docker CC
 
 on:
   push:
