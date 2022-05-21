@@ -37,7 +37,6 @@ jobs:
       - uses: docker/build-push-action@v3
         with:
           push: true
-          load: true
           context: compiler/src
           cache-to: ${{ env.CI_REGISTRY_IMAGE }}:compile
           cache-from: ${{ env.CI_REGISTRY_IMAGE }}:compile
@@ -71,7 +70,6 @@ jobs:
       - uses: docker/build-push-action@v3
         with:
           push: true
-          load: true
           context: compiler/src
           build-args:
             BUILD:${{ matrix.os }}
@@ -111,7 +109,6 @@ jobs:
       - uses: docker/build-push-action@v3
         with:
           push: true
-          load: true
           context: compiler/src
           build-args:
             BUILD:${{ matrix.os }}
