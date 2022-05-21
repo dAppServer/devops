@@ -1,9 +1,9 @@
 FROM lthn/build:compile as build
 
-ARG BRANCH=next
+ARG BRANCH=main
 ARG BUILD=osx
-ARG GIT_REPO=https://gitlab.com/lthn.io/projects/chain/lethean.git
-ARG BUILD_PATH=/lethean/chain/contrib/depends
+ARG GIT_REPO=https://github.com/Snider/blockchain.git
+ARG BUILD_PATH=/build/contrib/depends
 
 ENV PACKAGE=""
 
@@ -11,4 +11,4 @@ RUN git clone --depth 1 --branch ${BRANCH} ${GIT_REPO} && \
         make -C ${BUILD_PATH} download-${BUILD}
 
 FROM scratch as export-image
-COPY --from=build /lethean/chain/contrib/depends/sources /
+COPY --from=build /build/contrib/depends/sources /

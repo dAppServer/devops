@@ -13,7 +13,7 @@ WORKDIR /root
 
 FROM build-base as build-prep
 ##########################################################
-# Split download & compile to use dockers caching layers #
+# Split download & images to use dockers caching layers #
 ##########################################################
 
 # Download CMake

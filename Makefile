@@ -23,7 +23,7 @@ tool-gcc: ## Builds lthn/build:tool-gcc
 #lthn-chain-linux-shrink-ci: ## Gitlab task
 #	build-shrink/docker-slim build --http-probe=false --continue-after "exec" --show-plogs --show-clogs --show-blogs \
 #			--exec "git clone --recursive --depth 1 --branch next https://gitlab.com/lthn.io/projects/chain/lethean.git && cd lethean && make -j10 static" \
-#			--include-shell --dockerfile build-conf/lthn/compile/base.Dockerfile --tag "lthn/build:lthn-compile-linux" \
+#			--include-shell --dockerfile build-conf/lthn/images/compile.Dockerfile --tag "lthn/build:lthn-images-linux" \
 #			--include-path "/usr/share/cmake-3.16" --include-path "/usr/local" .
 
 
@@ -48,46 +48,46 @@ lthn-libs-linux: ## Builds lthn/build:lthn-wallet-linux
 #	docker build --no-cache -t lthn/build:base-ubuntu-16.04-test -f build-test/base-image/ubuntu.Dockerfile build-src
 
 builder: ## Builds lthn/build
-	docker build -t lthn/build -f Dockerfile build-src
+	docker build -t lthn/build -f compiler/Dockerfile src
 
-compile: ## Builds lthn/build:compile
+compile: ## Builds lthn/build:images
 	docker build -t lthn/build:compile -f base.Dockerfile .
 
 sources-linux:
-	docker build --build-arg BUILD=linux  -t lthn/build:sources-linux -f build-conf/compile/sources.Dockerfile build-src
+	docker build --build-arg BUILD=linux  -t lthn/build:sources-linux -f compiler/images/sources.Dockerfile ../../src
 
 sources-win:
-	docker build --build-arg BUILD=win  -t lthn/build:sources-win -f build-conf/compile/sources.Dockerfile build-src
+	docker build --build-arg BUILD=win  -t lthn/build:sources-win -f compiler/images/sources.Dockerfile ../../src
 
 sources-osx:
-	docker build --build-arg BUILD=osx  -t lthn/build:sources-osx -f build-conf/compile/sources.Dockerfile build-src
+	docker build --build-arg BUILD=osx  -t lthn/build:sources-osx -f compiler/images/sources.Dockerfile ../../src
 
 depends-x86_64-apple-darwin11: ## Macos
-	docker build --build-arg BUILD=x86_64-apple-darwin11  -t lthn/build:depends-x86_64-apple-darwin11 -f build-conf/compile/depends.Dockerfile build-src
+	docker build --build-arg BUILD=x86_64-apple-darwin11  -t lthn/build:depends-x86_64-apple-darwin11 -f compiler/images/depends.Dockerfile compiler/src
 
 depends-x86_64-unknown-freebsd: ## x86_64 Freebsd
-	docker build --build-arg BUILD=x86_64-unknown-freebsd -t lthn/build:depends-x86_64-unknown-freebsd -f build-conf/compile/depends.Dockerfile build-src
+	docker build --build-arg BUILD=x86_64-unknown-freebsd -t lthn/build:depends-x86_64-unknown-freebsd -f compiler/images/depends.Dockerfile compiler/src
 
 depends-x86_64-unknown-linux-gnu: ## x86_64 Linux
-	docker build --build-arg BUILD=x86_64-unknown-linux-gnu -t lthn/build:depends-x86_64-unknown-linux-gnu -f build-conf/compile/depends.Dockerfile build-src
+	docker build --build-arg BUILD=x86_64-unknown-linux-gnu -t lthn/build:depends-x86_64-unknown-linux-gnu -f compiler/images/depends.Dockerfile compiler/src
 
 depends-i686-pc-linux-gnu: ## i686 Linux
-	docker build --build-arg BUILD=i686-pc-linux-gnu -t lthn/build:depends-i686-pc-linux-gnu -f build-conf/compile/depends.Dockerfile build-src
+	docker build --build-arg BUILD=i686-pc-linux-gnu -t lthn/build:depends-i686-pc-linux-gnu -f compiler/images/depends.Dockerfile compiler/src
 
 depends-x86_64-w64-mingw32: ## Windows 64
-	docker build --build-arg BUILD=x86_64-w64-mingw32 -t lthn/build:depends-x86_64-w64-mingw32 -f build-conf/compile/depends.Dockerfile build-src
+	docker build --build-arg BUILD=x86_64-w64-mingw32 -t lthn/build:depends-x86_64-w64-mingw32 -f compiler/images/depends.Dockerfile compiler/src
 
 depends-i686-w64-mingw32: ## Windows 32
-	docker build --build-arg BUILD=i686-w64-mingw32 -t lthn/build:depends-i686-w64-mingw32 -f build-conf/compile/depends.Dockerfile build-src
+	docker build --build-arg BUILD=i686-w64-mingw32 -t lthn/build:depends-i686-w64-mingw32 -f compiler/images/depends.Dockerfile compiler/src
 
 depends-arm-linux-gnueabihf: ## ARM 32
-	docker build --build-arg BUILD=arm-linux-gnueabihf -t lthn/build:depends-arm-linux-gnueabihf -f build-conf/compile/depends.Dockerfile build-src
+	docker build --build-arg BUILD=arm-linux-gnueabihf -t lthn/build:depends-arm-linux-gnueabihf -f compiler/images/depends.Dockerfile compiler/src
 
 depends-aarch64-linux-gnu: ## ARM 64
-	docker build --build-arg BUILD=aarch64-linux-gnu -t lthn/build:depends-aarch64-linux-gnu -f build-conf/compile/depends.Dockerfile build-src
+	docker build --build-arg BUILD=aarch64-linux-gnu -t lthn/build:depends-aarch64-linux-gnu -f compiler/images/depends.Dockerfile compiler/src
 
 depends-riscv64-linux-gnu: ## riscv64
-	docker build --build-arg=BUILD=riscv64-linux-gnu -t lthn/build:depends-riscv64-linux-gnu -f build-conf/compile/depends.Dockerfile build-src
+	docker build --build-arg=BUILD=riscv64-linux-gnu -t lthn/build:depends-riscv64-linux-gnu -f compiler/images/depends.Dockerfile compiler/src
 
 wallet-linux-base:
 	docker build -t lthn/build:wallet-linux-base -f build-conf/wallet/linux/base.Dockerfile .

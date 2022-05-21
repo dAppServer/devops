@@ -1,4 +1,4 @@
-FROM ubuntu:18.04 as base
+FROM ubuntu:20.04 as base
 # This sets the build target, you can pick from:
 # 64: x86_64-unknown-linux-gnu, x86_64-unknown-freebsd, x86_64-w64-mingw32
 # 32: i686-pc-linux-gnu, i686-w64-mingw32, arm-linux-gnueabihf
