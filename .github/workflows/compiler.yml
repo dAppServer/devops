@@ -34,7 +34,7 @@ jobs:
           docker push "$CI_REGISTRY_IMAGE:compile"
   sources:
     runs-on: ubuntu-latest
-    needs: base
+    needs: compile
     strategy:
       matrix:
         os: [osx, linux, win]
