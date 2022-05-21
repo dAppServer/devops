@@ -113,6 +113,6 @@ jobs:
           build-args:
             BUILD:${{ matrix.os }}
           cache-to: $${{ env.CI_REGISTRY_IMAGE }}:depends-${{ matrix.os }}
-          cache-from: ${{ envCI_REGISTRY_IMAGE }}:depends-${{ matrix.os }}
+          cache-from: ${{ env.CI_REGISTRY_IMAGE }}:depends-${{ matrix.os }}
           tags: lthn/build:depends-${{ matrix.os }},${{ env.CI_REGISTRY_IMAGE }}:depends-${{ matrix.os }}
           file: compiler/images/depends.Dockerfile
