@@ -8,23 +8,10 @@ clean: ## Docker System Prune
 	docker system prune --all
 
 build: ## Builds lthn/build
-	docker build --no-cache -t lthn/build:chain -f images/compile.Dockerfile build-context
+	docker build -t lthn/build:compile -f compiler/images/compile.Dockerfile compiler/src
 
 tool-gcc: ## Builds lthn/build:tool-gcc
 	docker build --no-cache -t lthn/build:tool-gcc -f .build/conf/tool/gcc/build.Dockerfile .build/src
-
-#lthn-chain-linux-shrink: ## Builds a optimised build image
-#	docker run --rm -v /var/run/docker.sock:/var/run/docker.sock dslim/docker-slim build \
-#			--continue-after "exec" --http-probe-off --pull --target "lthn/build:lthn-chain-linux" \
-#			--exec "git clone https://gitlab.com/lthn.io/projects/chain/lethean.git && cd lethean && make -j4 release-static && cd .. && rm -rf lethean" \
-#			--show-plogs --show-clogs --show-blogs --tag "lthn/build:lthn-chain-linux" \
-#			--include-path "/usr/share/cmake-3.5"
-
-#lthn-chain-linux-shrink-ci: ## Gitlab task
-#	build-shrink/docker-slim build --http-probe=false --continue-after "exec" --show-plogs --show-clogs --show-blogs \
-#			--exec "git clone --recursive --depth 1 --branch next https://gitlab.com/lthn.io/projects/chain/lethean.git && cd lethean && make -j10 static" \
-#			--include-shell --dockerfile build-conf/lthn/images/compile.Dockerfile --tag "lthn/build:lthn-images-linux" \
-#			--include-path "/usr/share/cmake-3.16" --include-path "/usr/local" .
 
 
 lthn-libs-linux: ## Builds lthn/build:lthn-wallet-linux
@@ -54,13 +41,13 @@ compile: ## Builds lthn/build:images
 	docker build -t lthn/build:compile -f base.Dockerfile .
 
 sources-linux:
-	docker build --build-arg BUILD=linux  -t lthn/build:sources-linux -f compiler/images/sources.Dockerfile ../../src
+	docker build --build-arg BUILD=linux  -t lthn/build:sources-linux -f compiler/images/sources.Dockerfile compiler/src
 
 sources-win:
-	docker build --build-arg BUILD=win  -t lthn/build:sources-win -f compiler/images/sources.Dockerfile ../../src
+	docker build --build-arg BUILD=win  -t lthn/build:sources-win -f compiler/images/sources.Dockerfile compiler/src
 
 sources-osx:
-	docker build --build-arg BUILD=osx  -t lthn/build:sources-osx -f compiler/images/sources.Dockerfile ../../src
+	docker build --build-arg BUILD=osx  -t lthn/build:sources-osx -f compiler/images/sources.Dockerfile compiler/src
 
 depends-x86_64-apple-darwin11: ## Macos
 	docker build --build-arg BUILD=x86_64-apple-darwin11  -t lthn/build:depends-x86_64-apple-darwin11 -f compiler/images/depends.Dockerfile compiler/src
@@ -90,44 +77,57 @@ depends-riscv64-linux-gnu: ## riscv64
 	docker build --build-arg=BUILD=riscv64-linux-gnu -t lthn/build:depends-riscv64-linux-gnu -f compiler/images/depends.Dockerfile compiler/src
 
 wallet-linux-base:
-	docker build -t lthn/build:wallet-linux-base -f build-conf/wallet/linux/base.Dockerfile .
+	docker build -t lthn/build:wallet-linux-base -f build-conf/wallet/linux/base.Dockerfile compiler/src
 
 wallet-lib-linux-utils:
-	docker build --build-arg THREADS=20 -t=lthn/build:wallet-lib-linux-utils -f=build-conf/wallet/linux/utils.Dockerfile .
+	docker build --build-arg THREADS=20 -t=lthn/build:wallet-lib-linux-utils -f=build-conf/wallet/linux/utils.Dockerfile compiler/src
 
 wallet-lib-linux-boost:
-	docker build --build-arg THREADS=20 -t=lthn/build:wallet-lib-linux-boost -f=build-conf/wallet/linux/boost.Dockerfile .
+	docker build --build-arg THREADS=20 -t=lthn/build:wallet-lib-linux-boost -f=build-conf/wallet/linux/boost.Dockerfile compiler/src
 
 wallet-lib-linux-fontconfig:
-	docker build --build-arg THREADS=20 -t=lthn/build:wallet-lib-linux-fontconfig -f=build-conf/wallet/linux/fontconfig.Dockerfile .
+	docker build --build-arg THREADS=20 -t=lthn/build:wallet-lib-linux-fontconfig -f=build-conf/wallet/linux/fontconfig.Dockerfile compiler/src
 
 wallet-lib-linux-cmake:
-	docker build --build-arg THREADS=20 -t=lthn/build:wallet-lib-linux-cmake -f=build-conf/wallet/linux/cmake.Dockerfile .
+	docker build --build-arg THREADS=20 -t=lthn/build:wallet-lib-linux-cmake -f=build-conf/wallet/linux/cmake.Dockerfile compiler/src
 
 wallet-lib-linux-libx:
-	docker build --build-arg THREADS=20 -t=lthn/build:wallet-lib-linux-libx -f=build-conf/wallet/linux/libx.Dockerfile .
+	docker build --build-arg THREADS=20 -t=lthn/build:wallet-lib-linux-libx -f=build-conf/wallet/linux/libx.Dockerfile compiler/src
 
 wallet-windows-base:
-	docker build --build-arg THREADS=20 -t=lthn/build:wallet-windows-base -f=build-conf/wallet/windows/base.Dockerfile .
+	docker build --build-arg THREADS=20 -t=lthn/build:wallet-windows-base -f=build-conf/wallet/windows/base.Dockerfile compiler/src
 
 wallet-lib-windows-cmake:
-	docker build --build-arg THREADS=20 -t=lthn/build:wallet-lib-windows-cmake -f=build-conf/wallet/windows/cmake.Dockerfile .
+	docker build --build-arg THREADS=20 -t=lthn/build:wallet-lib-windows-cmake -f=build-conf/wallet/windows/cmake.Dockerfile compiler/src
 
 wallet-lib-windows-libx:
-	docker build --build-arg THREADS=20 -t=lthn/build:wallet-lib-windows-libx -f=build-conf/wallet/windows/libx.Dockerfile .
+	docker build --build-arg THREADS=20 -t=lthn/build:wallet-lib-windows-libx -f=build-conf/wallet/windows/libx.Dockerfile compiler/src
 
 wallet-lib-windows-qt:
-	docker build --build-arg THREADS=20 -t=lthn/build:wallet-lib-windows-qt -f=build-conf/wallet/windows/qt.Dockerfile .
+	docker build --build-arg THREADS=20 -t=lthn/build:wallet-lib-windows-qt -f=build-conf/wallet/windows/qt.Dockerfile compiler/src
 
 
 wallet-linux:
-	docker build --build-arg THREADS=20 -t=lthn/build:wallet-linux -f=build-conf/wallet/linux.Dockerfile .
+	docker build --build-arg THREADS=20 -t=lthn/build:wallet-linux -f=build-conf/wallet/linux.Dockerfile compiler/src
 
 wallet-windows:
-	docker build --build-arg THREADS=20 -t=lthn/build:wallet-windows -f=build-conf/wallet/windows.Dockerfile .
+	docker build --build-arg THREADS=20 -t=lthn/build:wallet-windows -f=build-conf/wallet/windows.Dockerfile compiler/src
 
 wallet-android:
-	docker build -t lthn/build:wallet-android -f build-conf/wallet/android.Dockerfile .
+	docker build -t lthn/build:wallet-android -f build-conf/wallet/android.Dockerfile compiler/src
+
+#lthn-chain-linux-shrink: ## Builds a optimised build image
+#	docker run --rm -v /var/run/docker.sock:/var/run/docker.sock dslim/docker-slim build \
+#			--continue-after "exec" --http-probe-off --pull --target "lthn/build:lthn-chain-linux" \
+#			--exec "git clone https://gitlab.com/lthn.io/projects/chain/lethean.git && cd lethean && make -j4 release-static && cd .. && rm -rf lethean" \
+#			--show-plogs --show-clogs --show-blogs --tag "lthn/build:lthn-chain-linux" \
+#			--include-path "/usr/share/cmake-3.5"
+
+#lthn-chain-linux-shrink-ci: ## Gitlab task
+#	build-shrink/docker-slim build --http-probe=false --continue-after "exec" --show-plogs --show-clogs --show-blogs \
+#			--exec "git clone --recursive --depth 1 --branch next https://gitlab.com/lthn.io/projects/chain/lethean.git && cd lethean && make -j10 static" \
+#			--include-shell --dockerfile build-conf/lthn/images/compile.Dockerfile --tag "lthn/build:lthn-images-linux" \
+#			--include-path "/usr/share/cmake-3.16" --include-path "/usr/local" .
 
 
 help: ## Show this help

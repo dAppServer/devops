@@ -47,6 +47,7 @@ jobs:
     needs: compile
 
     strategy:
+      max-parallel: 1
       matrix:
         os: [osx, linux, win]
     steps:
