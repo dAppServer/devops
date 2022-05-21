@@ -113,7 +113,7 @@ jobs:
           push: true
           context: compiler/src
           build-args:
-            BUILD=${{ matrix.arch }}
+            BUILD:{{ matrix.arch }}
           cache-to: ${{ env.CI_REGISTRY_IMAGE }}:depends-${{ matrix.arch }}
           cache-from: ${{ env.CI_REGISTRY_IMAGE }}:depends-${{ matrix.arch }}
           tags: lthn/build:depends-${{ matrix.arch }},${{ env.CI_REGISTRY_IMAGE }}:depends-${{ matrix.arch }}
