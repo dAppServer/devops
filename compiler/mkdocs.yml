@@ -1,10 +1,10 @@
 site_name: Build Docs
 site_dir: public
-docs_dir: compiler/docs
+docs_dir: docs
 theme:
   name: material
-  custom_dir: compiler/docs/overrides
-  favicon: compiler/docs/img/favicon.ico
+  custom_dir: docs/overrides
+  favicon: docs/img/favicon.ico
   features:
     - toc.integrate
   palette:
