@@ -1,4 +1,4 @@
-name: Docker CC
+name: Builder Image
 
 on:
   push:
@@ -9,9 +9,6 @@ on:
     paths:
       - compiler/images/container.Dockerfile
       - .github/workflows/container.yml
-
-env:
-  CI_REGISTRY_IMAGE: ghcr.io/dappserver/compiler
 
 jobs:
   build:
@@ -46,6 +43,6 @@ jobs:
           cache-from: type=gha
           cache-to: type=gha,mode=max
           target: ${{ matrix.target }}
-          tags: lthn/build:${{ matrix.target }}
+          tags: lthn/build:libs-${{ matrix.target }}
           file: compiler/images/container.Dockerfile
 
