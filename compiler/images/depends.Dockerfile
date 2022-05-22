@@ -3,7 +3,7 @@ FROM lthn/build:compile as build
 ARG THREADS=2
 ARG BRANCH=master
 ARG BUILD=x86_64-unknown-linux-gnu
-ARG GIT_REPO=https://github.com/dAppdNode/itw3.git
+ARG GIT_REPO=https://github.com/dAppServer/itw3.git
 ARG BUILD_PATH=/build/contrib/depends
 
 COPY --from=lthn/build:sources-linux / /cache/linux
