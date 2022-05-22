@@ -55,7 +55,7 @@ depends-x86_64-unknown-freebsd: ## x86_64 Freebsd
 	docker build --build-arg BUILD=x86_64-unknown-freebsd -t lthn/build:depends-x86_64-unknown-freebsd -f compiler/images/depends.Dockerfile compiler/src
 
 depends-x86_64-unknown-linux-gnu: ## x86_64 Linux
-	docker build --build-arg BUILD=x86_64-unknown-linux-gnu -t lthn/build:depends-x86_64-unknown-linux-gnu -f compiler/images/depends.Dockerfile compiler/src
+	docker build --build-arg THREADS=6 --build-arg BUILD=x86_64-unknown-linux-gnu -t lthn/build:depends-x86_64-unknown-linux-gnu -f compiler/images/depends.Dockerfile compiler/src
 
 depends-i686-pc-linux-gnu: ## i686 Linux
 	docker build --build-arg BUILD=i686-pc-linux-gnu -t lthn/build:depends-i686-pc-linux-gnu -f compiler/images/depends.Dockerfile compiler/src

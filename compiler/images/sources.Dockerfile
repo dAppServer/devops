@@ -1,3 +1,4 @@
+# syntax=docker/dockerfile:1
 FROM lthn/build:compile as build
 
 ARG BRANCH=master
