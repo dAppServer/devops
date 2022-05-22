@@ -1,119 +1,88 @@
-.PHONY: all help clean build tool-gcc lthn-chain-linux lthn-wallet-linux shrink-chain-build
-.PHONY: base-ubuntu base-ubuntu-16.04 base-ubuntu-18.04 base-ubuntu-20.04
 
+COMMON_PROPS:=--platform=linux/amd64 --load compiler/src
 all: help
 
 clean: ## Docker System Prune
 	docker system prune --all
 
-build: ## Builds lthn/build
-	docker build -t lthn/build:compile -f compiler/images/compile.Dockerfile compiler/src
-
-tool-gcc: ## Builds lthn/build:tool-gcc
-	docker build --no-cache -t lthn/build:tool-gcc -f .build/conf/tool/gcc/build.Dockerfile .build/src
-
-
-lthn-libs-linux: ## Builds lthn/build:lthn-wallet-linux
-	docker build --no-cache -t lthn/build:lthn-libs-linux -f build-conf/lthn/libs/linux.Dockerfile $(dir)/.build/src
-
-
-#base-ubuntu: base-ubuntu-20.04 ## Builds lthn/build:base-ubuntu (20.04)
-#	echo "made base-ubuntu-16.04, base-ubuntu-18.04 base-ubuntu-20.04"
-#	docker tag lthn/build:base-ubuntu-20.04 lthn/build:base-ubuntu
-#
-#base-ubuntu-16-04: ## Builds lthn/build:base-ubuntu-16-04
-#	docker build --no-cache -t lthn/build:base-ubuntu-16-04 -f build-conf/base/ubuntu/16-04/build.Dockerfile build-src
-#
-#base-ubuntu-18-04: ## Builds lthn/build:base-ubuntu-18-04
-#	docker build --no-cache -t lthn/build:base-ubuntu-18-04 -f build-conf/base/ubuntu/18-04/build.Dockerfile build-src
-#
-#base-ubuntu-20-04: ## Builds lthn/build:base-ubuntu-20-04
-#	docker build --no-cache -t lthn/build:base-ubuntu-20-04 -f build-conf/base/ubuntu/20-04/build.Dockerfile build-src
-#
-#base-ubuntu-16.04-test: ## Builds lthn/build:base-ubuntu-16.04-test
-#	docker build --no-cache -t lthn/build:base-ubuntu-16.04-test -f build-test/base-image/ubuntu.Dockerfile build-src
-
-builder: ## Builds lthn/build
-	docker build -t lthn/build -f compiler/Dockerfile src
-
 compile: ## Builds lthn/build:compile
-	docker build -t lthn/build:compile -f base.Dockerfile .
+	docker build -t lthn/build:compile --cache-from=lthn/build:compile -f compiler/images/compile.Dockerfile ${COMMON_PROPS}
 
 sources-linux: ## Download Linux Source Code
-	docker build --build-arg BUILD=linux  -t lthn/build:sources-linux -f compiler/images/sources.Dockerfile compiler/src
+	docker build --build-arg BUILD=linux --cache-from=lthn/build:sources-linux -t lthn/build:sources-linux -f compiler/images/sources.Dockerfile  ${COMMON_PROPS}
 
 sources-win: ## Download Windows Source Code
-	docker build --build-arg BUILD=win  -t lthn/build:sources-win -f compiler/images/sources.Dockerfile compiler/src
+	docker build --build-arg BUILD=win --cache-from=lthn/build:sources-win -t lthn/build:sources-win -f compiler/images/sources.Dockerfile  ${COMMON_PROPS}
 
 sources-osx: ## Download macOS Source Code
-	docker build --build-arg BUILD=osx  -t lthn/build:sources-osx -f compiler/images/sources.Dockerfile compiler/src
+	docker build --build-arg BUILD=osx --cache-from=lthn/build:sources-osx -t lthn/build:sources-osx -f compiler/images/sources.Dockerfile  ${COMMON_PROPS}
 
 depends-x86_64-apple-darwin11: ## Macos
-	docker build --build-arg BUILD=x86_64-apple-darwin11  -t lthn/build:depends-x86_64-apple-darwin11 -f compiler/images/depends.Dockerfile compiler/src
+	docker build --build-arg BUILD=x86_64-apple-darwin11 --cache-from=lthn/build:depends-x86_64-apple-darwin11 -t lthn/build:depends-x86_64-apple-darwin11 -f compiler/images/depends.Dockerfile  ${COMMON_PROPS}
 
 depends-x86_64-unknown-freebsd: ## x86_64 Freebsd
-	docker build --build-arg BUILD=x86_64-unknown-freebsd -t lthn/build:depends-x86_64-unknown-freebsd -f compiler/images/depends.Dockerfile compiler/src
+	docker build --build-arg BUILD=x86_64-unknown-freebsd --cache-from=lthn/build:depends-x86_64-unknown-freebsd -t lthn/build:depends-x86_64-unknown-freebsd -f compiler/images/depends.Dockerfile  ${COMMON_PROPS}
 
 depends-x86_64-unknown-linux-gnu: ## x86_64 Linux
-	docker build --build-arg THREADS=6 --build-arg BUILD=x86_64-unknown-linux-gnu -t lthn/build:depends-x86_64-unknown-linux-gnu -f compiler/images/depends.Dockerfile compiler/src
+	docker build --build-arg BUILD=x86_64-unknown-linux-gnu --cache-from=lthn/build:depends-x86_64-unknown-linux-gnu -t lthn/build:depends-x86_64-unknown-linux-gnu -f compiler/images/depends.Dockerfile  ${COMMON_PROPS}
 
 depends-i686-pc-linux-gnu: ## i686 Linux
-	docker build --build-arg BUILD=i686-pc-linux-gnu -t lthn/build:depends-i686-pc-linux-gnu -f compiler/images/depends.Dockerfile compiler/src
+	docker build --build-arg BUILD=i686-pc-linux-gnu --cache-from=lthn/build:depends-i686-pc-linux-gnu -t lthn/build:depends-i686-pc-linux-gnu -f compiler/images/depends.Dockerfile  ${COMMON_PROPS}
 
 depends-x86_64-w64-mingw32: ## Windows 64
-	docker build --build-arg BUILD=x86_64-w64-mingw32 -t lthn/build:depends-x86_64-w64-mingw32 -f compiler/images/depends.Dockerfile compiler/src
+	docker build --build-arg BUILD=x86_64-w64-mingw32 --cache-from=lthn/build:depends-x86_64-w64-mingw32 -t lthn/build:depends-x86_64-w64-mingw32 -f compiler/images/depends.Dockerfile  ${COMMON_PROPS}
 
 depends-i686-w64-mingw32: ## Windows 32
-	docker build --build-arg BUILD=i686-w64-mingw32 -t lthn/build:depends-i686-w64-mingw32 -f compiler/images/depends.Dockerfile compiler/src
+	docker build --build-arg BUILD=i686-w64-mingw32 --cache-from=lthn/build:depends-i686-w64-mingw32 -t lthn/build:depends-i686-w64-mingw32 -f compiler/images/depends.Dockerfile  ${COMMON_PROPS}
 
 depends-arm-linux-gnueabihf: ## ARM 32
-	docker build --build-arg BUILD=arm-linux-gnueabihf -t lthn/build:depends-arm-linux-gnueabihf -f compiler/images/depends.Dockerfile compiler/src
+	docker build --build-arg BUILD=arm-linux-gnueabihf --cache-from=lthn/build:depends-arm-linux-gnueabihf -t lthn/build:depends-arm-linux-gnueabihf -f compiler/images/depends.Dockerfile  ${COMMON_PROPS}
 
 depends-aarch64-linux-gnu: ## ARM 64
-	docker build --build-arg BUILD=aarch64-linux-gnu -t lthn/build:depends-aarch64-linux-gnu -f compiler/images/depends.Dockerfile compiler/src
+	docker build --build-arg BUILD=aarch64-linux-gnu --cache-from=lthn/build:depends-aarch64-linux-gnu -t lthn/build:depends-aarch64-linux-gnu -f compiler/images/depends.Dockerfile  ${COMMON_PROPS}
 
 depends-riscv64-linux-gnu: ## riscv64
-	docker build --build-arg=BUILD=riscv64-linux-gnu -t lthn/build:depends-riscv64-linux-gnu -f compiler/images/depends.Dockerfile compiler/src
+	docker build --build-arg=BUILD=riscv64-linux-gnu --cache-from=lthn/build:depends-riscv64-linux-gnu -t lthn/build:depends-riscv64-linux-gnu -f compiler/images/depends.Dockerfile  ${COMMON_PROPS}
 
 wallet-linux-base:
-	docker build -t lthn/build:wallet-linux-base -f build-conf/wallet/linux/base.Dockerfile compiler/src
+	docker build --cache-from=lthn/build:wallet-linux-base   -t lthn/build:wallet-linux-base -f build-conf/wallet/linux/base.Dockerfile  ${COMMON_PROPS}
 
 wallet-lib-linux-utils:
-	docker build --build-arg THREADS=20 -t=lthn/build:wallet-lib-linux-utils -f=build-conf/wallet/linux/utils.Dockerfile compiler/src
+	docker build --cache-from=lthn/build:wallet-lib-linux-utils -t=lthn/build:wallet-lib-linux-utils -f=build-conf/wallet/linux/utils.Dockerfile  ${COMMON_PROPS}
 
 wallet-lib-linux-boost:
-	docker build --build-arg THREADS=20 -t=lthn/build:wallet-lib-linux-boost -f=build-conf/wallet/linux/boost.Dockerfile compiler/src
+	docker build --cache-from=lthn/build:wallet-lib-linux-boost   -t=lthn/build:wallet-lib-linux-boost -f=build-conf/wallet/linux/boost.Dockerfile  ${COMMON_PROPS}
 
 wallet-lib-linux-fontconfig:
-	docker build --build-arg THREADS=20 -t=lthn/build:wallet-lib-linux-fontconfig -f=build-conf/wallet/linux/fontconfig.Dockerfile compiler/src
+	docker build --cache-from=lthn/build:wallet-lib-linux-fontconfig   -t=lthn/build:wallet-lib-linux-fontconfig -f=build-conf/wallet/linux/fontconfig.Dockerfile  ${COMMON_PROPS}
 
 wallet-lib-linux-cmake:
-	docker build --build-arg THREADS=20 -t=lthn/build:wallet-lib-linux-cmake -f=build-conf/wallet/linux/cmake.Dockerfile compiler/src
+	docker build --cache-from=lthn/build:wallet-lib-linux-cmake   -t=lthn/build:wallet-lib-linux-cmake -f=build-conf/wallet/linux/cmake.Dockerfile  ${COMMON_PROPS}
 
 wallet-lib-linux-libx:
-	docker build --build-arg THREADS=20 -t=lthn/build:wallet-lib-linux-libx -f=build-conf/wallet/linux/libx.Dockerfile compiler/src
+	docker build --cache-from=lthn/build:wallet-lib-linux-libx   -t=lthn/build:wallet-lib-linux-libx -f=build-conf/wallet/linux/libx.Dockerfile  ${COMMON_PROPS}
 
 wallet-windows-base:
-	docker build --build-arg THREADS=20 -t=lthn/build:wallet-windows-base -f=build-conf/wallet/windows/base.Dockerfile compiler/src
+	docker build --cache-from=lthn/build:wallet-windows-base   -t=lthn/build:wallet-windows-base -f=build-conf/wallet/windows/base.Dockerfile  ${COMMON_PROPS}
 
 wallet-lib-windows-cmake:
-	docker build --build-arg THREADS=20 -t=lthn/build:wallet-lib-windows-cmake -f=build-conf/wallet/windows/cmake.Dockerfile compiler/src
+	docker build --cache-from=lthn/build:wallet-lib-windows-cmake   -t=lthn/build:wallet-lib-windows-cmake -f=build-conf/wallet/windows/cmake.Dockerfile  ${COMMON_PROPS}
 
 wallet-lib-windows-libx:
-	docker build --build-arg THREADS=20 -t=lthn/build:wallet-lib-windows-libx -f=build-conf/wallet/windows/libx.Dockerfile compiler/src
+	docker build --cache-from=lthn/build:wallet-lib-windows-libx   -t=lthn/build:wallet-lib-windows-libx -f=build-conf/wallet/windows/libx.Dockerfile  ${COMMON_PROPS}
 
 wallet-lib-windows-qt:
-	docker build --build-arg THREADS=20 -t=lthn/build:wallet-lib-windows-qt -f=build-conf/wallet/windows/qt.Dockerfile compiler/src
+	docker build --cache-from=lthn/build:wallet-lib-windows-qt   -t=lthn/build:wallet-lib-windows-qt -f=build-conf/wallet/windows/qt.Dockerfile  ${COMMON_PROPS}
 
 
 wallet-linux:
-	docker build --build-arg THREADS=20 -t=lthn/build:wallet-linux -f=build-conf/wallet/linux.Dockerfile compiler/src
+	docker build --cache-from=lthn/build:wallet-linux   -t=lthn/build:wallet-linux -f=build-conf/wallet/linux.Dockerfile  ${COMMON_PROPS}
 
 wallet-windows:
-	docker build --build-arg THREADS=20 -t=lthn/build:wallet-windows -f=build-conf/wallet/windows.Dockerfile compiler/src
+	docker build --cache-from=lthn/build:wallet-windows   -t=lthn/build:wallet-windows -f=build-conf/wallet/windows.Dockerfile  ${COMMON_PROPS}
 
 wallet-android:
-	docker build -t lthn/build:wallet-android -f build-conf/wallet/android.Dockerfile compiler/src
+	docker build --cache-from=lthn/build:wallet-android   -t lthn/build:wallet-android -f build-conf/wallet/android.Dockerfile  ${COMMON_PROPS}
 
 #lthn-chain-linux-shrink: ## Builds a optimised build image
 #	docker run --rm -v /var/run/docker.sock:/var/run/docker.sock dslim/docker-slim build \

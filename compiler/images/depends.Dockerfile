@@ -7,9 +7,9 @@ ARG BUILD=x86_64-w64-mingw32
 ARG GIT_REPO=https://github.com/Snider/blockchain.git
 ARG BUILD_PATH=/build/contrib/depends
 
-COPY --from=lthn/build:sources-linux / /cache/linux
-COPY --from=lthn/build:sources-win / /cache/win
-COPY --from=lthn/build:sources-osx / /cache/osx
+COPY --from=lthn/build:sources-linux /output.tar.gz /cache/linux
+COPY --from=lthn/build:sources-win /output.tar.gz /cache/win
+COPY --from=lthn/build:sources-osx /output.tar.gz /cache/osx
 
 ## Clone depends for the project
 RUN  if [ !-f "/build/Makefile" ]; then \
@@ -68,17 +68,27 @@ ENV CCACHE_TEMPDIR=/tmp/.ccache-temp
 ENV CCACHE_COMPRESS=1
 ENV CCACHE_DIR=/ccache
 
-RUN make -j${THREADS} -C ${BUILD_PATH} HOST=${BUILD}
+RUN pwd && mem_avail_gb=$(( $(getconf _AVPHYS_PAGES) * $(getconf PAGE_SIZE) / (1024 * 1024 * 1024) )) &&\
+            make_job_slots=$(( $mem_avail_gb < 4 ? 1 : $mem_avail_gb / 4)) &&\
+            echo make_job_slots=$make_job_slots &&\
+            set -x &&\
+            make -j $make_job_slots -C ${BUILD_PATH} HOST=${BUILD}
 
-RUN  if [ -f "/build/Makefile" ]; then \
+RUN pwd && mem_avail_gb=$(( $(getconf _AVPHYS_PAGES) * $(getconf PAGE_SIZE) / (1024 * 1024 * 1024) )) &&\
+        make_job_slots=$(( $mem_avail_gb < 4 ? 1 : $mem_avail_gb / 4)) &&\
+        echo make_job_slots=$make_job_slots &&\
+        set -x &&\
+        if [ -f "/build/Makefile" ]; then \
          (cd /build && git submodule update --init --depth 1); \
     fi && \
-    make -j${BUILD_THREADS} depends root=/depends target=${BUILD_TARGET} && \
+    make -j $make_job_slots depends target=${BUILD_TARGET} && \
     mkdir -p /build/dist/${BUILD_TARGET} && \
     mv -f /build/build/release/bin/* /build/dist/${BUILD_TARGET};
 
 ONBUILD ADD --from=builder /depends/built /build/contrib/depends/built
 
-
-
-CMD make depends -j${THREADS} root=/depends target=${BUILD_TARGET} -j${THREADS}
+CMD pwd && mem_avail_gb=$(( $(getconf _AVPHYS_PAGES) * $(getconf PAGE_SIZE) / (1024 * 1024 * 1024) )) &&\
+            make_job_slots=$(( $mem_avail_gb < 4 ? 1 : $mem_avail_gb / 4)) &&\
+            echo make_job_slots=$make_job_slots &&\
+            set -x &&\
+            make depends -j $make_job_slots target=${BUILD_TARGET}
