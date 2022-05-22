@@ -17,11 +17,9 @@ jobs:
       fail-fast: false
       matrix:
         target: [
-          x86_64-unknown-linux-gnu, x86_64-apple-darwin, x86_64-apple-darwin11, x86_64-apple-darwin,
-          x86_64-pc-linux-gnu, i686-pc-linux-gnu, x86_64-unknown-freebsd, x86_64-w64-mingw32,
-          x86_64-apple-darwin, aarch64-linux-gnu, arm-linux-gnueabihf, powerpc64-linux-gnu,
-          powerpc64le-linux-gnu, riscv32-linux-gnu, riscv64-linux-gnu, s390x-linux-gnu,
-          aarch64-linux-android, i686-linux-android, armv7a-linux-android
+          i686-pc-linux-gnu, i686-linux-gnu, i686-w64-mingw32,
+          x86_64-apple-darwin11, x86_64-w64-mingw32, x86_64-linux-gnu,  x86_64-unknown-freebsd,
+          arm-linux-gnueabihf, aarch64-linux-gnu, riscv64-linux-gnu, arm-linux-android, aarch64-linux-android
         ]
     steps:
       - name: Cancel Previous Runs
