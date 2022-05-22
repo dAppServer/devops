@@ -16,4 +16,4 @@ RUN git clone --depth 1 --branch ${BRANCH} ${GIT_REPO} /build && \
         make -j $make_job_slots -C ${BUILD_PATH} download-${BUILD}
 
 FROM scratch as export-image
-COPY --from=build /build/contrib/depends/sources /output.tar.gz
+COPY --from=build /build/contrib/depends/sources /

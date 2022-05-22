@@ -7,14 +7,14 @@ ARG BUILD=x86_64-w64-mingw32
 ARG GIT_REPO=https://github.com/Snider/blockchain.git
 ARG BUILD_PATH=/build/contrib/depends
 
-COPY --from=lthn/build:sources-linux /output.tar.gz /cache/linux
-COPY --from=lthn/build:sources-win /output.tar.gz /cache/win
-COPY --from=lthn/build:sources-osx /output.tar.gz /cache/osx
+COPY --from=lthn/build:sources-linux / /cache/linux
+COPY --from=lthn/build:sources-win / /cache/win
+COPY --from=lthn/build:sources-osx / /cache/osx
 
 ## Clone depends for the project
 RUN  if [ !-f "/build/Makefile" ]; then \
             git clone --depth 1 --recursive --branch ${BRANCH} ${GIT_REPO} /src \
-            && cp -R /src/contrib/depends ${BUILD_PATH}; \
+            && cp -R /build/contrib/depends ${BUILD_PATH}; \
         fi
 
 WORKDIR /build
