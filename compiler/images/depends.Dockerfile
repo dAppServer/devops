@@ -14,7 +14,7 @@ RUN git clone --depth 1 --branch ${BRANCH} ${GIT_REPO} /build;
 
 ENV PACKAGE=""
 RUN case ${BUILD} in \
-    x86_64-linux-gnu) \
+    x86_64-unknown-linux-gnu) \
      PACKAGE="gperf cmake python3-zmq libdbus-1-dev libharfbuzz-dev"; \
       cp -r /cache/linux /build/contrib/depends/sources; \
     ;; \
@@ -23,7 +23,7 @@ RUN case ${BUILD} in \
      cp -r /cache/linux /build/contrib/depends/sources; \
     ;; \
     i686-pc-linux-gnu) \
-     PACKAGE="gperf cmake g++-multilib python3-zmq"; \
+     PACKAGE="gperf bc cmake g++-multilib python3-zmq"; \
      cp -r /cache/linux /build/contrib/depends/sources; \
     ;; \
     arm-linux-gnueabihf) \
