@@ -14,46 +14,38 @@ COPY --from=lthn/build:sources-osx /output.tar.gz /cache/osx
 ## Clone depends for the project
 RUN  if [ !-f "/build/Makefile" ]; then \
             git clone --depth 1 --recursive --branch ${BRANCH} ${GIT_REPO} /src \
-            && cp -R /src/contrib/depends /depends; \
+            && cp -R /src/contrib/depends ${BUILD_PATH}; \
         fi
 
 WORKDIR /build
 ENV PACKAGE=""
 RUN case ${BUILD} in \
     x86_64-unknown-linux-gnu) \
-     PACKAGE="gperf cmake python3-zmq libdbus-1-dev libharfbuzz-dev"; \
-      cp -r /cache/linux /depends/sources; \
+     PACKAGE="gperf cmake python3-zmq libdbus-1-dev libharfbuzz-dev" && cp -r /cache/linux ${BUILD_PATH}/sources; \
     ;; \
     i686-pc-linux-gnu) \
-     PACKAGE="gperf cmake g++-multilib python3-zmq"; \
-     cp -r /cache/linux /depends/sources; \
+     PACKAGE="gperf cmake g++-multilib python3-zmq" && cp -r /cache/linux ${BUILD_PATH}/sources; \
     ;; \
     arm-linux-gnueabihf) \
-     PACKAGE="python3 gperf g++-arm-linux-gnueabihf"; \
-     cp -r /cache/linux /depends/sources; \
+     PACKAGE="python3 gperf g++-arm-linux-gnueabihf" && cp -r /cache/linux ${BUILD_PATH}/sources; \
     ;; \
     aarch64-linux-gnu) \
-     PACKAGE="python3 gperf g++-aarch64-linux-gnu"; \
-     cp -r /cache/linux /depends/sources; \
+     PACKAGE="python3 gperf g++-aarch64-linux-gnu" && cp -r /cache/linux ${BUILD_PATH}/sources; \
     ;; \
     x86_64-w64-mingw32) \
-     PACKAGE="cmake python3 g++-mingw-w64-x86-64 qttools5-dev-tools"; \
-    cp -r /cache/win /depends/sources; \
+     PACKAGE="cmake python3 g++-mingw-w64-x86-64 qttools5-dev-tools" && cp -r /cache/win ${BUILD_PATH}/sources; \
     ;; \
     i686-w64-mingw32) \
-     PACKAGE="python3 g++-mingw-w64-i686 qttools5-dev-tools"; \
-      cp -r /cache/win /depends/sources; \
+     PACKAGE="python3 g++-mingw-w64-i686 qttools5-dev-tools" && cp -r /cache/win ${BUILD_PATH}/sources; \
     ;; \
     riscv64-linux-gnu) \
-     PACKAGE="python3 gperf g++-riscv64-linux-gnu"; \
-     cp -r /cache/linux /depends/sources; \
+     PACKAGE="python3 gperf g++-riscv64-linux-gnu" && cp -r /cache/linux ${BUILD_PATH}/sources; \
     ;; \
     x86_64-unknown-freebsd) \
-     PACKAGE="clang-8 gperf cmake python3-zmq libdbus-1-dev libharfbuzz-dev"; \
-     cp -r /cache/linux /depends/sources; \
+     PACKAGE="clang-8 gperf cmake python3-zmq libdbus-1-dev libharfbuzz-dev" && cp -r /cache/linux ${BUILD_PATH}/sources; \
     ;; \
     esac \
-    && apt-get update && apt-get install -y $PACKAGE;
+    && apt-get update && apt-get upgrade -y && apt-get install -y $PACKAGE;
 
 # windows CC
 RUN if [ ${BUILD} = x86_64-w64-mingw32 ] || [ ${BUILD} = i686-w64-mingw32 ]; then \
@@ -83,9 +75,11 @@ RUN pwd && mem_avail_gb=$(( $(getconf _AVPHYS_PAGES) * $(getconf PAGE_SIZE) / (1
     fi && \
     make -j $make_job_slots depends target=${BUILD_TARGET} && \
     mkdir -p /build/dist/${BUILD_TARGET} && \
+    chmod +x /build/build/release/bin/* && \
     mv -f /build/build/release/bin/* /build/dist/${BUILD_TARGET};
 
-ONBUILD ADD --from=builder /depends/built /build/contrib/depends/built
+ONBUILD ADD --from=builder ${BUILD_PATH}/built /build/contrib/depends/built
+ONBUILD ADD --from=builder /build/dist/* /usr/local/bin
 
 CMD pwd && mem_avail_gb=$(( $(getconf _AVPHYS_PAGES) * $(getconf PAGE_SIZE) / (1024 * 1024 * 1024) )) &&\
             make_job_slots=$(( $mem_avail_gb < 4 ? 1 : $mem_avail_gb / 4)) &&\
