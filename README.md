@@ -10,6 +10,14 @@
 
 ### Build Pipelines
 
+[![Docker](https://img.shields.io/docker/v/lthn/build/compile?label=lthn%2Fbuild&logo=docker&style=flat-square)](https://hub.docker.com/r/lthn/build/tags?page=1&name=compile) 
+
+
+[![Docker](https://img.shields.io/docker/v/lthn/build/depends-x86_64-unknown-linux-gnu?label=Depends&style=flat-square)](https://hub.docker.com/r/lthn/build/tags?page=1&name=depends-x86_64-unknown-linux-gnu)
+
+[![docs](https://github.com/dAppServer/devops/actions/workflows/docs.yml/badge.svg?style=flat-square)](https://github.com/dAppServer/devops/actions/workflows/docs.yml)
+
+
 [![lthn/build](https://github.com/dAppServer/devops/actions/workflows/compiler.yml/badge.svg?style=flat-square)](https://github.com/dAppServer/devops/actions/workflows/compiler.yml) [![docs](https://github.com/dAppServer/devops/actions/workflows/docs.yml/badge.svg?style=flat-square)](https://github.com/dAppServer/devops/actions/workflows/docs.yml)
 
 ### Deployment Environments
