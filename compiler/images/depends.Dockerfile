@@ -1,6 +1,6 @@
 FROM lthn/build:compile as build
 
-ARG THREADS=1
+ARG THREADS=2
 ARG BRANCH=master
 ARG BUILD=x86_64-unknown-linux-gnu
 ARG GIT_REPO=https://github.com/dAppdNode/itw3.git
