@@ -1,27 +1,27 @@
 
-COMMON_PROPS:=--platform=linux/amd64 --pull compiler/src
+COMMON_PROPS:=--platform=linux/amd64 --load compiler/src
 all: help
 
 clean: ## Docker System Prune
 	docker system prune --all
 
 compile: ## Builds lthn/build:compile
-	docker build -t lthn/build:compile --cache-to=lthn/build:compile  --cache-from=lthn/build:compile -f compiler/images/compile.Dockerfile ${COMMON_PROPS}
+	docker build -t lthn/build:compile  -f compiler/images/compile.Dockerfile ${COMMON_PROPS}
 
 sources-linux: ## Download Linux Source Code
-	docker build --build-arg BUILD=linux --cache-to=lthn/build:sources-linux --cache-from=lthn/build:sources-linux -t lthn/build:sources-linux -f compiler/images/sources.Dockerfile  ${COMMON_PROPS}
+	docker build --build-arg BUILD=linux -t lthn/build:sources-linux -f compiler/images/sources.Dockerfile  ${COMMON_PROPS}
 
 sources-win: ## Download Windows Source Code
-	docker build --build-arg BUILD=win --cache-to=lthn/build:sources-win --cache-from=lthn/build:sources-win -t lthn/build:sources-win -f compiler/images/sources.Dockerfile  ${COMMON_PROPS}
+	docker build --build-arg BUILD=win  -t lthn/build:sources-win -f compiler/images/sources.Dockerfile  ${COMMON_PROPS}
 
 sources-osx: ## Download macOS Source Code
-	docker build --build-arg BUILD=osx --cache-to=lthn/build:sources-osx --cache-from=lthn/build:sources-osx -t lthn/build:sources-osx -f compiler/images/sources.Dockerfile  ${COMMON_PROPS}
+	docker build --build-arg BUILD=osx -t lthn/build:sources-osx -f compiler/images/sources.Dockerfile  ${COMMON_PROPS}
 
 depends-x86_64-apple-darwin11: ## Macos
-	docker build --build-arg BUILD=x86_64-apple-darwin11 --cache-to=lthn/build:depends-x86_64-apple-darwin11 --cache-from=lthn/build:depends-x86_64-apple-darwin11 -t lthn/build:depends-x86_64-apple-darwin11 -f compiler/images/depends.Dockerfile  ${COMMON_PROPS}
+	docker build --build-arg BUILD=x86_64-apple-darwin11 -t lthn/build:depends-x86_64-apple-darwin11 -f compiler/images/depends.Dockerfile  ${COMMON_PROPS}
 
 depends-x86_64-unknown-freebsd: ## x86_64 Freebsd
-	docker build --build-arg BUILD=x86_64-unknown-freebsd --cache-to=lthn/build:depends-x86_64-unknown-freebsd --cache-from=lthn/build:depends-x86_64-unknown-freebsd -t lthn/build:depends-x86_64-unknown-freebsd -f compiler/images/depends.Dockerfile  ${COMMON_PROPS}
+	docker build --build-arg BUILD=x86_64-unknown-freebsd -t lthn/build:depends-x86_64-unknown-freebsd -f compiler/images/depends.Dockerfile  ${COMMON_PROPS}
 
 depends-x86_64-unknown-linux-gnu: ## x86_64 Linux
 	docker build --build-arg BUILD=x86_64-unknown-linux-gnu --cache-to=lthn/build:depends-x86_64-unknown-linux-gnu --cache-from=lthn/build:depends-x86_64-unknown-linux-gnu -t lthn/build:depends-x86_64-unknown-linux-gnu -f compiler/images/depends.Dockerfile  ${COMMON_PROPS}
