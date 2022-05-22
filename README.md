@@ -1,5 +1,7 @@
 # OS Friendly Build System
 
+Build Statuses: [![Docker CC](https://github.com/dAppServer/devops/actions/workflows/compiler.yml/badge.svg)](https://github.com/dAppServer/devops/actions/workflows/compiler.yml) [![docs](https://github.com/dAppServer/devops/actions/workflows/docs.yml/badge.svg)](https://github.com/dAppServer/devops/actions/workflows/docs.yml)
+
 Open source build tooling that allows Compatible Licences according to Article 5 EUPL(some listed below):
 
 - GNU General Public License (GPL) v. 2, v. 3
