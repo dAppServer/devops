@@ -1,6 +1,20 @@
 # OS Friendly Build System
 
-Build Statuses: [![Docker CC](https://github.com/dAppServer/devops/actions/workflows/compiler.yml/badge.svg)](https://github.com/dAppServer/devops/actions/workflows/compiler.yml) [![docs](https://github.com/dAppServer/devops/actions/workflows/docs.yml/badge.svg)](https://github.com/dAppServer/devops/actions/workflows/docs.yml)
+### Stats
+![GitHub](https://img.shields.io/github/license/dAppServer/devops?label=License&style=flat-square)
+![Discord](https://img.shields.io/discord/977550915278110800?label=Discord&logo=discord&style=flat-square)
+
+### Security Status
+
+![Snyk Vulnerabilities for GitHub Repo](https://img.shields.io/snyk/vulnerabilities/github/dAppServer/devops?style=flat-square)
+
+### Build Pipelines
+
+[![lthn/build](https://github.com/dAppServer/devops/actions/workflows/compiler.yml/badge.svg?style=flat-square)](https://github.com/dAppServer/devops/actions/workflows/compiler.yml) [![docs](https://github.com/dAppServer/devops/actions/workflows/docs.yml/badge.svg?style=flat-square)](https://github.com/dAppServer/devops/actions/workflows/docs.yml)
+
+### Deployment Environments
+
+![GitHub deployments](https://img.shields.io/github/deployments/dAppServer/devops/github-pages?label=Docs&style=flat-square)
 
 Open source build tooling that allows Compatible Licences according to Article 5 EUPL(some listed below):
 
