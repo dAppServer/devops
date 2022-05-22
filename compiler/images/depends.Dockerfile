@@ -21,28 +21,28 @@ WORKDIR /build
 ENV PACKAGE=""
 RUN case ${BUILD} in \
     x86_64-unknown-linux-gnu) \
-     PACKAGE="gperf cmake python3-zmq libdbus-1-dev libharfbuzz-dev" && cp -r /cache/linux ${BUILD_PATH}/sources; \
+     PACKAGE="gperf cmake python3-zmq libdbus-1-dev libharfbuzz-dev" && cp -r /cache/linux /build/contrib/depends/sources; \
     ;; \
     i686-pc-linux-gnu) \
-     PACKAGE="gperf cmake g++-multilib python3-zmq" && cp -r /cache/linux ${BUILD_PATH}/sources; \
+     PACKAGE="gperf cmake g++-multilib python3-zmq" && cp -r /cache/linux /build/contrib/depends/sources; \
     ;; \
     arm-linux-gnueabihf) \
-     PACKAGE="python3 gperf g++-arm-linux-gnueabihf" && cp -r /cache/linux ${BUILD_PATH}/sources; \
+     PACKAGE="python3 gperf g++-arm-linux-gnueabihf" && cp -r /cache/linux /build/contrib/depends/sources; \
     ;; \
     aarch64-linux-gnu) \
-     PACKAGE="python3 gperf g++-aarch64-linux-gnu" && cp -r /cache/linux ${BUILD_PATH}/sources; \
+     PACKAGE="python3 gperf g++-aarch64-linux-gnu" && cp -r /cache/linux /build/contrib/depends/sources; \
     ;; \
     x86_64-w64-mingw32) \
-     PACKAGE="cmake python3 g++-mingw-w64-x86-64 qttools5-dev-tools" && cp -r /cache/win ${BUILD_PATH}/sources; \
+     PACKAGE="cmake python3 g++-mingw-w64-x86-64 qttools5-dev-tools" && cp -r /cache/win /build/contrib/depends/sources; \
     ;; \
     i686-w64-mingw32) \
-     PACKAGE="python3 g++-mingw-w64-i686 qttools5-dev-tools" && cp -r /cache/win ${BUILD_PATH}/sources; \
+     PACKAGE="python3 g++-mingw-w64-i686 qttools5-dev-tools" && cp -r /cache/win /build/contrib/depends/sources; \
     ;; \
     riscv64-linux-gnu) \
-     PACKAGE="python3 gperf g++-riscv64-linux-gnu" && cp -r /cache/linux ${BUILD_PATH}/sources; \
+     PACKAGE="python3 gperf g++-riscv64-linux-gnu" && cp -r /cache/linux /build/contrib/depends/sources; \
     ;; \
     x86_64-unknown-freebsd) \
-     PACKAGE="clang-8 gperf cmake python3-zmq libdbus-1-dev libharfbuzz-dev" && cp -r /cache/linux ${BUILD_PATH}/sources; \
+     PACKAGE="clang-8 gperf cmake python3-zmq libdbus-1-dev libharfbuzz-dev" && cp -r /cache/linux /build/contrib/depends/sources; \
     ;; \
     esac \
     && apt-get update && apt-get upgrade -y && apt-get install -y $PACKAGE;
