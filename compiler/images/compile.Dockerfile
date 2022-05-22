@@ -9,4 +9,8 @@ RUN apt-get update && \
                     bsdmainutils curl git ccache wget libgtest-dev \
                     && rm -rf /var/lib/apt/lists/*
 
+WORKDIR /build
 
+COPY --chown=root --chmod=0777 build.sh /usr/local/bin/build
+
+ENTRYPOINT ["build"]

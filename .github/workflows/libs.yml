@@ -37,7 +37,8 @@ jobs:
         uses: docker/build-push-action@v2
         with:
           push: true
-          cache-from: ghcr.io/letheanVPN/build:libs-linux-base
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
           tags: lthn/build:libs-linux-base
           file: .build/conf/libs/linux/compile.Dockerfile
   libs:

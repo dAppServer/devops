@@ -44,6 +44,9 @@ depends-aarch64-linux-gnu: ## ARM 64
 depends-riscv64-linux-gnu: ## riscv64
 	docker build --build-arg=BUILD=riscv64-linux-gnu --cache-to=lthn/build:depends-riscv64-linux-gnu --cache-from=lthn/build:depends-riscv64-linux-gnu -t lthn/build:depends-riscv64-linux-gnu -f compiler/images/depends.Dockerfile  ${COMMON_PROPS}
 
+compile-riscv64-linux-gnu:
+	docker build --target=riscv64-linux-gnu --load -t lthn/build:riscv64-linux-gnu -f compiler/images/container.Dockerfile  compiler/src
+
 wallet-linux-base:
 	docker build --cache-from=lthn/build:wallet-linux-base   -t lthn/build:wallet-linux-base -f build-conf/wallet/linux/base.Dockerfile  ${COMMON_PROPS}
 

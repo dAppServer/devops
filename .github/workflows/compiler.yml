@@ -38,8 +38,8 @@ jobs:
         with:
           push: true
           context: compiler/src
-          cache-to: ${{ env.CI_REGISTRY_IMAGE }}:compile
-          cache-from: ${{ env.CI_REGISTRY_IMAGE }}:compile
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
           tags: lthn/build:compile,${{ env.CI_REGISTRY_IMAGE }}:compile
           file: compiler/images/compile.Dockerfile
   sources:
@@ -74,8 +74,8 @@ jobs:
           context: compiler/src
           build-args:
             BUILD:${{ matrix.os }}
-          cache-to: ${{ env.CI_REGISTRY_IMAGE }}:sources-${{ matrix.os }}
-          cache-from: ${{ env.CI_REGISTRY_IMAGE }}:sources-${{ matrix.os }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
           tags: lthn/build:sources-${{ matrix.os }},${{ env.CI_REGISTRY_IMAGE}}:sources-${{ matrix.os }}
           file: compiler/images/sources.Dockerfile
 
@@ -114,7 +114,7 @@ jobs:
           context: compiler/src
           build-args:
             BUILD:{{ matrix.arch }}
-          cache-to: ${{ env.CI_REGISTRY_IMAGE }}:depends-${{ matrix.arch }}
-          cache-from: ${{ env.CI_REGISTRY_IMAGE }}:depends-${{ matrix.arch }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
           tags: lthn/build:depends-${{ matrix.arch }},${{ env.CI_REGISTRY_IMAGE }}:depends-${{ matrix.arch }}
           file: compiler/images/depends.Dockerfile
