@@ -40,7 +40,7 @@ dev: ## Builds full env
 	bash scripts/build-chains.sh
 
 mainnet-lthn: ## Run lethean Blockchain Node
-	./blockchain/bin/letheand --confirm-external-bind --detach --data-dir=data/lthn --pidfile=data/lthn/letheand.pid
+	./blockchain/bin/letheand --confirm-external-bind --detach --rpc-bind-ip=0.0.0.0 --p2p-bind-ip=0.0.0.0 --data-dir=data/lthn --pidfile=data/lthn/letheand.pid
 
 mainnet-wrkz: ## Run WrkzCoin Node
 	./blockchain/bin/Wrkzd --confirm-external-bind --data-dir=data/wrkz
