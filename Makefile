@@ -34,7 +34,7 @@ shutdown:
 	find ./data -type f -name "*.pid" -exec pkill -F "{}" \;
 	find ./data -type f -name "*.pid" -exec rm "{}" \;
 
-chains: ## Builds full env
+dev: ## Builds full env
 	bash scripts/build-chains.sh
 
 mainnet-lthn: ## Run lethean Blockchain Node
