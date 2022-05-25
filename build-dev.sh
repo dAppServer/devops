@@ -65,4 +65,8 @@ if [ ! -f "blockchain/bin/wrkzd" ]; then
 fi
 
 
+mkdir -p data/itw3/testnet
+mkdir -p data/lthn/testnet
+mkdir -p data/wrkz/testnet
+
 echo "FIN"
