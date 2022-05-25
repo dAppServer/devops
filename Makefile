@@ -3,17 +3,23 @@ COMMON_PROPS:=--platform=linux/amd64 --load compiler/src
 all: help
 
 
-dev: ## Builds full env
-	bash build-dev.sh
+chains: ## Builds full env
+	bash scripts/build-chains.sh
+
+mainnet-lthn:
+	./blockchain/bin/letheand --confirm-external-bind --detach --data-dir=data/lthn
+
+mainnet-wrkz:
+	./blockchain/bin/Wrkzd --confirm-external-bind --data-dir=data/wrkz
 
 testnet-itw3: ## Start iTw3 Testnet
-	./blockchain/bin/itw3d --testnet --detach --data-dir=data/itw3/testnet
+	./blockchain/bin/itw3d --confirm-external-bind --testnet --detach --data-dir=data/itw3/testnet
 
 testnet-lthn: ## Start Lethean Testnet
-	./blockchain/bin/letheand --testnet --detach --data-dir=data/lthn/testnet
+	./blockchain/bin/letheand --confirm-external-bind --testnet --detach --data-dir=data/lthn/testnet
 
 testnet-wrkz: ## Start WrkzCoin Testnet
-	./blockchain/bin/letheand --testnet --detach --data-dir=data/wrkz/testnet
+	./blockchain/bin/Wrkzd --confirm-external-bind --testnet --data-dir=data/wrkz/testnet
 
 clean: ## Docker System Prune
 	docker system prune --all
