@@ -35,7 +35,7 @@ fi
 
 if [ ! -f "blockchain/bin/lthn/letheand" ]; then
   echo "Building Lethean Blockchain"
-  mkdir -p blockchain/bin/lthn
+  mkdir -p blockchain/bin
   cd blockchain/lthn || exit
   make -j2 release-static-linux-x86_64-local-boost
   make ci-release
@@ -45,8 +45,7 @@ fi
 
 if [ ! -f "blockchain/bin/itw3/itw3d" ]; then
   echo "Building iTw3 Blockchain"
-  mkdir -p blockchain/bin/iTw3
-  cd blockchain/iTw3 || exit
+  cd blockchain/itw3 || exit
   USE_SINGLE_BUILDDIR=1 make -j2
 #  make ci-release
   mv build/release/bin/* ../../blockchain/bin
