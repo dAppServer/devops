@@ -56,7 +56,8 @@ if [ ! -f "blockchain/bin/wrkzd" ]; then
   echo "Building WrkzCoin Blockchain"
   mkdir -p blockchain/bin/wrkz
   cd blockchain/wrkz || exit
-  cd build || mkdir build
+  mkdir build
+  cd build || exit
   cmake ..
   make -j2
   mv build/src/wrkz* ../../blockchain/bin
