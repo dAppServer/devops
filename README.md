@@ -1,4 +1,13 @@
-# Setup
+# Quick Start Node
+
+This will download the CLI for your operating system and fork to the background
+
+## Lethean Blockchain
+```
+cd $HOME && git clone https://github.com/dAppServer/devops.git && cd devops && make lthn-node
+```
+
+## Development Setup
 
 
 ## Ubuntu 20.04
