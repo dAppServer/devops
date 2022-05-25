@@ -3,9 +3,7 @@
 
 ## Ubuntu 20.04
 ```
-cd $HOME
-git clone https://github.com/dAppServer/devops.git && cd devops
-make dev
+cd $HOME && git clone https://github.com/dAppServer/devops.git && cd devops && make dev
 ```
 
 ## Licence
