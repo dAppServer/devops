@@ -33,7 +33,7 @@ if [ ! -f "blockchain/bin/lthn/letheand" ]; then
   echo "Building Lethean Blockchain"
   mkdir -p blockchain/bin/lthn
   cd blockchain/lthn || exit
-  make -j2 release-static-linux-x86_64-boost
+  make -j2 release-static-linux-x86_64-local-boost
   make ci-release
   mv build/packaged/* blockchain/bin/lthn/
   cd ../../
