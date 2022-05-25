@@ -22,11 +22,13 @@ else
     endif
 endif
 
+$(shell [[ -d ./blockchain/bin ]] || mkdir -p ./blockchain/bin)
+
 COMMON_PROPS:=--platform=linux/amd64 --load compiler/src
 all: help
 
 lthn-node: ## Start Lethean Chain Node
-	[[ ! -f /blockchain/bin/letheand$(CLI_SUFFIX) ]] || make lthn-download-$(HOST)-cli
+	[[ ! -f ./blockchain/bin/letheand$(CLI_SUFFIX) ]] || make lthn-download-$(HOST)-cli
 	make mainnet-lthn
 
 shutdown:
