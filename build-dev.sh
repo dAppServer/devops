@@ -11,6 +11,7 @@ if [ ! -d "blockchain/lthn" ]; then
   git clone --recursive --depth=1 https://github.com/letheanVPN/blockchain-iz.git blockchain/lthn
 else
   echo "Updating Lethean Blockchain"
+  rm -rf blockchain/bin/lethean* || true
   (cd blockchain/lthn && git pull)
 fi
 
@@ -20,6 +21,7 @@ if [ ! -d "blockchain/wrkz" ]; then
   git clone --recursive --depth=1 https://github.com/wrkzcoin/wrkzcoin.git blockchain/wrkz
 else
   echo "Updating WrkzCoin Blockchain"
+  rm -rf blockchain/bin/wrkz* || true
   (cd blockchain/wrkz && git pull)
 fi
 
@@ -29,6 +31,7 @@ if [ ! -d "blockchain/itw3" ]; then
   git clone --recursive --depth=1 https://github.com/dAppServer/itw3.git blockchain/itw3
 else
   echo "Updating iTw3 Blockchain"
+  rm -rf blockchain/bin/itw3* || true
   (cd blockchain/itw3 && git pull)
 fi
 
