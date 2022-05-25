@@ -39,7 +39,7 @@ if [ ! -f "blockchain/bin/lthn/letheand" ]; then
   cd blockchain/lthn || exit
   make -j2 release-static-linux-x86_64-local-boost
   make ci-release
-  mv build/packaged/* ../../blockchain/bin/lthn
+  mv build/packaged/* ../../blockchain/bin
   cd ../../
 fi
 
@@ -49,7 +49,7 @@ if [ ! -f "blockchain/bin/itw3/itw3d" ]; then
   cd blockchain/iTw3 || exit
   USE_SINGLE_BUILDDIR=1 make -j2
 #  make ci-release
-  mv build/release/bin/* ../../blockchain/bin/itw3/
+  mv build/release/bin/* ../../blockchain/bin
   cd ../../
 fi
 
@@ -60,7 +60,7 @@ if [ ! -f "blockchain/bin/wrkz/wrkzd" ]; then
   cd build || mkdir build
   cmake ..
   make -j2
-  mv build/src/wrkz* ../../blockchain/bin/wrkz/
+  mv build/src/wrkz* ../../blockchain/bin
   cd ../../
 fi
 
