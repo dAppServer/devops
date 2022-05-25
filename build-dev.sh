@@ -33,7 +33,7 @@ else
 fi
 
 
-if [ ! -f "blockchain/bin/lthn/letheand" ]; then
+if [ ! -f "blockchain/bin/letheand" ]; then
   echo "Building Lethean Blockchain"
   mkdir -p blockchain/bin
   cd blockchain/lthn || exit
@@ -43,7 +43,7 @@ if [ ! -f "blockchain/bin/lthn/letheand" ]; then
   cd ../../
 fi
 
-if [ ! -f "blockchain/bin/itw3/itw3d" ]; then
+if [ ! -f "blockchain/bin/itw3d" ]; then
   echo "Building iTw3 Blockchain"
   cd blockchain/itw3 || exit
   USE_SINGLE_BUILDDIR=1 make -j2
@@ -52,7 +52,7 @@ if [ ! -f "blockchain/bin/itw3/itw3d" ]; then
   cd ../../
 fi
 
-if [ ! -f "blockchain/bin/wrkz/wrkzd" ]; then
+if [ ! -f "blockchain/bin/wrkzd" ]; then
   echo "Building WrkzCoin Blockchain"
   mkdir -p blockchain/bin/wrkz
   cd blockchain/wrkz || exit
