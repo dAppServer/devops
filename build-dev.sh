@@ -1,6 +1,10 @@
 #!/usr/bin/env bash
 # shellcheck shell=bash
-
+if [ ! -d "blockchain/lthn" ]; then
+  echo "This script is going to take quite some time... don't wait around"
+  echo "waiting for 15 seconds just to let you see this"
+  sleep 15
+fi
 # Check for Lethean
 if [ ! -d "blockchain/lthn" ]; then
   echo "Cloning Lethean Blockchain"
