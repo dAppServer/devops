@@ -60,8 +60,8 @@ if [ ! -f "blockchain/bin/wrkzd" ]; then
   cd build || exit
   cmake ..
   make -j2
-  mv build/src/wrkz* ../../blockchain/bin
-  cd ../../
+  mv src/wrkz* ../../../blockchain/bin
+  cd ../../../
 fi
 
 
