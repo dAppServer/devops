@@ -6,10 +6,10 @@ all: help
 chains: ## Builds full env
 	bash scripts/build-chains.sh
 
-mainnet-lthn:
+mainnet-lthn: ## Run lethean Blockchain Node
 	./blockchain/bin/letheand --confirm-external-bind --detach --data-dir=data/lthn
 
-mainnet-wrkz:
+mainnet-wrkz: ## Run WrkzCoin Node
 	./blockchain/bin/Wrkzd --confirm-external-bind --data-dir=data/wrkz
 
 testnet-itw3: ## Start iTw3 Testnet
