@@ -22,7 +22,7 @@ else
     endif
 endif
 
-$(shell [[ -d ./blockchain/bin ]] || mkdir -p ./blockchain/bin)
+$(shell mkdir -p ./blockchain/bin)
 
 COMMON_PROPS:=--platform=linux/amd64 --load compiler/src
 all: help
