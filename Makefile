@@ -31,6 +31,12 @@ lthn-node: ## Start Lethean Chain Node
 	[[  -f ./blockchain/bin/letheand$(CLI_SUFFIX) ]] || make lthn-download-$(HOST)-cli
 	make mainnet-lthn
 
+lthn-export: ## Export Lethean Chain Node
+	./blockchain/bin/lethean-blockchain-export --data-dir=data/lthn --output-file=data/lthn/blockchain.raw
+
+lthn-import: ## Export Lethean Chain Node
+	./blockchain/bin/lethean-blockchain-import --data-dir=data/lthn --input-file=data/lthn/blockchain.raw
+
 shutdown:
 	@echo "Halting running pids"
 	find ./data -type f -name "*.pid" -exec pkill -F "{}" \;
