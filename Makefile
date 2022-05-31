@@ -52,10 +52,10 @@ mainnet-wrkz: ## Run WrkzCoin Node
 	./blockchain/bin/Wrkzd --confirm-external-bind --data-dir=data/wrkz
 
 testnet-itw3: ## Start iTw3 Testnet
-	./blockchain/bin/itw3d --confirm-external-bind --testnet --detach --data-dir=data/itw3/testnet --pidfile=data/itw3/itw3d-testnet.pid
+	./blockchain/bin/itw3d --confirm-external-bind --testnet --detach --rpc-bind-ip=0.0.0.0 --p2p-bind-ip=0.0.0.0 --data-dir=data/itw3/testnet --pidfile=data/itw3/itw3d-testnet.pid
 
 testnet-lthn: ## Start Lethean Testnet
-	./blockchain/bin/letheand --confirm-external-bind --testnet --detach --data-dir=data/lthn/testnet --pidfile=data/lthn/letheand-testnet.pid
+	./blockchain/bin/letheand --confirm-external-bind --testnet --detach --rpc-bind-ip=0.0.0.0 --p2p-bind-ip=0.0.0.0 --data-dir=data/lthn/testnet --pidfile=data/lthn/letheand-testnet.pid
 
 testnet-wrkz: ## Start WrkzCoin Testnet
 	./blockchain/bin/Wrkzd --confirm-external-bind --testnet --data-dir=data/wrkz/testnet
