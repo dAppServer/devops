@@ -37,7 +37,7 @@ lthn-export: ## Export Lethean Chain Node
 lthn-import: ## Export Lethean Chain Node
 	./blockchain/bin/lethean-blockchain-import --data-dir=data/lthn --input-file=data/lthn/blockchain.raw
 
-shutdown:
+shutdown: ## Shutdown chain nodes
 	@echo "Halting running pids"
 	find ./data -type f -name "*.pid" -exec pkill -F "{}" \;
 	find ./data -type f -name "*.pid" -exec rm "{}" \;
@@ -48,7 +48,7 @@ dev: ## Builds full env
 mainnet-lthn: ## Run lethean Blockchain Node
 	./blockchain/bin/letheand --confirm-external-bind --detach --rpc-bind-ip=0.0.0.0 --p2p-bind-ip=0.0.0.0 --data-dir=data/lthn --pidfile=data/lthn/letheand.pid
 
-mainnet-wrkz: ## Run WrkzCoin Node
+mainnet-wrkz: # Run WrkzCoin Node
 	./blockchain/bin/Wrkzd --confirm-external-bind --data-dir=data/wrkz
 
 testnet-itw3: ## Start iTw3 Testnet
@@ -57,7 +57,7 @@ testnet-itw3: ## Start iTw3 Testnet
 testnet-lthn: ## Start Lethean Testnet
 	./blockchain/bin/letheand --confirm-external-bind --testnet --detach --rpc-bind-ip=0.0.0.0 --p2p-bind-ip=0.0.0.0 --data-dir=data/lthn/testnet --pidfile=data/lthn/letheand-testnet.pid
 
-testnet-wrkz: ## Start WrkzCoin Testnet
+testnet-wrkz: # Start WrkzCoin Testnet
 	./blockchain/bin/Wrkzd --confirm-external-bind --testnet --data-dir=data/wrkz/testnet
 
 lthn-download-windows-cli: ## Download Windows CLI
