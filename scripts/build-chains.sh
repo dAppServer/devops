@@ -28,7 +28,7 @@ fi
 # Check for iTw3
 if [ ! -d "blockchain/itw3" ]; then
   echo "Cloning iTw3 Blockchain"
-  git clone --recursive --depth=1 https://github.com/dAppServer/itw3.git blockchain/itw3
+  git clone --recursive --branch=main --depth=1 https://github.com/dAppServer/itw3.git blockchain/itw3
 else
   echo "Updating iTw3 Blockchain"
   rm -rf blockchain/bin/itw3* || true
