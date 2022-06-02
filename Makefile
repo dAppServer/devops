@@ -69,6 +69,17 @@ lthn-download-linux-cli:  ## Download Linux CLI
 lthn-download-macos-cli:  ## Download macOS CLI
 	[ -f ./blockchain/bin/letheand ] || mkdir -p blockchain/bin && wget https://github.com/letheanVPN/blockchain/releases/latest/download/lethean-cli-macos.zip && unzip -d ./blockchain/bin lethean-cli-macos.zip && rm lethean-cli-macos.zip;
 
+wallet-itw3-testnet: ## Open itw3-wallet-cli --testnet
+	[ -d ./wallets ] || mkdir -p wallets && cd wallets &&  ../blockchain/bin/itw3-wallet-cli --testnet
+
+wallet-lthn-testnet: ## Open lethean-wallet-cli --testnet
+	[ -d ./wallets ] || mkdir -p wallets && cd wallets &&  ../blockchain/bin/lethean-wallet-cli --testnet
+
+wallet-itw3: ## Open itw3-wallet-cli --testnet
+	[ -d ./wallets ] || mkdir -p wallets && cd wallets &&  ../blockchain/bin/itw3-wallet-cli
+
+wallet-lthn: ## Open lethean-wallet-cli --testnet
+	[ -d ./wallets ] || mkdir -p wallets && cd wallets &&  ../blockchain/bin/lethean-wallet-cli
 
 
 clean: ## Docker System Prune
