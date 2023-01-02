@@ -61,13 +61,13 @@ testnet-wrkz: # Start WrkzCoin Testnet
 	./blockchain/bin/Wrkzd --confirm-external-bind --testnet --data-dir=data/wrkz/testnet
 
 lthn-download-windows-cli: ## Download Windows CLI
-	[ -f ./blockchain/bin/letheand.exe ] || mkdir -p build/cli && wget https://github.com/letheanVPN/blockchain/releases/latest/download/windows.tar && tar -xvf windows.tar -C ./blockchain/bin && rm windows.tar;
+	[ -f ./blockchain/bin/letheand.exe ] || mkdir -p build/cli && wget https://github.com/letheanVPN/blockchain-iz/releases/latest/download/windows.tar && tar -xvf windows.tar -C ./blockchain/bin && rm windows.tar;
 
 lthn-download-linux-cli:  ## Download Linux CLI
-	[ -f ./blockchain/bin/letheand ] || mkdir -p build/cli && wget https://github.com/letheanVPN/blockchain/releases/latest/download/linux.tar && tar -xvf linux.tar -C  ./blockchain/bin && rm linux.tar;
+	[ -f ./blockchain/bin/letheand ] || mkdir -p build/cli && wget https://github.com/letheanVPN/blockchain-iz/releases/latest/download/linux.tar && tar -xvf linux.tar -C  ./blockchain/bin && rm linux.tar;
 
 lthn-download-macos-cli:  ## Download macOS CLI
-	[ -f ./blockchain/bin/letheand ] || mkdir -p blockchain/bin && wget https://github.com/letheanVPN/blockchain/releases/latest/download/lethean-cli-macos.zip && unzip -d ./blockchain/bin lethean-cli-macos.zip && rm lethean-cli-macos.zip;
+	[ -f ./blockchain/bin/letheand ] || mkdir -p blockchain/bin && wget https://github.com/letheanVPN/blockchain-iz/releases/latest/download/lethean-cli-macos.zip && unzip -d ./blockchain/bin lethean-cli-macos.zip && rm lethean-cli-macos.zip;
 
 wallet-itw3-testnet: ## Open itw3-wallet-cli --testnet
 	[ -d ./wallets ] || mkdir -p wallets && cd wallets &&  ../blockchain/bin/itw3-wallet-cli --testnet
