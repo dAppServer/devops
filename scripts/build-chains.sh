@@ -49,7 +49,7 @@ fi
 if [ ! -f "blockchain/bin/itw3d" ]; then
   echo "Building iTw3 Blockchain"
   cd blockchain/itw3 || exit
-  USE_SINGLE_BUILDDIR=1 make -j2
+  make release-testnet -j2
 #  make ci-release
   mv build/release/bin/* ../../blockchain/bin
   cd ../../
