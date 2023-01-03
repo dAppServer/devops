@@ -45,7 +45,7 @@ shutdown: ## Shutdown chain nodes
 dev: ## Builds full env
 	bash scripts/build-chains.sh
 
-itw3-testnet: ## Clone and compile iTw3 in Testnet mode
+build-itw3-testnet: ## Clone and compile iTw3 in Testnet mode
 	bash scripts/build/itw3-testnet.sh
 
 mainnet-lthn: ## Run lethean Blockchain Node
@@ -54,13 +54,13 @@ mainnet-lthn: ## Run lethean Blockchain Node
 mainnet-wrkz: # Run WrkzCoin Node
 	./blockchain/bin/Wrkzd --confirm-external-bind --data-dir=data/wrkz
 
-testnet-itw3: ## Start iTw3 Testnet
+start-itw3-testnet: ## Start iTw3 Testnet
 	./blockchain/bin/itw3d --confirm-external-bind --testnet --detach --rpc-bind-ip=0.0.0.0 --p2p-bind-ip=0.0.0.0 --data-dir=data/itw3/testnet --pidfile=data/itw3/itw3d-testnet.pid
 
-testnet-lthn: ## Start Lethean Testnet
+start-lthn-testnet: ## Start Lethean Testnet
 	./blockchain/bin/letheand --confirm-external-bind --testnet --detach --rpc-bind-ip=0.0.0.0 --p2p-bind-ip=0.0.0.0 --data-dir=data/lthn/testnet --pidfile=data/lthn/letheand-testnet.pid
 
-testnet-wrkz: # Start WrkzCoin Testnet
+start-wrkz-testnet: # Start WrkzCoin Testnet
 	./blockchain/bin/Wrkzd --confirm-external-bind --testnet --data-dir=data/wrkz/testnet
 
 lthn-download-windows-cli: ## Download Windows CLI
