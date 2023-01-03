@@ -4,7 +4,7 @@
 # Check for iTw3
 if [ ! -d "../blockchain/itw3" ]; then
   echo "Cloning iTw3 Blockchain"
-  git clone --recursive --branch=main --depth=1 https://github.com/letheanVPN/blockchain-iTw3.git ../blockchain/itw3
+  git clone --recursive --branch=main https://github.com/letheanVPN/blockchain-iTw3.git ../blockchain/itw3
 else
   echo "Updating iTw3 Blockchain"
   rm -rf blockchain/bin/itw3* || true
