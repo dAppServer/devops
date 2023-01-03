@@ -1,6 +1,11 @@
 #!/usr/bin/env bash
 # shellcheck shell=bash
 
+# make testnet dir
+if [ ! -f "../data/itw3/testnet" ]; then
+  mkdir -p ../data/itw3/testnet
+fi
+
 # Check for iTw3
 if [ ! -d "../blockchain/itw3" ]; then
   echo "Cloning iTw3 Blockchain"
@@ -11,6 +16,7 @@ else
   (cd ../blockchain/itw3 && git pull)
 fi
 
+# compile program
 if [ ! -f "../blockchain/bin/itw3d" ]; then
   echo "Building iTw3 Blockchain"
   cd ../blockchain/itw3 || exit
@@ -20,6 +26,8 @@ if [ ! -f "../blockchain/bin/itw3d" ]; then
   cd ../../
 fi
 
-mkdir -p ../data/itw3/testnet
+
+
+
 
 echo "FIN"
