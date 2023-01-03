@@ -6,6 +6,10 @@ if [ ! -f "../data/itw3/testnet" ]; then
   mkdir -p ../data/itw3/testnet
 fi
 
+if [ ! -f "../blockchain/bin" ]; then
+  mkdir -p ../blockchain/bin
+fi
+
 # Check for iTw3
 if [ ! -d "../blockchain/itw3" ]; then
   echo "Cloning iTw3 Blockchain"
@@ -22,7 +26,8 @@ if [ ! -f "../blockchain/bin/itw3d" ]; then
   cd ../blockchain/itw3 || exit
   make release-testnet -j2
 #  make ci-release
-  mv build/release/bin/* ../../blockchain/bin
+  mv build/release/src/letheand ../../blockchain/bin/letheand
+  mv build/release/src/simplewallet ../../blockchain/bin/simplewallet
   cd ../../
 fi
 
