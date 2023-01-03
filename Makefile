@@ -45,6 +45,9 @@ shutdown: ## Shutdown chain nodes
 dev: ## Builds full env
 	bash scripts/build-chains.sh
 
+itw3-testnet: ## Clone and compile iTw3 in Testnet mode
+	bash scripts/build/itw3.sh
+
 mainnet-lthn: ## Run lethean Blockchain Node
 	./blockchain/bin/letheand --confirm-external-bind --detach --rpc-bind-ip=0.0.0.0 --p2p-bind-ip=0.0.0.0 --data-dir=data/lthn --pidfile=data/lthn/letheand.pid
 
