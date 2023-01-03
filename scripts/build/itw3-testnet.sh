@@ -2,7 +2,7 @@
 # shellcheck shell=bash
 
 # Check for iTw3
-if [ ! -d "blockchain/itw3" ]; then
+if [ ! -d "../blockchain/itw3" ]; then
   echo "Cloning iTw3 Blockchain"
   git clone --recursive --branch=main --depth=1 https://github.com/letheanVPN/blockchain-iTw3.git ../blockchain/itw3
 else
@@ -11,7 +11,7 @@ else
   (cd ../blockchain/itw3 && git pull)
 fi
 
-if [ ! -f "blockchain/bin/itw3d" ]; then
+if [ ! -f "../blockchain/bin/itw3d" ]; then
   echo "Building iTw3 Blockchain"
   cd ../blockchain/itw3 || exit
   make release-testnet -j2
